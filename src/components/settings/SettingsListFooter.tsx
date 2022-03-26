@@ -10,5 +10,5 @@ export default function SettingsListFooter() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center" },
+  container: { flex: 1, alignItems: "center", paddingTop: 32 },
 });

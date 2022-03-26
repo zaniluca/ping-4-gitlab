@@ -80,6 +80,7 @@ const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
 export default function SettingsList() {
   return (
     <SectionList
+      style={styles.list}
       scrollEnabled={false}
       stickySectionHeadersEnabled={false}
       contentInsetAdjustmentBehavior="automatic"
@@ -93,6 +94,9 @@ export default function SettingsList() {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    backgroundColor: theme.colors.gray100,
+  },
   section: {
     padding: 8,
     backgroundColor: theme.colors.gray100,
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 16,
+    backgroundColor: "white",
   },
   icon: {
     paddingRight: 8,

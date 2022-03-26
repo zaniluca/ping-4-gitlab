@@ -4,12 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/types";
 import SettingsList from "../components/settings/SettingsList";
+import SettingsHeader from "../components/settings/SettingsHeader";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Settings">;
 
 export default function SettingsScreen({ navigation }: Props) {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <SettingsHeader />
       <SettingsList />
     </SafeAreaView>
   );
