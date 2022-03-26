@@ -12,6 +12,7 @@ const colors = {
 const fonts = {
   sourceSansPro: {
     bold: "SourceSansPro_700Bold",
+    semibold: "SourceSansPro_600SemiBold",
     regular: "SourceSansPro_400Regular",
   },
 };

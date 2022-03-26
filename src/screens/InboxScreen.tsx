@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import {
   Text,
@@ -6,9 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { AtSign, GitCommit } from "react-native-feather";
+import { AtSign, Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ListSeparator } from "../components/ListSeparator";
+import { RootStackParamList } from "../navigation/types";
 import theme from "../utils/theme";
 
 const data = [
@@ -54,30 +56,49 @@ const data = [
   },
 ];
 
-export default function InboxScreen() {
+type Props = NativeStackScreenProps<RootStackParamList, "Inbox">;
+
+export default function InboxScreen({ navigation }: Props) {
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerSearchBarOptions: {
+        placeholder: "Search for notifications",
+      },
+      headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+          <Settings stroke={theme.colors.gray600} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.listItem}>
-              <View style={styles.row}>
-                <View style={styles.listIcon}>
-                  <AtSign stroke={theme.colors.purpleDark} width={20} />
-                </View>
-                <View>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style={styles.body}>{item.body}</Text>
-                </View>
+      <FlatList
+        contentInsetAdjustmentBehavior="automatic"
+        data={data}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() =>
+              navigation.navigate("NotificationDetail", { ...item })
+            }
+          >
+            <View style={styles.row}>
+              <View style={styles.listIcon}>
+                <AtSign stroke={theme.colors.purpleDark} width={20} />
               </View>
-            </TouchableOpacity>
-          )}
-          ItemSeparatorComponent={ListSeparator}
-          keyExtractor={(item) => item.title}
-          removeClippedSubviews
-        />
-      </View>
+              <View>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.body}>{item.body}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+        ItemSeparatorComponent={ListSeparator}
+        keyExtractor={(item) => item.title}
+        removeClippedSubviews
+      />
     </SafeAreaView>
   );
 }
