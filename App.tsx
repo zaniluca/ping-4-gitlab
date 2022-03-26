@@ -37,8 +37,7 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Inbox"
           screenOptions={{
-            headerLargeTitle: true,
-            headerShadowVisible: false,
+            headerLargeTitleShadowVisible: false,
             headerTintColor: theme.colors.gray900,
             headerLargeTitleStyle: {
               fontWeight: "bold",
@@ -50,17 +49,21 @@ export default function App() {
             },
           }}
         >
-          <Stack.Screen name="Inbox" component={InboxScreen} />
           <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ headerLargeStyle: false }}
+            name="Inbox"
+            component={InboxScreen}
+            options={{
+              headerLargeTitle: true,
+              headerSearchBarOptions: {
+                placeholder: "Search for notifications",
+              },
+            }}
           />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen
             name="NotificationDetail"
             component={NotificationDetail}
             options={({ route }) => ({
-              headerLargeTitle: false,
               title: route.params.title,
             })}
           />

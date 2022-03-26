@@ -4,6 +4,7 @@ const colors = {
   orange300: "#FCA121",
   orange600: "#FC6D26",
   orange900: "#E24329",
+  gray100: "#F9F9F9",
   gray300: "#CCCCCC",
   gray600: "#8C929D",
   gray900: "#2E2E2E",
