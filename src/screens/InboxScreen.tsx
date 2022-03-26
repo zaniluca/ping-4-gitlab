@@ -4,10 +4,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  SectionList,
   FlatList,
 } from "react-native";
-import { GitCommit } from "react-native-feather";
+import { AtSign, GitCommit } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ListSeparator } from "../components/ListSeparator";
 import theme from "../utils/theme";
@@ -55,7 +54,7 @@ const data = [
   },
 ];
 
-export default function HomeScreen() {
+export default function InboxScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -64,9 +63,9 @@ export default function HomeScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.listItem}>
               <View style={styles.row}>
-                {/* <View style={styles.listIcon}>
-                  <GitCommit stroke={theme.colors.purpleDark} />
-                </View> */}
+                <View style={styles.listIcon}>
+                  <AtSign stroke={theme.colors.purpleDark} width={20} />
+                </View>
                 <View>
                   <Text style={styles.title}>{item.title}</Text>
                   <Text style={styles.body}>{item.body}</Text>
@@ -74,9 +73,9 @@ export default function HomeScreen() {
               </View>
             </TouchableOpacity>
           )}
-          // renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
           ItemSeparatorComponent={ListSeparator}
           keyExtractor={(item) => item.title}
+          removeClippedSubviews
         />
       </View>
     </SafeAreaView>
@@ -86,6 +85,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   row: {
     flexDirection: "row",
@@ -100,9 +100,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     color: theme.colors.gray900,
+    fontFamily: theme.fonts.sourceSansPro.regular,
   },
   body: {
+    paddingTop: 2,
     fontSize: 15,
     color: theme.colors.gray600,
+    fontFamily: theme.fonts.sourceSansPro.regular,
   },
 });

@@ -9,8 +9,16 @@ const colors = {
   gray900: "#2E2E2E",
 };
 
+const fonts = {
+  sourceSansPro: {
+    bold: "SourceSansPro_700Bold",
+    regular: "SourceSansPro_400Regular",
+  },
+};
+
 const theme = {
   colors,
+  fonts,
 };
 
 export default theme;
