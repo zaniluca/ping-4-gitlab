@@ -22,7 +22,7 @@ export default function InboxScreen({ navigation }: Props) {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <InboxList />
     </SafeAreaView>
   );
