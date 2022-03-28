@@ -19,6 +19,7 @@ import AppLoading from "expo-app-loading";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import { RootStackParamList } from "./src/navigation/types";
 import NotificationDetail from "./src/screens/NotificationDetail";
+import LoginScreen from "./src/screens/LoginScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -35,7 +36,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Inbox"
+          initialRouteName="Login"
           screenOptions={{
             headerLargeTitleShadowVisible: false,
             headerTintColor: theme.colors.gray900,
@@ -60,6 +61,13 @@ export default function App() {
             }}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="NotificationDetail"
             component={NotificationDetail}
