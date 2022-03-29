@@ -18,39 +18,70 @@ type Props = TextInputProps & {
 const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
   const [focused, setFocused] = React.useState(false);
 
-  // const getFlexDirection = () => {
-  //   if (icon && iconPosition) {
-  //     if (iconPosition === 'left') {
-  //       return 'row';
-  //     } else if (iconPosition === 'right') {
-  //       return 'row-reverse';
-  //     }
-  //   }
-  // };
+  const getLabelColor = () => {
+    if (error) {
+      return "red";
+    }
 
-  // const getBorderColor = () => {
-  //   if (error) {
-  //     return colors.danger;
-  //   }
+    if (focused) {
+      return theme.colors.purpleLight;
+    } else {
+      return theme.colors.gray600;
+    }
+  };
 
-  //   if (focused) {
-  //     return colors.primary;
-  //   } else {
-  //     return colors.grey;
-  //   }
-  // };
+  const getPlaceholderColor = () => {
+    // Specifying opacity with "+60"
+    if (error) {
+      return "#ff0000" + "60";
+    }
+
+    if (focused) {
+      return theme.colors.purpleLight + "60";
+    } else {
+      return undefined;
+    }
+  };
+
+  const getTextColor = () => {
+    if (error) {
+      return "red";
+    }
+
+    if (focused) {
+      return theme.colors.purpleLight;
+    } else {
+      return theme.colors.gray900;
+    }
+  };
+
+  const getBorderColor = () => {
+    if (error) {
+      return "red";
+    }
+
+    if (focused) {
+      return theme.colors.purpleLight;
+    } else {
+      return "transparent";
+    }
+  };
+
   return (
-    <View style={[styles.container, style]}>
-      <View style={[styles.wrapper, { borderColor: "transparent" }]}>
+    <View style={style}>
+      <View style={[styles.wrapper, { borderColor: getBorderColor() }]}>
         {label && (
           <View style={styles.labelWrapper}>
-            <Text style={styles.label}>{label}</Text>
+            <Text style={[styles.label, { color: getLabelColor() }]}>
+              {label}
+            </Text>
           </View>
         )}
         <View style={styles.inputWrapper}>
           <TextInput
             {...props}
-            style={styles.textInput}
+            style={[styles.textInput, { color: getTextColor() }]}
+            placeholderTextColor={getPlaceholderColor()}
             onFocus={() => {
               setFocused(true);
             }}
@@ -60,8 +91,6 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
           />
         </View>
       </View>
-
-      {/* {error && <Text style={styles.error}>{error}</Text>} */}
     </View>
   );
 };
@@ -69,10 +98,6 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 export default Input;
 
 const styles = StyleSheet.create({
-  container: {
-    // paddingVertical: 12,
-    // backgroundColor: "red",
-  },
   wrapper: {
     height: 56,
     borderWidth: 1,
@@ -97,7 +122,6 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: theme.fonts.sourceSansPro.regular,
     fontSize: 17,
-    color: theme.colors.gray600,
     textTransform: "capitalize",
   },
   textInput: {
@@ -106,14 +130,6 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.sourceSansPro.semibold,
     fontSize: 17,
     color: theme.colors.gray900,
-    // paddingVertical: 16,
     backgroundColor: theme.colors.gray100,
-    // borderRadius: 4,
   },
-
-  // error: {
-  //   color: "red",
-  //   paddingTop: 4,
-  //   fontSize: 12,
-  // },
 });

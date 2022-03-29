@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import theme from "../utils/theme";
@@ -9,6 +9,11 @@ import Button from "../components/Button";
 import { openUrl } from "../utils/open-url";
 import { Formik } from "formik";
 import { signupSchema } from "../utils/validation";
+import Hint from "../components/Hint";
+import { RootStackParamList } from "../navigation/types";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
 const INITIAL_VALUES = {
   email: "",
@@ -16,7 +21,7 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
-export default function SignupScreen() {
+export default function SignupScreen({ navigation }: Props) {
   const handleSubmit = (values: typeof INITIAL_VALUES) => {
     console.log(values);
   };
@@ -70,12 +75,13 @@ export default function SignupScreen() {
                   onBlur={handleBlur("confirmPassword")}
                   value={values.confirmPassword}
                   label="confirm"
+                  error="Password field is required"
                   autoCompleteType="password"
                 />
-                <Text style={styles.passwordHint}>
+                <Hint>
                   Your password must be 8 or more characters long & contain a
                   mix of upper & lower case letters, numbers & symbols.
-                </Text>
+                </Hint>
                 <Text>{JSON.stringify(errors, null, 2)}</Text>
                 <Button
                   title="Create an account"
@@ -104,6 +110,12 @@ export default function SignupScreen() {
             </Text>
             .
           </Text>
+          <Text style={styles.body}>
+            Already have an account?{" "}
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.signInButton}> Sign in</Text>
+            </TouchableOpacity>
+          </Text>
         </View>
       </KeyboardAvoid>
     </SafeAreaView>
@@ -129,12 +141,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: theme.colors.gray900,
   },
-  passwordHint: {
-    marginTop: 8,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 12,
-    color: theme.colors.gray600,
-  },
   disclaimerText: {
     marginTop: 16,
     flexDirection: "row",
@@ -143,5 +149,18 @@ const styles = StyleSheet.create({
   },
   disclaimerLink: {
     color: theme.colors.purpleDark,
+  },
+  // What a bad naming, this is actually the already have an account
+  body: {
+    marginTop: 16,
+    textAlign: "center",
+    fontFamily: theme.fonts.sourceSansPro.regular,
+    fontSize: 17,
+    color: theme.colors.gray900,
+  },
+  signInButton: {
+    fontFamily: theme.fonts.sourceSansPro.semibold,
+    color: theme.colors.purpleDark,
+    fontSize: 17,
   },
 });
