@@ -5,6 +5,7 @@ import theme from "../utils/theme";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
+import Button from "../components/Button";
 
 export default function LoginScreen() {
   const [email, setEmail] = React.useState("");
@@ -36,6 +37,7 @@ export default function LoginScreen() {
             label="password"
             autoCompleteType="password"
           />
+          <Button title="Login" onPress={() => setEmail("Login")} />
         </View>
       </KeyboardAvoid>
     </SafeAreaView>
