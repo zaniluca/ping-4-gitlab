@@ -7,11 +7,19 @@ import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { openUrl } from "../utils/open-url";
+import { Formik } from "formik";
+import { signupSchema } from "../utils/validation";
+
+const INITIAL_VALUES = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 export default function SignupScreen() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const handleSubmit = (values: typeof INITIAL_VALUES) => {
+    console.log(values);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,41 +30,61 @@ export default function SignupScreen() {
           Create an account so you can save your notifications across devices
         </Text>
         <View style={{ marginTop: 24 }}>
-          <Input
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            label="email"
-            autoCompleteType="email"
-            spellCheck={false}
-          />
-          <Input
-            style={{ marginTop: 8 }}
-            secureTextEntry
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            label="password"
-            autoCompleteType="password"
-          />
-          <Input
-            style={{ marginTop: 8 }}
-            secureTextEntry
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            label="confirm"
-            autoCompleteType="password"
-          />
-          <Text style={styles.passwordHint}>
-            Your password must be 8 or more characters long & contain a mix of
-            upper & lower case letters, numbers & symbols.
-          </Text>
-          <Button
-            title="Create an account"
-            style={{ marginTop: 32 }}
-            onPress={() => setEmail("sss")}
-          />
+          <Formik
+            initialValues={INITIAL_VALUES}
+            onSubmit={handleSubmit}
+            validationSchema={signupSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit: submit,
+              values,
+              errors,
+            }) => (
+              <>
+                <Input
+                  placeholder="Enter your email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  label="email"
+                  autoCompleteType="email"
+                  spellCheck={false}
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Enter your password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  label="password"
+                  autoCompleteType="password"
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Confirm password"
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  value={values.confirmPassword}
+                  label="confirm"
+                  autoCompleteType="password"
+                />
+                <Text style={styles.passwordHint}>
+                  Your password must be 8 or more characters long & contain a
+                  mix of upper & lower case letters, numbers & symbols.
+                </Text>
+                <Text>{JSON.stringify(errors, null, 2)}</Text>
+                <Button
+                  title="Create an account"
+                  style={{ marginTop: 32 }}
+                  onPress={submit}
+                />
+              </>
+            )}
+          </Formik>
           {/* Disclaimer Section */}
           <Text style={styles.disclaimerText}>
             By signing up, you're agree to our{"\n"}

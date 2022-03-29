@@ -6,10 +6,17 @@ import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { Formik } from "formik";
+
+const INITIAL_VALUES = {
+  email: "",
+  password: "",
+};
 
 export default function LoginScreen() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const handleSubmit = (values: typeof INITIAL_VALUES) => {
+    console.log(values);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,28 +27,36 @@ export default function LoginScreen() {
           Use your credentials to log in to your account
         </Text>
         <View style={{ marginTop: 24 }}>
-          <Input
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            label="email"
-            autoCompleteType="email"
-            spellCheck={false}
-          />
-          <Input
-            style={{ marginTop: 8 }}
-            secureTextEntry
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            label="password"
-            autoCompleteType="password"
-          />
-          <Button
-            title="Login"
-            style={{ marginTop: 32 }}
-            onPress={() => setEmail("Login")}
-          />
+          <Formik initialValues={INITIAL_VALUES} onSubmit={handleSubmit}>
+            {({ handleChange, handleBlur, handleSubmit: submit, values }) => (
+              <>
+                <Input
+                  placeholder="Enter your email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  label="email"
+                  autoCompleteType="email"
+                  spellCheck={false}
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Enter your password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.email}
+                  label="password"
+                  autoCompleteType="password"
+                />
+                <Button
+                  title="Login"
+                  style={{ marginTop: 32 }}
+                  onPress={submit}
+                />
+              </>
+            )}
+          </Formik>
           <TouchableOpacity
             style={{
               marginTop: 16,
