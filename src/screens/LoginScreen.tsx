@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "white",
+    marginTop: 32,
   },
   title: {
     marginTop: 20,

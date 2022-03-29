@@ -6,6 +6,7 @@ import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { openUrl } from "../utils/open-url";
 
 export default function SignupScreen() {
   const [email, setEmail] = React.useState("");
@@ -16,7 +17,7 @@ export default function SignupScreen() {
     <SafeAreaView style={styles.container}>
       <BackButton />
       <KeyboardAvoid>
-        <Text style={styles.title}>Sign up</Text>
+        <Text style={styles.title}>Sign Up</Text>
         <Text style={styles.subtitle}>
           Create an account so you can save your notifications across devices
         </Text>
@@ -59,8 +60,21 @@ export default function SignupScreen() {
           {/* Disclaimer Section */}
           <Text style={styles.disclaimerText}>
             By signing up, you're agree to our{"\n"}
-            <Text style={styles.disclaimerLink}>Terms of Use</Text> and
-            <Text style={styles.disclaimerLink}> Privacy Policy</Text>.
+            <Text
+              style={styles.disclaimerLink}
+              onPress={() => openUrl("https://google.com")}
+            >
+              Terms of Use
+            </Text>{" "}
+            and
+            <Text
+              style={styles.disclaimerLink}
+              onPress={() => openUrl("https://google.com")}
+            >
+              {" "}
+              Privacy Policy
+            </Text>
+            .
           </Text>
         </View>
       </KeyboardAvoid>
@@ -73,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "white",
+    marginTop: 32,
   },
   title: {
     marginTop: 20,
