@@ -17,11 +17,13 @@ type Props = {
 
 const Button: React.FC<Props> = ({ onPress, title, style }) => {
   return (
-    // <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-    //   </TouchableOpacity>
-    <Pressable style={[styles.button, style]} onPress={onPress}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={[styles.button, style]}
+      onPress={onPress}
+    >
       <Text style={styles.text}>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Settings: undefined;
   NotificationDetail: Notification;
   Login: undefined;
+  Signup: undefined;
 };
 
 type Notification = {

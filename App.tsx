@@ -20,6 +20,7 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import { RootStackParamList } from "./src/navigation/types";
 import NotificationDetail from "./src/screens/NotificationDetail";
 import LoginScreen from "./src/screens/LoginScreen";
+import SignupScreen from "./src/screens/SignupScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -36,7 +37,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Signup"
           screenOptions={{
             headerLargeTitleShadowVisible: false,
             headerTintColor: theme.colors.gray900,
@@ -64,6 +65,13 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={SignupScreen}
             options={{
               headerShown: false,
             }}
