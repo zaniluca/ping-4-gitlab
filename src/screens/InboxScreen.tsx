@@ -5,6 +5,7 @@ import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
+import InboxOnboardSheet from "../components/inbox/InboxOnboardSheet";
 import { RootStackParamList } from "../navigation/types";
 import theme from "../utils/theme";
 
@@ -24,6 +25,7 @@ export default function InboxScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <InboxList />
+      <InboxOnboardSheet />
     </SafeAreaView>
   );
 }
