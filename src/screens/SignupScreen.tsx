@@ -39,6 +39,8 @@ export default function SignupScreen({ navigation }: Props) {
             initialValues={INITIAL_VALUES}
             onSubmit={handleSubmit}
             validationSchema={signupSchema}
+            validateOnChange={false}
+            validateOnBlur={false}
           >
             {({
               handleChange,
@@ -53,6 +55,7 @@ export default function SignupScreen({ navigation }: Props) {
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   value={values.email}
+                  error={errors.email}
                   label="email"
                   autoCompleteType="email"
                   spellCheck={false}
@@ -64,6 +67,7 @@ export default function SignupScreen({ navigation }: Props) {
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
                   value={values.password}
+                  error={errors.password}
                   label="password"
                   autoCompleteType="password"
                 />
@@ -74,8 +78,8 @@ export default function SignupScreen({ navigation }: Props) {
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
                   value={values.confirmPassword}
+                  error={errors.confirmPassword}
                   label="confirm"
-                  error="Password field is required"
                   autoCompleteType="password"
                 />
                 <Hint>
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "white",
-    marginTop: 32,
+    paddingTop: 32,
   },
   title: {
     marginTop: 20,

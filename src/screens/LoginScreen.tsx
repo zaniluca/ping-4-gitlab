@@ -27,7 +27,12 @@ export default function LoginScreen() {
           Use your credentials to log in to your account
         </Text>
         <View style={{ marginTop: 24 }}>
-          <Formik initialValues={INITIAL_VALUES} onSubmit={handleSubmit}>
+          <Formik
+            initialValues={INITIAL_VALUES}
+            onSubmit={handleSubmit}
+            validateOnChange={false}
+            validateOnBlur={false}
+          >
             {({ handleChange, handleBlur, handleSubmit: submit, values }) => (
               <>
                 <Input
@@ -45,7 +50,7 @@ export default function LoginScreen() {
                   placeholder="Enter your password"
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
-                  value={values.email}
+                  value={values.password}
                   label="password"
                   autoCompleteType="password"
                 />
@@ -79,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "white",
-    marginTop: 32,
+    paddingTop: 32,
   },
   title: {
     marginTop: 20,
