@@ -6,7 +6,6 @@ const Hint: React.FC = ({ children }) => {
   return (
     <Text
       style={{
-        marginTop: 8,
         fontFamily: theme.fonts.sourceSansPro.regular,
         fontSize: 12,
         color: theme.colors.gray600,
