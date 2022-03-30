@@ -24,9 +24,9 @@ const InboxItem: React.FC<Props> = ({ item }) => {
     >
       <View style={styles.row}>
         <View style={styles.icon}>
-          <AtSign stroke={theme.colors.purpleDark} width={20} />
+          <AtSign stroke={theme.colors.purpleLight} width={20} />
         </View>
-        <View>
+        <View style={{ flexShrink: 1 }}>
           <View style={[styles.row, { justifyContent: "space-between" }]}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
               {item.title}
@@ -45,10 +45,12 @@ const InboxItem: React.FC<Props> = ({ item }) => {
 export default InboxItem;
 
 const styles = StyleSheet.create({
-  row: { flexDirection: "row" },
+  row: {
+    flexDirection: "row",
+  },
   container: {
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    marginHorizontal: 16,
   },
   icon: {
     paddingRight: 8,
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: theme.colors.gray900,
     fontFamily: theme.fonts.sourceSansPro.regular,
+    flexShrink: 1,
   },
   body: {
     paddingTop: 2,

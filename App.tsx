@@ -37,7 +37,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Signup"
+          initialRouteName="Inbox"
           screenOptions={{
             headerLargeTitleShadowVisible: false,
             headerTintColor: theme.colors.gray900,

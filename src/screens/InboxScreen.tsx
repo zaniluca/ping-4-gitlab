@@ -7,7 +7,6 @@ import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import { RootStackParamList } from "../navigation/types";
 import theme from "../utils/theme";
-import SkeletonContent from "react-native-skeleton-content";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Inbox">;
 
@@ -31,7 +30,6 @@ export default function InboxScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "white",
   },
 });
