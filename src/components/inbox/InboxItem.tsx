@@ -28,12 +28,21 @@ const InboxItem: React.FC<Props> = ({ item }) => {
         </View>
         <View style={{ flexShrink: 1 }}>
           <View style={[styles.row, { justifyContent: "space-between" }]}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
-              {item.title}
-            </Text>
-            <Text style={styles.time}>12:24</Text>
+            <View style={{ flexShrink: 1, paddingEnd: 2 }}>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="middle"
+                style={styles.headline}
+              >
+                {"kampaay/kampaay-storefront #320"}
+              </Text>
+              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
+                {item.title}
+              </Text>
+            </View>
+            <Text style={styles.time}>1h</Text>
           </View>
-          <Text numberOfLines={3} ellipsizeMode="tail" style={styles.body}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.body}>
             {item.body}
           </Text>
         </View>
@@ -55,10 +64,16 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: 8,
   },
+  headline: {
+    fontSize: 16,
+    color: theme.colors.gray600,
+    fontFamily: theme.fonts.sourceSansPro.regular,
+    flexShrink: 1,
+  },
   title: {
     fontSize: 17,
     color: theme.colors.gray900,
-    fontFamily: theme.fonts.sourceSansPro.regular,
+    fontFamily: theme.fonts.sourceSansPro.semibold,
     flexShrink: 1,
   },
   body: {
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 16,
-    color: theme.colors.gray900,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
+    color: theme.colors.gray600,
+    fontFamily: theme.fonts.sourceSansPro.regular,
   },
 });
