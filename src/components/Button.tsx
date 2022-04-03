@@ -1,5 +1,4 @@
 import {
-  Pressable,
   StyleProp,
   StyleSheet,
   Text,

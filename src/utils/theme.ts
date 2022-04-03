@@ -1,9 +1,10 @@
 const colors = {
   purpleLight: "#6E49CB",
   purpleDark: "#380D75",
-  orange300: "#FCA121",
-  orange600: "#FC6D26",
-  orange900: "#E24329",
+  green: "#108548",
+  blue: "#1068BF",
+  red: "#E24329",
+  orange: "#FC6D26",
   gray100: "#F9F9F9",
   gray300: "#CCCCCC",
   gray600: "#8C929D",

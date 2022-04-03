@@ -20,7 +20,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 
   const getLabelColor = () => {
     if (error) {
-      return "red";
+      return theme.colors.red;
     }
 
     if (focused) {
@@ -33,7 +33,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
   const getPlaceholderColor = () => {
     // Specifying opacity with "+60"
     if (error) {
-      return "#ff0000" + "60";
+      return theme.colors.red + "60";
     }
 
     if (focused) {
@@ -45,7 +45,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 
   const getTextColor = () => {
     if (error) {
-      return "red";
+      return theme.colors.red;
     }
 
     if (focused) {
@@ -57,7 +57,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 
   const getBorderColor = () => {
     if (error) {
-      return "red";
+      return theme.colors.red;
     }
 
     if (focused) {
