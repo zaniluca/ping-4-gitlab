@@ -32,6 +32,7 @@ export default function InboxScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "white",
   },
 });
