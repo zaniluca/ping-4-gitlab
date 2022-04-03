@@ -1,21 +1,26 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import theme from "../../utils/theme";
-import { AtSign } from "react-native-feather";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Notification } from "../../utils/types";
+import { parseHeaders } from "../../utils/parse-headers";
+import InboxItemIcon from "./InboxItemIcon";
 
 type Props = {
-  item: {
-    title: string;
-    body: string;
-  };
+  item: Notification;
 };
 
 const InboxItem: React.FC<Props> = ({ item }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const headers = parseHeaders(item.headers);
+
+  const NotificationIcon = () => {};
+
+  const iid = headers["x-gitlab-issue-iid"];
 
   return (
     <TouchableOpacity
@@ -24,26 +29,32 @@ const InboxItem: React.FC<Props> = ({ item }) => {
     >
       <View style={styles.row}>
         <View style={styles.icon}>
-          <AtSign stroke={theme.colors.purpleLight} width={20} />
+          <InboxItemIcon headers={headers} width={20} />
         </View>
         <View style={{ flexShrink: 1 }}>
           <View style={[styles.row, { justifyContent: "space-between" }]}>
-            <View style={{ flexShrink: 1, paddingEnd: 2 }}>
+            <View
+              style={{
+                flexShrink: 1,
+                paddingEnd: 2,
+                justifyContent: "space-between",
+              }}
+            >
               <Text
                 numberOfLines={1}
                 ellipsizeMode="middle"
-                style={styles.headline}
+                style={styles.project}
               >
-                {"kampaay/kampaay-storefront #320"}
+                {headers["x-gitlab-project-path"] + " #" + iid}
               </Text>
               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
-                {item.title}
+                {item.subject}
               </Text>
             </View>
             <Text style={styles.time}>1h</Text>
           </View>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.body}>
-            {item.body}
+            {item.text}
           </Text>
         </View>
       </View>
@@ -64,7 +75,7 @@ const styles = StyleSheet.create({
   icon: {
     paddingRight: 8,
   },
-  headline: {
+  project: {
     fontSize: 16,
     color: theme.colors.gray600,
     fontFamily: theme.fonts.sourceSansPro.regular,

@@ -55,7 +55,7 @@ const RootStackNavigator = () => {
         name="NotificationDetail"
         component={NotificationDetail}
         options={({ route }) => ({
-          title: route.params.title,
+          title: route.params.subject,
         })}
       />
     </Stack.Navigator>

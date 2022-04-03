@@ -12,7 +12,7 @@ import theme from "../utils/theme";
 type Props = NativeStackScreenProps<RootStackParamList, "Inbox">;
 
 export default function InboxScreen({ navigation }: Props) {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton onPress={() => navigation.navigate("Settings")}>

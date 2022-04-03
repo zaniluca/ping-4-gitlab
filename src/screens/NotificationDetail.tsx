@@ -8,8 +8,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "NotificationDetail">;
 export default function NotificationDetail({ route, navigation }: Props) {
   return (
     <View>
-      <Text>{route.params.title}</Text>
-      <Text>{route.params.body}</Text>
+      <Text>{route.params.subject}</Text>
+      <Text>{route.params.text}</Text>
     </View>
   );
 }
