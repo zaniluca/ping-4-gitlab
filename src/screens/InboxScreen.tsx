@@ -25,7 +25,7 @@ export default function InboxScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <InboxList />
-      <InboxOnboardSheet />
+      {/* <InboxOnboardSheet /> */}
     </SafeAreaView>
   );
 }
