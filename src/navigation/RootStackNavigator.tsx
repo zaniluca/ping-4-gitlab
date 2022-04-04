@@ -6,6 +6,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
 import theme from "../utils/theme";
+import GetStartedScreen from "../screens/GetStartedScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -57,6 +58,16 @@ const RootStackNavigator = () => {
         options={({ route }) => ({
           title: route.params.subject,
         })}
+      />
+      <Stack.Screen
+        name="GetStarted"
+        component={GetStartedScreen}
+        options={{
+          presentation: "modal",
+          title: "Get Started",
+          headerLargeTitle: true,
+          gestureEnabled: false,
+        }}
       />
     </Stack.Navigator>
   );
