@@ -17,9 +17,6 @@ const InboxItem: React.FC<Props> = ({ item }) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const headers = parseHeaders(item.headers);
-
-  const NotificationIcon = () => {};
-
   const iid = headers["x-gitlab-issue-iid"];
 
   return (
