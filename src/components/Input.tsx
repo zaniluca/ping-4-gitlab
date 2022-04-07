@@ -1,13 +1,8 @@
+import { useTheme } from "@shopify/restyle";
 import React from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  TextInputProps,
-  StyleProp,
-  Text,
-} from "react-native";
-import theme from "../utils/theme";
+import { TextInput, StyleSheet, TextInputProps, StyleProp } from "react-native";
+import theme, { Theme } from "../utils/theme";
+import { Text, Box } from "./restyle";
 
 type Props = TextInputProps & {
   style?: StyleProp<any>;
@@ -16,71 +11,76 @@ type Props = TextInputProps & {
 };
 
 const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
+  const { colors, textVariants } = useTheme<Theme>();
   const [focused, setFocused] = React.useState(false);
 
   const getLabelColor = () => {
     if (error) {
-      return theme.colors.red;
+      return colors.red;
     }
 
     if (focused) {
-      return theme.colors.purpleLight;
+      return colors.purple;
     } else {
-      return theme.colors.gray600;
+      return colors.gray600;
     }
   };
 
   const getPlaceholderColor = () => {
     // Specifying opacity with "+60"
     if (error) {
-      return theme.colors.red + "60";
+      return colors.red + "60";
     }
 
     if (focused) {
-      return theme.colors.purpleLight + "60";
+      return colors.purple + "60";
     } else {
-      return undefined;
+      return colors.gray600 + "60";
     }
   };
 
   const getTextColor = () => {
     if (error) {
-      return theme.colors.red;
+      return colors.red;
     }
 
     if (focused) {
-      return theme.colors.purpleLight;
+      return colors.purple;
     } else {
-      return theme.colors.gray900;
+      return colors.gray900;
     }
   };
 
   const getBorderColor = () => {
     if (error) {
-      return theme.colors.red;
+      return colors.red;
     }
 
     if (focused) {
-      return theme.colors.purpleLight;
+      return colors.purple;
     } else {
       return "transparent";
     }
   };
 
   return (
-    <View style={style}>
-      <View style={[styles.wrapper, { borderColor: getBorderColor() }]}>
+    <Box style={style}>
+      <Box style={[styles.wrapper, { borderColor: getBorderColor() }]}>
         {label && (
-          <View style={styles.labelWrapper}>
-            <Text style={[styles.label, { color: getLabelColor() }]}>
+          <Box style={styles.labelWrapper}>
+            <Text
+              variant="body"
+              textTransform="capitalize"
+              style={{ color: getLabelColor() }}
+            >
               {label}
             </Text>
-          </View>
+          </Box>
         )}
-        <View style={styles.inputWrapper}>
+        <Box style={styles.inputWrapper}>
           <TextInput
             {...props}
-            style={[styles.textInput, { color: getTextColor() }]}
+            style={[textVariants.headline, { color: getTextColor() }]}
             placeholderTextColor={getPlaceholderColor()}
             onFocus={() => {
               setFocused(true);
@@ -89,9 +89,9 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
               setFocused(false);
             }}
           />
-        </View>
-      </View>
-    </View>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
@@ -119,17 +119,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     flexBasis: "auto",
   },
-  label: {
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 17,
-    textTransform: "capitalize",
-  },
   textInput: {
     flex: 1,
     width: "100%",
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    fontSize: 17,
-    color: theme.colors.gray900,
     backgroundColor: theme.colors.gray100,
   },
 });

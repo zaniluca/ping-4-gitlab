@@ -1,12 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import theme from "../../utils/theme";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Notification } from "../../utils/types";
 import { parseHeaders } from "../../utils/parse-headers";
 import InboxItemIcon from "./InboxItemIcon";
+import { Box, Text } from "../restyle";
 
 type Props = {
   item: Notification;
@@ -15,7 +15,6 @@ type Props = {
 const InboxItem: React.FC<Props> = ({ item }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   const headers = parseHeaders(item.headers);
   const iid = headers["x-gitlab-issue-iid"];
 
@@ -24,37 +23,39 @@ const InboxItem: React.FC<Props> = ({ item }) => {
       style={styles.container}
       onPress={() => navigation.navigate("NotificationDetail", item)}
     >
-      <View style={styles.row}>
-        <View style={styles.icon}>
+      <Box flexDirection="row">
+        <Box paddingRight="s">
           <InboxItemIcon headers={headers} width={20} />
-        </View>
-        <View style={{ flexShrink: 1 }}>
-          <View style={[styles.row, { justifyContent: "space-between" }]}>
-            <View
-              style={{
-                flexShrink: 1,
-                paddingEnd: 2,
-                justifyContent: "space-between",
-              }}
-            >
+        </Box>
+        <Box flexShrink={1}>
+          <Box flexDirection="row" justifyContent="space-between">
+            <Box flexShrink={1} justifyContent="space-between" paddingEnd="xxs">
               <Text
                 numberOfLines={1}
                 ellipsizeMode="middle"
-                style={styles.project}
+                variant="body"
+                color="gray600"
               >
                 {headers["x-gitlab-project-path"] + " #" + iid}
               </Text>
-              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
+              <Text numberOfLines={2} ellipsizeMode="tail" variant="body">
                 {item.subject}
               </Text>
-            </View>
-            <Text style={styles.time}>1h</Text>
-          </View>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.body}>
+            </Box>
+            <Text variant="callout" color="gray600">
+              1h
+            </Text>
+          </Box>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            variant="callout"
+            color="gray600"
+          >
             {item.text}
           </Text>
-        </View>
-      </View>
+        </Box>
+      </Box>
     </TouchableOpacity>
   );
 };
@@ -62,37 +63,8 @@ const InboxItem: React.FC<Props> = ({ item }) => {
 export default InboxItem;
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-  },
   container: {
     paddingVertical: 8,
     marginHorizontal: 16,
-  },
-  icon: {
-    paddingRight: 8,
-  },
-  project: {
-    fontSize: 16,
-    color: theme.colors.gray600,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    flexShrink: 1,
-  },
-  title: {
-    fontSize: 17,
-    color: theme.colors.gray900,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    flexShrink: 1,
-  },
-  body: {
-    paddingTop: 2,
-    fontSize: 16,
-    color: theme.colors.gray600,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-  },
-  time: {
-    fontSize: 16,
-    color: theme.colors.gray600,
-    fontFamily: theme.fonts.sourceSansPro.regular,
   },
 });

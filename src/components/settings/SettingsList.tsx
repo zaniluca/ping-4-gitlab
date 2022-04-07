@@ -2,16 +2,15 @@ import {
   ListRenderItem,
   SectionList,
   SectionListData,
-  StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
 } from "react-native";
 import React from "react";
 import { AtSign, ChevronRight, Clock, Heart } from "react-native-feather";
-import theme from "../../utils/theme";
+import { Theme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
+import { useTheme } from "@shopify/restyle";
+import { Box, Text } from "../restyle";
 
 const SETTINGS_SECTIONS: any[] = [
   // {
@@ -55,32 +54,44 @@ type SectionHeaderProps = {
   section: SectionListData<SectionItem>;
 };
 
-const renderSectionHeader = ({ section }: SectionHeaderProps) => {
-  return (
-    <View style={styles.section}>
-      <Text style={styles.sectionHeader}>{section.title}</Text>
-    </View>
+const SettingsList = () => {
+  const { colors, fontFamily, spacing } = useTheme<Theme>();
+
+  const renderSectionHeader = ({ section }: SectionHeaderProps) => {
+    return (
+      <Box padding="m" backgroundColor="gray100">
+        <Text
+          variant="callout"
+          fontFamily={fontFamily.semibold}
+          textTransform="uppercase"
+          paddingHorizontal="l"
+          letterSpacing={1.5}
+        >
+          {section.title}
+        </Text>
+      </Box>
+    );
+  };
+
+  const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
+    <TouchableOpacity
+      style={{ padding: spacing.l, backgroundColor: colors.white }}
+    >
+      <Box flexDirection="row" justifyContent="space-between">
+        <Box flexDirection="row">
+          <Box paddingRight="m">
+            <item.icon stroke={colors.gray900} strokeWidth={2} />
+          </Box>
+          <Text variant="headline">{item.name}</Text>
+        </Box>
+        <ChevronRight stroke={colors.gray900} />
+      </Box>
+    </TouchableOpacity>
   );
-};
 
-const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
-  <TouchableOpacity style={styles.listItem}>
-    <View style={[styles.row, { justifyContent: "space-between" }]}>
-      <View style={styles.row}>
-        <View style={styles.icon}>
-          <item.icon stroke={theme.colors.gray900} strokeWidth={2} />
-        </View>
-        <Text style={styles.text}>{item.name}</Text>
-      </View>
-      <ChevronRight stroke={theme.colors.gray900} />
-    </View>
-  </TouchableOpacity>
-);
-
-export default function SettingsList() {
   return (
     <SectionList
-      style={styles.list}
+      style={{ backgroundColor: colors.gray100 }}
       scrollEnabled={false}
       stickySectionHeadersEnabled={false}
       contentInsetAdjustmentBehavior="automatic"
@@ -91,42 +102,6 @@ export default function SettingsList() {
       ListFooterComponent={SettingsListFooter}
     />
   );
-}
+};
 
-const styles = StyleSheet.create({
-  list: {
-    backgroundColor: theme.colors.gray100,
-  },
-  section: {
-    padding: 8,
-    backgroundColor: theme.colors.gray100,
-  },
-  sectionHeader: {
-    paddingHorizontal: 16,
-    textTransform: "uppercase",
-    color: theme.colors.gray900,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    letterSpacing: 1.5,
-  },
-  row: {
-    flexDirection: "row",
-  },
-  listItem: {
-    padding: 16,
-    backgroundColor: "white",
-  },
-  icon: {
-    paddingRight: 8,
-  },
-  text: {
-    fontSize: 17,
-    color: theme.colors.gray900,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-  },
-  body: {
-    paddingTop: 2,
-    fontSize: 15,
-    color: theme.colors.gray600,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-  },
-});
+export default SettingsList;

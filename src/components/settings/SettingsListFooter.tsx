@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Box, Text } from "../restyle";
 
-export default function SettingsListFooter() {
+const SettingsListFooter = () => {
   return (
-    <View style={styles.container}>
+    <Box flex={1} alignItems="center" paddingTop="xl">
       <Text>Footer</Text>
-    </View>
+    </Box>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", paddingTop: 32 },
-});
+export default SettingsListFooter;

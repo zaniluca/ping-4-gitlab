@@ -1,13 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
-import theme from "../../utils/theme";
+import theme, { Theme } from "../../utils/theme";
 import { ArrowRight } from "react-native-feather";
+import { Box, Text } from "../restyle";
+import { useTheme } from "@shopify/restyle";
 
-export default function SettingsHeader() {
+export const SettingsHeader = () => {
+  const theme = useTheme<Theme>();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.primaryText}>Anonymous User</Text>
-      <Text style={styles.secondaryText}>
+      <Text variant="headline">Anonymous User</Text>
+      <Text variant="callout" color="gray600" paddingTop="xxs">
         Login to save your data on all your device
       </Text>
       <View
@@ -16,45 +20,31 @@ export default function SettingsHeader() {
           paddingBottom: 32,
         }}
       >
-        <TouchableOpacity style={[styles.btn, { width: 140 }]}>
-          <View style={styles.row}>
-            <Text style={styles.btnText}>Login</Text>
-            <ArrowRight stroke={"white"} width={20} />
-          </View>
+        <TouchableOpacity style={styles.btn}>
+          <Box flexDirection="row">
+            <Text variant="headline" color="white">
+              Login
+            </Text>
+            <ArrowRight stroke={theme.colors.white} width={20} />
+          </Box>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
+
+export default SettingsHeader;
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
-  primaryText: {
-    fontSize: 17,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    color: theme.colors.gray900,
-  },
-  secondaryText: {
-    paddingTop: 2,
-    fontSize: 16,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    color: theme.colors.gray600,
-  },
-  row: {
-    flexDirection: "row",
-  },
   btn: {
+    width: 140,
+    backgroundColor: theme.colors.purple,
     alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: theme.colors.purpleLight,
     borderRadius: 100,
-  },
-  btnText: {
-    fontSize: 17,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    color: "white",
   },
 });

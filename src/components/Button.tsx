@@ -1,12 +1,13 @@
 import {
   StyleProp,
   StyleSheet,
-  Text,
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
 import React from "react";
-import theme from "../utils/theme";
+import { Theme } from "../utils/theme";
+import { useTheme } from "@shopify/restyle";
+import { Text } from "./restyle";
 
 type Props = {
   onPress: () => void;
@@ -15,13 +16,22 @@ type Props = {
 };
 
 const Button: React.FC<Props> = ({ onPress, title, style }) => {
+  const { fontFamily, colors } = useTheme<Theme>();
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      style={[styles.button, style]}
+      style={[styles.button, style, { backgroundColor: colors.indigo }]}
       onPress={onPress}
     >
-      <Text style={styles.text}>{title}</Text>
+      <Text
+        style={[
+          styles.text,
+          { fontFamily: fontFamily.semibold, color: colors.white },
+        ]}
+      >
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -36,13 +46,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: theme.colors.purpleLight,
   },
   text: {
     fontSize: 18,
     lineHeight: 21,
-    fontFamily: theme.fonts.sourceSansPro.semibold,
     letterSpacing: 0.25,
-    color: "white",
   },
 });
