@@ -6,12 +6,17 @@ import { WebView } from "react-native-webview";
 
 type Props = NativeStackScreenProps<RootStackParamList, "NotificationDetail">;
 
-export default function NotificationDetail({ route, navigation }: Props) {
-  const source = {
-    html: route.params.html ?? "",
-  };
+const NotificationDetail: React.FC<Props> = ({ navigation, route }) => {
+  return (
+    <WebView
+      source={{
+        html: route.params.html ?? "",
+      }}
+      textZoom={125}
+    />
+  );
+};
 
-  return <WebView source={source} textZoom={125} />;
-}
+export default NotificationDetail;
 
 const styles = StyleSheet.create({});

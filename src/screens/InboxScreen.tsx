@@ -10,7 +10,7 @@ import theme from "../utils/theme";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Inbox">;
 
-export default function InboxScreen({ navigation }: Props) {
+const InboxScreen: React.FC<Props> = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -27,7 +27,9 @@ export default function InboxScreen({ navigation }: Props) {
       <InboxList />
     </SafeAreaView>
   );
-}
+};
+
+export default InboxScreen;
 
 const styles = StyleSheet.create({
   container: {

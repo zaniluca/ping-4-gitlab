@@ -7,13 +7,14 @@ import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
 import theme from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
+import LandingScreen from "../screens/LandingScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Inbox"
+      initialRouteName="Landing"
       screenOptions={{
         headerLargeTitleShadowVisible: false,
         headerTintColor: theme.colors.gray900,
@@ -58,6 +59,13 @@ const RootStackNavigator = () => {
         options={({ route }) => ({
           title: route.params.subject,
         })}
+      />
+      <Stack.Screen
+        name="Landing"
+        component={LandingScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="GetStarted"

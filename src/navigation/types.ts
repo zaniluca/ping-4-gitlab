@@ -6,5 +6,6 @@ export type RootStackParamList = {
   GetStarted: undefined;
   NotificationDetail: Notification;
   Login: undefined;
+  Landing: undefined;
   Signup: undefined;
 };

@@ -8,14 +8,16 @@ import SettingsHeader from "../components/settings/SettingsHeader";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Settings">;
 
-export default function SettingsScreen({ navigation }: Props) {
+const SettingsScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <SettingsHeader />
       <SettingsList />
     </SafeAreaView>
   );
-}
+};
+
+export default SettingsScreen;
 
 const styles = StyleSheet.create({
   container: {

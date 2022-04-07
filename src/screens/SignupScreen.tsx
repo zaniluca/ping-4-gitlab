@@ -27,7 +27,7 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
-export default function SignupScreen({ navigation }: Props) {
+const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const handleSubmit = (values: typeof INITIAL_VALUES) => {
     console.log(values);
   };
@@ -150,7 +150,9 @@ export default function SignupScreen({ navigation }: Props) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
+
+export default SignupScreen;
 
 const styles = StyleSheet.create({
   container: {

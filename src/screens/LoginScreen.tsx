@@ -13,13 +13,17 @@ import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Formik } from "formik";
+import { RootStackParamList } from "../navigation/types";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 const INITIAL_VALUES = {
   email: "",
   password: "",
 };
 
-export default function LoginScreen() {
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const handleSubmit = (values: typeof INITIAL_VALUES) => {
     console.log(values);
   };
@@ -69,6 +73,12 @@ export default function LoginScreen() {
                 </>
               )}
             </Formik>
+            <Text style={styles.body}>
+              Don't have an account?{" "}
+              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                <Text style={styles.signUpButton}> Signup</Text>
+              </TouchableOpacity>
+            </Text>
             <TouchableOpacity
               style={{
                 marginTop: 16,
@@ -85,7 +95,9 @@ export default function LoginScreen() {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
+
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -110,5 +122,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.sourceSansPro.semibold,
     fontSize: 17,
     color: theme.colors.purpleDark,
+  },
+  body: {
+    marginTop: 16,
+    textAlign: "center",
+    fontFamily: theme.fonts.sourceSansPro.regular,
+    fontSize: 17,
+    color: theme.colors.gray900,
+    paddingBottom: 32,
+  },
+  signUpButton: {
+    fontFamily: theme.fonts.sourceSansPro.semibold,
+    color: theme.colors.purpleDark,
+    fontSize: 17,
   },
 });

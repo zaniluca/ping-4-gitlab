@@ -13,37 +13,37 @@ import theme from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 
-const SETTINGS_SECTIONS = [
-  {
-    title: "Content",
-    data: [
-      {
-        name: "Favourites",
-        icon: (props: SvgProps) => <Heart {...props} />,
-      },
-      {
-        name: "Work Hours",
-        icon: (props: SvgProps) => <Clock {...props} />,
-      },
-    ],
-  },
-  {
-    title: "Content",
-    data: [
-      {
-        name: "Name",
-        icon: (props: SvgProps) => <AtSign {...props} />,
-      },
-      {
-        name: "Name",
-        icon: (props: SvgProps) => <AtSign {...props} />,
-      },
-      {
-        name: "Name",
-        icon: (props: SvgProps) => <AtSign {...props} />,
-      },
-    ],
-  },
+const SETTINGS_SECTIONS: any[] = [
+  // {
+  //   title: "Content",
+  //   data: [
+  //     {
+  //       name: "Favourites",
+  //       icon: (props: SvgProps) => <Heart {...props} />,
+  //     },
+  //     {
+  //       name: "Work Hours",
+  //       icon: (props: SvgProps) => <Clock {...props} />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Content",
+  //   data: [
+  //     {
+  //       name: "Name",
+  //       icon: (props: SvgProps) => <AtSign {...props} />,
+  //     },
+  //     {
+  //       name: "Name",
+  //       icon: (props: SvgProps) => <AtSign {...props} />,
+  //     },
+  //     {
+  //       name: "Name",
+  //       icon: (props: SvgProps) => <AtSign {...props} />,
+  //     },
+  //   ],
+  // },
 ];
 
 type SectionItem = {

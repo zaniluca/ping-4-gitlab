@@ -6,7 +6,7 @@ import { RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "GetStarted">;
 
-export default function GetStartedScreen({ navigation }: Props) {
+const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <ScrollView
@@ -20,7 +20,9 @@ export default function GetStartedScreen({ navigation }: Props) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
+
+export default GetStartedScreen;
 
 const styles = StyleSheet.create({
   container: {
