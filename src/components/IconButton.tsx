@@ -1,5 +1,6 @@
 import { TouchableOpacity } from "react-native";
 import React from "react";
+import { Box } from "./restyle";
 
 type Props = {
   onPress: () => void;
@@ -7,13 +8,8 @@ type Props = {
 
 const IconButton: React.FC<Props> = ({ children, onPress }) => {
   return (
-    <TouchableOpacity
-      style={{
-        padding: 4,
-      }}
-      onPress={onPress}
-    >
-      {children}
+    <TouchableOpacity onPress={onPress}>
+      <Box padding="s">{children}</Box>
     </TouchableOpacity>
   );
 };

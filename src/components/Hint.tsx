@@ -1,16 +1,9 @@
-import { Text } from "react-native";
 import React from "react";
-import theme from "../utils/theme";
+import { Text } from "./restyle";
 
 const Hint: React.FC = ({ children }) => {
   return (
-    <Text
-      style={{
-        fontFamily: theme.fonts.sourceSansPro.regular,
-        fontSize: 12,
-        color: theme.colors.gray600,
-      }}
-    >
+    <Text variant="caption" color="gray600">
       {children}
     </Text>
   );

@@ -13,6 +13,7 @@
     "@expo-google-fonts/source-sans-pro": "^0.2.2",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
+    "@shopify/restyle": "^2.0.0",
     "expo": "~44.0.0",
     "expo-app-loading": "~1.3.0",
     "expo-font": "~10.0.4",

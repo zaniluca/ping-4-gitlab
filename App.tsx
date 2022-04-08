@@ -9,6 +9,8 @@ import {
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
+import { ThemeProvider } from "@shopify/restyle";
+import theme from "./src/utils/theme";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,11 +24,13 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <RootStackNavigator />
-      </NavigationContainer>
+    <ThemeProvider theme={theme}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RootStackNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
       <StatusBar style="auto" />
-    </SafeAreaProvider>
+    </ThemeProvider>
   );
 }

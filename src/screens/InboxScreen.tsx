@@ -1,17 +1,20 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
+import { useTheme } from "@shopify/restyle";
+import React, { useLayoutEffect } from "react";
 import { StyleSheet } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import { RootStackParamList } from "../navigation/types";
-import theme from "../utils/theme";
+import { Theme } from "../utils/theme";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
-  React.useLayoutEffect(() => {
+  const theme = useTheme<Theme>();
+
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton onPress={() => navigation.navigate("Settings")}>

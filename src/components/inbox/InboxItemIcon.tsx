@@ -1,7 +1,8 @@
+import { useTheme } from "@shopify/restyle";
 import React from "react";
 import { AtSign, Circle } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
-import theme from "../../utils/theme";
+import { Theme } from "../../utils/theme";
 import { Headers } from "../../utils/types";
 
 type Props = SvgProps & {
@@ -9,11 +10,13 @@ type Props = SvgProps & {
 };
 
 const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {
+  const { colors } = useTheme<Theme>();
+
   if (headers["x-gitlab-issue-iid"]) {
-    return <Circle {...props} stroke={"green"} />;
+    return <Circle {...props} stroke={colors.green} />;
   }
 
-  return <AtSign {...props} stroke={theme.colors.purpleLight} />;
+  return <AtSign {...props} stroke={colors.purple} />;
 };
 
 export default InboxItemIcon;

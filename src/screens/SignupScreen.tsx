@@ -1,13 +1,6 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import theme from "../utils/theme";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
@@ -18,6 +11,7 @@ import { signupSchema } from "../utils/validation";
 import Hint from "../components/Hint";
 import { RootStackParamList } from "../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Box, Text } from "../components/restyle";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
@@ -37,11 +31,13 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
-          <Text style={styles.title}>Sign Up</Text>
-          <Text style={styles.subtitle}>
+          <Text variant="largeTitle" marginTop="l">
+            Sign Up
+          </Text>
+          <Text variant="body" marginTop="s">
             Create an account so you can save your notifications across devices
           </Text>
-          <View style={{ marginTop: 24 }}>
+          <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
               onSubmit={handleSubmit}
@@ -89,21 +85,19 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     label="confirm"
                     autoCompleteType="password"
                   />
-                  <View style={{ marginTop: 8 }}>
+                  <Box marginTop="s">
                     {Object.entries(errors).length > 0 ? (
-                      <View>
-                        <Text style={{ color: "red" }}>
-                          Some errors occurred:
-                        </Text>
+                      <Box>
+                        <Text color="red">Some errors occurred:</Text>
                         {Object.entries(errors).map(([key, value]) => (
-                          <View key={key} style={{ flexDirection: "row" }}>
-                            <Text style={{ color: "red" }}>{"\u2022"}</Text>
-                            <Text style={{ paddingLeft: 5, color: "red" }}>
+                          <Box key={key} flexDirection="row">
+                            <Text color="red">{"\u2022"}</Text>
+                            <Text color="red" paddingLeft="xs">
                               {value}
                             </Text>
-                          </View>
+                          </Box>
                         ))}
-                      </View>
+                      </Box>
                     ) : (
                       <Hint>
                         Your password must be 8 or more characters long &
@@ -111,7 +105,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                         symbols.
                       </Hint>
                     )}
-                  </View>
+                  </Box>
                   <Button
                     title="Create an account"
                     style={{ marginTop: 32 }}
@@ -121,17 +115,17 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
               )}
             </Formik>
             {/* Disclaimer Section */}
-            <Text style={styles.disclaimerText}>
+            <Text marginTop="m" style={styles.disclaimerText}>
               By signing up, you're agree to our{"\n"}
               <Text
-                style={styles.disclaimerLink}
+                color="purpleDark"
                 onPress={() => openUrl("https://google.com")}
               >
                 Terms of Use
               </Text>{" "}
               and
               <Text
-                style={styles.disclaimerLink}
+                color="purpleDark"
                 onPress={() => openUrl("https://google.com")}
               >
                 {" "}
@@ -139,13 +133,16 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
               </Text>
               .
             </Text>
-            <Text style={styles.body}>
+            <Text marginTop="m" paddingBottom="xl" variant="body">
               Already have an account?{" "}
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.signInButton}> Sign in</Text>
+                <Text variant="headline" color="purpleDark">
+                  {" "}
+                  Sign in
+                </Text>
               </TouchableOpacity>
             </Text>
-          </View>
+          </Box>
         </KeyboardAvoid>
       </ScrollView>
     </SafeAreaView>
@@ -161,39 +158,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: 32,
   },
-  title: {
-    marginTop: 20,
-    fontFamily: theme.fonts.sourceSansPro.bold,
-    fontSize: 34,
-    color: theme.colors.gray900,
-  },
-  subtitle: {
-    marginTop: 8,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 17,
-    color: theme.colors.gray900,
-  },
   disclaimerText: {
-    marginTop: 16,
     flexDirection: "row",
     justifyContent: "center",
     textAlign: "center",
-  },
-  disclaimerLink: {
-    color: theme.colors.purpleDark,
-  },
-  // What a bad naming, this is actually the already have an account
-  body: {
-    marginTop: 16,
-    textAlign: "center",
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 17,
-    color: theme.colors.gray900,
-    paddingBottom: 32,
-  },
-  signInButton: {
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    color: theme.colors.purpleDark,
-    fontSize: 17,
   },
 });

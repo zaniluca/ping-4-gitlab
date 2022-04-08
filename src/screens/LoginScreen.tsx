@@ -1,13 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import theme from "../utils/theme";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
@@ -15,6 +8,7 @@ import Button from "../components/Button";
 import { Formik } from "formik";
 import { RootStackParamList } from "../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Box, Text } from "../components/restyle";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -33,11 +27,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
-          <Text style={styles.title}>Login</Text>
-          <Text style={styles.subtitle}>
+          <Text variant="largeTitle" marginTop="l">
+            Login
+          </Text>
+          <Text variant="body" marginTop="s">
             Use your credentials to log in to your account
           </Text>
-          <View style={{ marginTop: 24 }}>
+          <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
               onSubmit={handleSubmit}
@@ -73,10 +69,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 </>
               )}
             </Formik>
-            <Text style={styles.body}>
+            <Text marginTop="m" paddingBottom="xl" variant="body">
               Don't have an account?{" "}
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text style={styles.signUpButton}> Signup</Text>
+                <Text variant="headline" color="purpleDark">
+                  Signup
+                </Text>
               </TouchableOpacity>
             </Text>
             <TouchableOpacity
@@ -86,11 +84,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <Text style={styles.forgotPasswordText}>
+              <Text variant="headline" color="purpleDark">
                 I Forgot my Password :(
               </Text>
             </TouchableOpacity>
-          </View>
+          </Box>
         </KeyboardAvoid>
       </ScrollView>
     </SafeAreaView>
@@ -105,35 +103,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "white",
     paddingTop: 32,
-  },
-  title: {
-    marginTop: 20,
-    fontFamily: theme.fonts.sourceSansPro.bold,
-    fontSize: 34,
-    color: theme.colors.gray900,
-  },
-  subtitle: {
-    marginTop: 8,
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 17,
-    color: theme.colors.gray900,
-  },
-  forgotPasswordText: {
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    fontSize: 17,
-    color: theme.colors.purpleDark,
-  },
-  body: {
-    marginTop: 16,
-    textAlign: "center",
-    fontFamily: theme.fonts.sourceSansPro.regular,
-    fontSize: 17,
-    color: theme.colors.gray900,
-    paddingBottom: 32,
-  },
-  signUpButton: {
-    fontFamily: theme.fonts.sourceSansPro.semibold,
-    color: theme.colors.purpleDark,
-    fontSize: 17,
   },
 });

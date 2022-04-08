@@ -5,13 +5,16 @@ import LoginScreen from "../screens/LoginScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
-import theme from "../utils/theme";
+import { Theme } from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
+import { useTheme } from "@shopify/restyle";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
+  const theme = useTheme<Theme>();
+
   return (
     <Stack.Navigator
       initialRouteName="Landing"
@@ -20,25 +23,22 @@ const RootStackNavigator = () => {
         headerTintColor: theme.colors.gray900,
         headerLargeTitleStyle: {
           fontWeight: "bold",
-          fontFamily: theme.fonts.sourceSansPro.bold,
+          fontFamily: theme.fontFamily.bold,
         },
         headerTitleStyle: {
           fontWeight: "bold",
-          fontFamily: theme.fonts.sourceSansPro.bold,
+          fontFamily: theme.fontFamily.bold,
         },
       }}
     >
+      {/* Auth */}
       <Stack.Screen
-        name="Inbox"
-        component={InboxScreen}
+        name="Landing"
+        component={LandingScreen}
         options={{
-          headerLargeTitle: true,
-          headerSearchBarOptions: {
-            placeholder: "Search for notifications",
-          },
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -53,6 +53,18 @@ const RootStackNavigator = () => {
           headerShown: false,
         }}
       />
+      {/*  */}
+      <Stack.Screen
+        name="Inbox"
+        component={InboxScreen}
+        options={{
+          headerBackVisible: false,
+          headerLargeTitle: true,
+          headerSearchBarOptions: {
+            placeholder: "Search for notifications",
+          },
+        }}
+      />
       <Stack.Screen
         name="NotificationDetail"
         component={NotificationDetail}
@@ -60,13 +72,9 @@ const RootStackNavigator = () => {
           title: route.params.subject,
         })}
       />
-      <Stack.Screen
-        name="Landing"
-        component={LandingScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+
+      {/* Modals */}
       <Stack.Screen
         name="GetStarted"
         component={GetStartedScreen}
