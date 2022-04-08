@@ -25,7 +25,6 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
           Already have an account?{" "}
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text variant="headline" color="purpleDark">
-              {" "}
               Sign in
             </Text>
           </TouchableOpacity>

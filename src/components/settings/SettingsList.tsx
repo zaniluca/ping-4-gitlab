@@ -55,11 +55,11 @@ type SectionHeaderProps = {
 };
 
 const SettingsList = () => {
-  const { colors, fontFamily, spacing } = useTheme<Theme>();
+  const { colors, fontFamily } = useTheme<Theme>();
 
   const renderSectionHeader = ({ section }: SectionHeaderProps) => {
     return (
-      <Box padding="m" backgroundColor="gray100">
+      <Box padding="s" backgroundColor="gray100">
         <Text
           variant="callout"
           fontFamily={fontFamily.semibold}
@@ -74,10 +74,13 @@ const SettingsList = () => {
   };
 
   const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
-    <TouchableOpacity
-      style={{ padding: spacing.l, backgroundColor: colors.white }}
-    >
-      <Box flexDirection="row" justifyContent="space-between">
+    <TouchableOpacity>
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        padding="m"
+        backgroundColor="white"
+      >
         <Box flexDirection="row">
           <Box paddingRight="m">
             <item.icon stroke={colors.gray900} strokeWidth={2} />

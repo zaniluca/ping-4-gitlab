@@ -73,7 +73,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               Don't have an account?{" "}
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
                 <Text variant="headline" color="purpleDark">
-                  {" "}
                   Signup
                 </Text>
               </TouchableOpacity>

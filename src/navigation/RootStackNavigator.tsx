@@ -31,18 +31,14 @@ const RootStackNavigator = () => {
         },
       }}
     >
+      {/* Auth */}
       <Stack.Screen
-        name="Inbox"
-        component={InboxScreen}
+        name="Landing"
+        component={LandingScreen}
         options={{
-          headerBackVisible: false,
-          headerLargeTitle: true,
-          headerSearchBarOptions: {
-            placeholder: "Search for notifications",
-          },
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -57,6 +53,18 @@ const RootStackNavigator = () => {
           headerShown: false,
         }}
       />
+      {/*  */}
+      <Stack.Screen
+        name="Inbox"
+        component={InboxScreen}
+        options={{
+          headerBackVisible: false,
+          headerLargeTitle: true,
+          headerSearchBarOptions: {
+            placeholder: "Search for notifications",
+          },
+        }}
+      />
       <Stack.Screen
         name="NotificationDetail"
         component={NotificationDetail}
@@ -64,13 +72,9 @@ const RootStackNavigator = () => {
           title: route.params.subject,
         })}
       />
-      <Stack.Screen
-        name="Landing"
-        component={LandingScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+
+      {/* Modals */}
       <Stack.Screen
         name="GetStarted"
         component={GetStartedScreen}

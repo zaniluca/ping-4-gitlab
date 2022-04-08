@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/types";
@@ -20,10 +20,9 @@ const InboxItem: React.FC<Props> = ({ item }) => {
 
   return (
     <TouchableOpacity
-      style={styles.container}
       onPress={() => navigation.navigate("NotificationDetail", item)}
     >
-      <Box flexDirection="row">
+      <Box flexDirection="row" paddingHorizontal="m" paddingVertical="s">
         <Box paddingRight="s">
           <InboxItemIcon headers={headers} width={20} />
         </Box>
@@ -61,10 +60,3 @@ const InboxItem: React.FC<Props> = ({ item }) => {
 };
 
 export default InboxItem;
-
-const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 8,
-    marginHorizontal: 16,
-  },
-});
