@@ -13,6 +13,7 @@ import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
 import theme from "./src/utils/theme";
+import { AuthProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,12 +28,14 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <RootStackNavigator />
-        </NavigationContainer>
-      </SafeAreaProvider>
-      <StatusBar style="auto" />
+      <AuthProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <RootStackNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
+        <StatusBar style="auto" />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
