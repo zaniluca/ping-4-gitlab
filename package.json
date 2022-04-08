@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo-google-fonts/source-sans-pro": "^0.2.2",
     "@react-native-firebase/app": "^14.7.0",
+    "@react-native-firebase/perf": "^14.7.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
     "@shopify/restyle": "^2.0.0",

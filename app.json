@@ -29,6 +29,6 @@
       },
       "package": "com.zaniluca.ping4gitlab"
     },
-    "plugins": ["@react-native-firebase/app"]
+    "plugins": ["@react-native-firebase/app", "@react-native-firebase/perf"]
   }
 }
