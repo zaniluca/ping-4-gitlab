@@ -1479,13 +1479,6 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-14.7.0.tgz#e25088fba1f5e2c821d5d5cc1597518c55734327"
   integrity sha512-RyoMlJ9DRUelGh4z4wnt8Bjr/BEy1TNBkDa3f60uG6ryACNP7k4GqfMCzienSBa4NAwz70DJHEP6bDB6OTt35g==
 
-"@react-native-firebase/perf@^14.7.0":
-  version "14.7.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/perf/-/perf-14.7.0.tgz#e89280edd3ecf97c6dad2f1e5997b39aba650852"
-  integrity sha512-r/AUDpR/R670q2iJFes3peui+1jmmdOok6/HS1tr/eEGlEmsBa5/iYCJJ704AwhKa8ZQqpJSsiw1VEcPTYICZg==
-  dependencies:
-    "@expo/config-plugins" "^4.0.18"
-
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -2845,7 +2838,7 @@ expo-modules-core@~0.4.4:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-splash-screen@~0.14.0:
+expo-splash-screen@~0.14.0, expo-splash-screen@~0.14.1:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.14.2.tgz#2598d6980e71ecd8b7467ca821fb9dbfb80f355b"
   integrity sha512-X25D/0E2AWEFGgDWIVXZ5Bl7FhYk7TgVhEWvplBqrDY7G7vg5l1aoH6PelOQINWPsa1dcRyA7REdN2ltO+0LAw==

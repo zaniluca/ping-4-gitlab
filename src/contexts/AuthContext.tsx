@@ -7,14 +7,15 @@ import {
 } from "react";
 import firebaseAuth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
-type User = FirebaseAuthTypes.User;
+type User = FirebaseAuthTypes.User | null;
 
 type AuthContextValues = {
-  user?: User | null;
+  user: User;
   signInAnonymously: VoidFunction;
 };
 
 export const AuthContext = createContext<AuthContextValues>({
+  user: null,
   signInAnonymously: () => {},
 });
 
@@ -23,12 +24,14 @@ type AuthContextProps = {
 };
 
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User>(null);
   const auth = firebaseAuth();
 
-  const authStateChanged = (u: User | null) => {
+  const authStateChanged = (u: User) => {
     setUser(u);
     console.log("Auth state changed: ", user);
+    setLoading(false);
   };
 
   useEffect(() => {

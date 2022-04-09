@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ping-4-gitlab",
+    "name": "Ping for Gitlab",
     "owner": "zaniluca",
     "slug": "ping4gitlab",
     "version": "1.0.0",
@@ -17,7 +17,6 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
-
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab"
     },
@@ -29,6 +28,6 @@
       },
       "package": "com.zaniluca.ping4gitlab"
     },
-    "plugins": ["@react-native-firebase/app", "@react-native-firebase/perf"]
+    "plugins": ["@react-native-firebase/app"]
   }
 }
