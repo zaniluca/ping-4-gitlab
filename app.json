@@ -16,17 +16,17 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.zaniluca.ping4gitlab",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "supportsTablet": false,
-      "bundleIdentifier": "com.zaniluca.ping4gitlab"
+      "supportsTablet": false
     },
     "android": {
       "googleServicesFile": "./google-services.json",
+      "package": "com.zaniluca.ping4gitlab",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.zaniluca.ping4gitlab"
+      }
     },
     "plugins": ["@react-native-firebase/app"]
   }
