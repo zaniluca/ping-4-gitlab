@@ -69,25 +69,28 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 </>
               )}
             </Formik>
-            <Text marginTop="m" paddingBottom="xl" variant="body">
-              Don't have an account?{" "}
+            {/* Signup navigation */}
+            <Box
+              justifyContent="center"
+              flexDirection="row"
+              marginTop="m"
+              paddingBottom="xl"
+            >
+              <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text variant="headline" color="purpleDark">
+                <Text variant="headline" color="purpleDark" marginLeft="xs">
                   Signup
                 </Text>
               </TouchableOpacity>
-            </Text>
-            <TouchableOpacity
-              style={{
-                marginTop: 16,
-                flexDirection: "row",
-                justifyContent: "center",
-              }}
-            >
-              <Text variant="headline" color="purpleDark">
-                I Forgot my Password :(
-              </Text>
-            </TouchableOpacity>
+            </Box>
+            {/* Forgot Password Button */}
+            <Box flexDirection="row" justifyContent="center" marginTop="m">
+              <TouchableOpacity>
+                <Text variant="headline" color="purpleDark">
+                  I Forgot my Password :(
+                </Text>
+              </TouchableOpacity>
+            </Box>
           </Box>
         </KeyboardAvoid>
       </ScrollView>

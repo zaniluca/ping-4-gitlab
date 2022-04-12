@@ -5,13 +5,13 @@ import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { openUrl } from "../utils/open-url";
 import { Formik } from "formik";
 import { signupSchema } from "../utils/validation";
 import Hint from "../components/Hint";
 import { RootStackParamList } from "../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Box, Text } from "../components/restyle";
+import Disclaimer from "../components/Disclaimer";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
 
@@ -114,34 +114,20 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                 </>
               )}
             </Formik>
-            {/* Disclaimer Section */}
-            <Text marginTop="m" style={styles.disclaimerText}>
-              By signing up, you're agree to our{"\n"}
-              <Text
-                color="purpleDark"
-                onPress={() => openUrl("https://google.com")}
-              >
-                Terms of Use
-              </Text>{" "}
-              and
-              <Text
-                color="purpleDark"
-                onPress={() => openUrl("https://google.com")}
-              >
-                {" "}
-                Privacy Policy
-              </Text>
-              .
-            </Text>
-            <Text marginTop="m" paddingBottom="xl" variant="body">
-              Already have an account?{" "}
+            <Disclaimer />
+            <Box
+              justifyContent="center"
+              flexDirection="row"
+              marginTop="m"
+              paddingBottom="xl"
+            >
+              <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text variant="headline" color="purpleDark">
-                  {" "}
-                  Sign in
+                <Text variant="headline" color="purpleDark" marginLeft="xs">
+                  Login
                 </Text>
               </TouchableOpacity>
-            </Text>
+            </Box>
           </Box>
         </KeyboardAvoid>
       </ScrollView>
@@ -157,10 +143,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "white",
     paddingTop: 32,
-  },
-  disclaimerText: {
-    flexDirection: "row",
-    justifyContent: "center",
-    textAlign: "center",
   },
 });
