@@ -1,4 +1,9 @@
-import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -40,7 +45,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               validateOnChange={false}
               validateOnBlur={false}
             >
-              {({ handleChange, handleBlur, handleSubmit: submit, values }) => (
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit: submit,
+                values,
+                isSubmitting,
+              }) => (
                 <>
                   <Input
                     placeholder="Enter your email"
@@ -61,11 +72,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     label="password"
                     autoCompleteType="password"
                   />
-                  <Button
-                    title="Login"
-                    style={{ marginTop: 32 }}
-                    onPress={submit}
-                  />
+                  {/* Login CTA */}
+                  <Box marginTop="xl">
+                    <Button onPress={submit}>
+                      {isSubmitting ? (
+                        <ActivityIndicator color="white" />
+                      ) : (
+                        "Login"
+                      )}
+                    </Button>
+                  </Box>
                 </>
               )}
             </Formik>

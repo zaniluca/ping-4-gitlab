@@ -11,11 +11,11 @@ import { Text } from "./restyle";
 
 type Props = {
   onPress: () => void;
-  title: string;
+  title?: string;
   style?: StyleProp<ViewStyle>;
 };
 
-const Button: React.FC<Props> = ({ onPress, title, style }) => {
+const Button: React.FC<Props> = ({ onPress, title, style, children }) => {
   const { fontFamily, colors } = useTheme<Theme>();
 
   return (
@@ -30,7 +30,7 @@ const Button: React.FC<Props> = ({ onPress, title, style }) => {
           { fontFamily: fontFamily.semibold, color: colors.white },
         ]}
       >
-        {title}
+        {title ? title : children}
       </Text>
     </TouchableOpacity>
   );
