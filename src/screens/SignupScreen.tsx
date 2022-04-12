@@ -1,4 +1,9 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -51,6 +56,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                 handleSubmit: submit,
                 values,
                 errors,
+                isSubmitting,
               }) => (
                 <>
                   <Input
@@ -106,15 +112,21 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                       </Hint>
                     )}
                   </Box>
-                  <Button
-                    title="Create an account"
-                    style={{ marginTop: 32 }}
-                    onPress={submit}
-                  />
+                  {/* Signup CTA */}
+                  <Box marginTop="xl">
+                    <Button onPress={submit}>
+                      {isSubmitting ? (
+                        <ActivityIndicator color="white" />
+                      ) : (
+                        "Create an account"
+                      )}
+                    </Button>
+                  </Box>
                 </>
               )}
             </Formik>
             <Disclaimer />
+            {/* Login redirect button */}
             <Box
               justifyContent="center"
               flexDirection="row"
