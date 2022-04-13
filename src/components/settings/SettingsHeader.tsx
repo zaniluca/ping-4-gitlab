@@ -1,12 +1,11 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
-import theme, { Theme } from "../../utils/theme";
+import theme, { useTheme } from "../../utils/theme";
 import { ArrowRight } from "react-native-feather";
 import { Box, Text } from "../restyle";
-import { useTheme } from "@shopify/restyle";
 
 export const SettingsHeader = () => {
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
 
   return (
     <View style={styles.container}>
