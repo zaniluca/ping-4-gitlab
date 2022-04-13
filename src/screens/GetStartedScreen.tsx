@@ -1,10 +1,8 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackParamList } from "../navigation/types";
+import { RootStackScreenProps } from "../navigation/types";
 
-type Props = NativeStackScreenProps<RootStackParamList, "GetStarted">;
+type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   return (

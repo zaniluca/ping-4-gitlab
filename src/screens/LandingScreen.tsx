@@ -1,13 +1,12 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { RootStackParamList } from "../navigation/types";
+import { RootStackScreenProps } from "../navigation/types";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Landing">;
+type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   return (

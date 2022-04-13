@@ -1,9 +1,8 @@
 import React from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/types";
+import { RootStackScreenProps } from "../navigation/types";
 import { WebView } from "react-native-webview";
 
-type Props = NativeStackScreenProps<RootStackParamList, "NotificationDetail">;
+type Props = RootStackScreenProps<"NotificationDetail">;
 
 const NotificationDetail: React.FC<Props> = ({ navigation, route }) => {
   return (

@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Notification } from "../utils/types";
 
 export type RootStackParamList = {
@@ -9,3 +10,6 @@ export type RootStackParamList = {
   Landing: undefined;
   Signup: undefined;
 };
+
+export type RootStackScreenProps<T extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, T>;
