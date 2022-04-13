@@ -5,15 +5,14 @@ import LoginScreen from "../screens/LoginScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
-import { Theme } from "../utils/theme";
+import { useTheme } from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
-import { useTheme } from "@shopify/restyle";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
-  const theme = useTheme<Theme>();
+  const theme = useTheme();
 
   return (
     <Stack.Navigator
