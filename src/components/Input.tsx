@@ -1,7 +1,6 @@
-import { useTheme } from "@shopify/restyle";
-import React from "react";
+import React, { useState } from "react";
 import { TextInput, StyleSheet, TextInputProps, StyleProp } from "react-native";
-import theme, { Theme } from "../utils/theme";
+import theme, { useTheme } from "../utils/theme";
 import { Text, Box } from "./restyle";
 
 type Props = TextInputProps & {
@@ -11,8 +10,8 @@ type Props = TextInputProps & {
 };
 
 const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
-  const { colors, textVariants } = useTheme<Theme>();
-  const [focused, setFocused] = React.useState(false);
+  const { colors, textVariants } = useTheme();
+  const [focused, setFocused] = useState(false);
 
   const getLabelColor = () => {
     if (error) {

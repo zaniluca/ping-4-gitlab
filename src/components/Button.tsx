@@ -5,8 +5,7 @@ import {
   ViewStyle,
 } from "react-native";
 import React from "react";
-import { Theme } from "../utils/theme";
-import { useTheme } from "@shopify/restyle";
+import { useTheme } from "../utils/theme";
 import { Text } from "./restyle";
 
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
 };
 
 const Button: React.FC<Props> = ({ onPress, title, style, children }) => {
-  const { fontFamily, colors } = useTheme<Theme>();
+  const { fontFamily, colors } = useTheme();
 
   return (
     <TouchableOpacity
