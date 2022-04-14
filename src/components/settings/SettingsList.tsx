@@ -6,10 +6,9 @@ import {
 } from "react-native";
 import React from "react";
 import { AtSign, ChevronRight, Clock, Heart } from "react-native-feather";
-import { Theme } from "../../utils/theme";
+import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
-import { useTheme } from "@shopify/restyle";
 import { Box, Text } from "../restyle";
 
 const SETTINGS_SECTIONS: any[] = [
@@ -55,7 +54,7 @@ type SectionHeaderProps = {
 };
 
 const SettingsList = () => {
-  const { colors, fontFamily } = useTheme<Theme>();
+  const { colors, fontFamily } = useTheme();
 
   const renderSectionHeader = ({ section }: SectionHeaderProps) => {
     return (
