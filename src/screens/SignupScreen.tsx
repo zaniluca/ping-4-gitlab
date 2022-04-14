@@ -13,12 +13,11 @@ import Button from "../components/Button";
 import { Formik } from "formik";
 import { signupSchema } from "../utils/validation";
 import Hint from "../components/Hint";
-import { RootStackParamList } from "../navigation/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Signup">;
+type Props = RootStackScreenProps<"Signup">;
 
 const INITIAL_VALUES = {
   email: "",

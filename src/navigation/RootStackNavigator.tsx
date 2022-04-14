@@ -1,4 +1,7 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
 import { RootStackParamList } from "./types";
 import NotificationDetail from "../screens/NotificationDetail";
 import LoginScreen from "../screens/LoginScreen";
@@ -8,6 +11,7 @@ import InboxScreen from "../screens/InboxScreen";
 import { useTheme } from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -87,5 +91,8 @@ const RootStackNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+export const useRootStackNavigation = () =>
+  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 export default RootStackNavigator;

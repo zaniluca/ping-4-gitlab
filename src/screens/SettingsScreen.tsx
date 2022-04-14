@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/types";
+import { RootStackScreenProps } from "../navigation/types";
 import SettingsList from "../components/settings/SettingsList";
 import SettingsHeader from "../components/settings/SettingsHeader";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Settings">;
+type Props = RootStackScreenProps<"Settings">;
 
 const SettingsScreen: React.FC<Props> = ({ navigation }) => {
   return (

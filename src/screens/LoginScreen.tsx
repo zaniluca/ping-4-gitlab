@@ -11,11 +11,10 @@ import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Formik } from "formik";
-import { RootStackParamList } from "../navigation/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type Props = RootStackScreenProps<"Login">;
 
 const INITIAL_VALUES = {
   email: "",

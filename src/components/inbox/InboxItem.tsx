@@ -1,20 +1,18 @@
 import { TouchableOpacity } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../navigation/types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Notification } from "../../utils/types";
 import { parseHeaders } from "../../utils/parse-headers";
 import InboxItemIcon from "./InboxItemIcon";
 import { Box, Text } from "../restyle";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 
 type Props = {
   item: Notification;
 };
 
 const InboxItem: React.FC<Props> = ({ item }) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useRootStackNavigation();
+
   const headers = parseHeaders(item.headers);
   const iid = headers["x-gitlab-issue-iid"];
 
