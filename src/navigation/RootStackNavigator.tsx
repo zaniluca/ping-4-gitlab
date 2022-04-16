@@ -61,6 +61,7 @@ const RootStackNavigator = () => {
         name="Inbox"
         component={InboxScreen}
         options={{
+          gestureEnabled: false,
           headerBackVisible: false,
           headerLargeTitle: true,
           headerSearchBarOptions: {
