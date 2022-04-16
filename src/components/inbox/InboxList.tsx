@@ -2,7 +2,7 @@ import { FlatList, ListRenderItem } from "react-native";
 import React from "react";
 import InboxItem from "./InboxItem";
 import { ListSeparator } from "../ListSeparator";
-import { Notification } from "../../utils/types";
+import { Notification } from "../../utils/types/types";
 
 const DATA: Notification[] = [
   {

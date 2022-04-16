@@ -1,4 +1,4 @@
-import { Headers } from "./types";
+import { Headers } from "./types/types";
 
 export const parseHeaders = (headers: string): Headers => {
   let json: Record<string, string> = {};

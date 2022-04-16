@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Notification } from "../utils/types";
+import { Notification } from "../utils/types/types";
 
 export type RootStackParamList = {
   Inbox: undefined;

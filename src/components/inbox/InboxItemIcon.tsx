@@ -2,7 +2,7 @@ import React from "react";
 import { AtSign, Circle } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../utils/theme";
-import { Headers } from "../../utils/types";
+import { Headers } from "../../utils/types/types";
 
 type Props = SvgProps & {
   headers: Headers;
