@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import InboxItem from "./InboxItem";
 import { ListSeparator } from "../ListSeparator";
 import { Notification } from "../../utils/types/types";
-import { signInAnonymously } from "firebase/auth";
 import { collection, onSnapshot, query } from "firebase/firestore";
-import { auth, firestore } from "../../utils/firebase";
+import { firestore } from "../../utils/firebase";
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const renderItem: ListRenderItem<Notification> = ({ item }) => (
   <InboxItem item={item} />
@@ -14,30 +14,33 @@ const renderItem: ListRenderItem<Notification> = ({ item }) => (
 
 const InboxList = () => {
   const [data, setData] = useState<Notification[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    signInAnonymously(auth)
-      .then(async (user) => {
-        console.log("Logged in with uid: ", user.user.uid);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  useEffect(() => {
+    if (!user) return;
     const q = query(collection(firestore, "users/test/notifications"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      // querySnapshot.docChanges().forEach((change) => {
+      //   if (change.type === "added") {
+      //     console.log("New Notification!: ", change.doc.data());
+      //   }
+      //   if (change.type === "modified") {
+      //     console.log("Notification Modified: ", change.doc.data());
+      //   }
+      // });
+
       let docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
         const noti = doc.data() as Notification;
+        // Setting document id as notification id
         noti.id = doc.id;
         docs.push(noti);
       });
       setData(docs);
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   return (
     <FlatList

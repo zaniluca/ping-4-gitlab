@@ -1,13 +1,10 @@
-import { onAuthStateChanged } from "firebase/auth";
 import React, { useLayoutEffect } from "react";
-import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import { RootStackScreenProps } from "../navigation/types";
-import { auth } from "../utils/firebase";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Inbox">;
@@ -25,13 +22,6 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
     });
     // navigation.navigate("GetStarted");
   }, [navigation]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("Auth status changed: ", user);
-    });
-    return () => unsubscribe();
-  }, []);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>

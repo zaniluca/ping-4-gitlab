@@ -1,8 +1,12 @@
+import { User as FirebaseUser } from "firebase/auth";
+
 export type NotificationType = "issue" | "merge" | "general";
 
-export type User = {
+type UserProps = {
   expo_push_token?: string;
 };
+
+export type User = (FirebaseUser & UserProps) | null;
 
 export type Notification = {
   id: string;

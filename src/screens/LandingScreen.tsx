@@ -1,20 +1,28 @@
 import React from "react";
+import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
+import { useAuth } from "../contexts/AuthContext";
 import { RootStackScreenProps } from "../navigation/types";
 
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
+  const { signInAnonymously, user } = useAuth();
+
+  useEffect(() => {
+    if (user) navigation.navigate("Inbox");
+  }, [user]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Box paddingHorizontal="m">
         <Button
           title="Let's get started!"
-          onPress={() => navigation.navigate("Inbox")}
+          onPress={() => signInAnonymously()}
         />
         <Disclaimer />
         <Box
