@@ -1,5 +1,4 @@
-import { collection, onSnapshot, query } from "@firebase/firestore";
-import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import React, { useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { StyleSheet } from "react-native";
@@ -8,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import { RootStackScreenProps } from "../navigation/types";
-import { auth, firestore } from "../utils/firebase";
+import { auth } from "../utils/firebase";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Inbox">;
@@ -26,26 +25,6 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
     });
     // navigation.navigate("GetStarted");
   }, [navigation]);
-
-  useEffect(() => {
-    signInAnonymously(auth)
-      .then(async (user) => {
-        console.log("Logged in with uid: ", user.user.uid);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    const q = query(collection(firestore, "users/test/notifications"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-      });
-    });
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
