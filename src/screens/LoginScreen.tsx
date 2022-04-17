@@ -76,7 +76,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     label="password"
                     autoCompleteType="password"
                   />
-                  {/* Validation Errros */}
+                  {/* Validation Errors */}
                   {!!Object.entries(errors).length && (
                     <Box marginTop="s">
                       <Box>

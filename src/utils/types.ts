@@ -19,6 +19,7 @@ export type Notification = {
   raw_headers: string;
   recived: Date;
   viewed: boolean;
+  html: string;
 };
 
 export type Headers = ProjectHeaders & IssueHeaders & MergeHeaders;
