@@ -38,6 +38,17 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
     });
   };
 
+  const completeOnboarding = async (uid: string) => {
+    console.log("Compleating onboarding for user: ", uid);
+    await setDoc(
+      doc(firestore, `users/${uid}`),
+      {
+        onboarding: false,
+      },
+      { merge: true }
+    );
+  };
+
   useEffect(() => {
     if (!user) return;
     const unsub = onSnapshot(doc(firestore, `users/${user.uid}`), (doc) => {
@@ -59,7 +70,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const q = query(collection(firestore, `users/${user.uid}/notifications`));
+    const q = query(collection(firestore, `users/test/notifications`));
     const unsub = onSnapshot(q, (querySnapshot) => {
       let docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
@@ -68,6 +79,14 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
         noti.id = doc.id;
         docs.push(noti);
       });
+
+      if (!!notifications.length && userData?.onboarding) {
+        // User is in onboarding stage and recived the confirmation email
+        completeOnboarding(user.uid)
+          .then(() => console.log("Onboarding completed"))
+          .catch((e) => console.error(e));
+      }
+
       setNotifications(docs);
     });
 

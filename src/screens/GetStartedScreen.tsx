@@ -8,14 +8,14 @@ import { RootStackScreenProps } from "../navigation/types";
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
-  const { userData, notifications } = useData();
+  const { userData } = useData();
 
   useEffect(() => {
-    if (!!notifications.length) {
+    if (!userData?.onboarding) {
       // User correctly added the hook and recived a notification
       navigation.goBack();
     }
-  }, [notifications]);
+  }, [userData]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
