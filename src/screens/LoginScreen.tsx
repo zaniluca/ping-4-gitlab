@@ -13,6 +13,7 @@ import Button from "../components/Button";
 import { Formik } from "formik";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
+import { LoginSchema } from "../utils/validation";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -43,6 +44,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               onSubmit={handleSubmit}
               validateOnChange={false}
               validateOnBlur={false}
+              validationSchema={LoginSchema}
             >
               {({
                 handleChange,
@@ -50,6 +52,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 handleSubmit: submit,
                 values,
                 isSubmitting,
+                errors,
               }) => (
                 <>
                   <Input
@@ -57,6 +60,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     onChangeText={handleChange("email")}
                     onBlur={handleBlur("email")}
                     value={values.email}
+                    error={errors.email}
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
@@ -68,9 +72,26 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     onChangeText={handleChange("password")}
                     onBlur={handleBlur("password")}
                     value={values.password}
+                    error={errors.password}
                     label="password"
                     autoCompleteType="password"
                   />
+                  {/* Validation Errors */}
+                  {!!Object.entries(errors).length && (
+                    <Box marginTop="s">
+                      <Box>
+                        <Text color="red">Some errors occurred:</Text>
+                        {Object.entries(errors).map(([key, value]) => (
+                          <Box key={key} flexDirection="row">
+                            <Text color="red">{"\u2022"}</Text>
+                            <Text color="red" paddingLeft="xs">
+                              {value}
+                            </Text>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
                   {/* Login CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>

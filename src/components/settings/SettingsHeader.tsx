@@ -3,32 +3,29 @@ import React from "react";
 import theme, { useTheme } from "../../utils/theme";
 import { ArrowRight } from "react-native-feather";
 import { Box, Text } from "../restyle";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const SettingsHeader = () => {
   const theme = useTheme();
+  const { logout } = useAuth();
 
   return (
-    <View style={styles.container}>
+    <Box alignItems="center">
       <Text variant="headline">Anonymous User</Text>
       <Text variant="callout" color="gray600" paddingTop="xxs">
         Login to save your data on all your device
       </Text>
-      <View
-        style={{
-          paddingTop: 16,
-          paddingBottom: 32,
-        }}
-      >
-        <TouchableOpacity style={styles.btn}>
+      <Box paddingTop="m" paddingBottom="xl">
+        <TouchableOpacity style={styles.btn} onPress={logout}>
           <Box flexDirection="row">
             <Text variant="headline" color="white">
-              Login
+              Logout
             </Text>
             <ArrowRight stroke={theme.colors.white} width={20} />
           </Box>
         </TouchableOpacity>
-      </View>
-    </View>
+      </Box>
+    </Box>
   );
 };
 

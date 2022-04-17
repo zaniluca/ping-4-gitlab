@@ -11,6 +11,8 @@ import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
 import theme from "./src/utils/theme";
+import { AuthProvider } from "./src/contexts/AuthContext";
+import { DataProvider } from "./src/contexts/DataContext";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 import { registerForPushNotificationsAsync } from "./src/utils/notifications";
@@ -52,12 +54,16 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <RootStackNavigator />
-        </NavigationContainer>
-      </SafeAreaProvider>
-      <StatusBar style="auto" />
+      <AuthProvider>
+        <DataProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <RootStackNavigator />
+            </NavigationContainer>
+          </SafeAreaProvider>
+          <StatusBar style="auto" />
+        </DataProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

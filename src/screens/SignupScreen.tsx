@@ -11,7 +11,7 @@ import BackButton from "../components/BackButton";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Formik } from "formik";
-import { signupSchema } from "../utils/validation";
+import { SignupSchema } from "../utils/validation";
 import Hint from "../components/Hint";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
@@ -45,7 +45,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
             <Formik
               initialValues={INITIAL_VALUES}
               onSubmit={handleSubmit}
-              validationSchema={signupSchema}
+              validationSchema={SignupSchema}
               validateOnChange={false}
               validateOnBlur={false}
             >
@@ -90,8 +90,9 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     label="confirm"
                     autoCompleteType="password"
                   />
+                  {/* Validation errors */}
                   <Box marginTop="s">
-                    {Object.entries(errors).length > 0 ? (
+                    {!!Object.entries(errors).length ? (
                       <Box>
                         <Text color="red">Some errors occurred:</Text>
                         {Object.entries(errors).map(([key, value]) => (
