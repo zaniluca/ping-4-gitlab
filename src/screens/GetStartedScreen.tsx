@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,9 +10,22 @@ type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
+  const hasCompletedOnboarding = userData?.onboarding;
+
+  // Disabling android hardware back buttons
+  useLayoutEffect(() => {
+    const listener = navigation.addListener("beforeRemove", (e) => {
+      // When user has finished onboarding re-enable back button
+      if (!hasCompletedOnboarding) {
+        e.preventDefault();
+      }
+      return;
+    });
+    return () => listener();
+  }, [navigation, userData]);
 
   useEffect(() => {
-    if (!userData?.onboarding) {
+    if (!hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
       navigation.goBack();
     }

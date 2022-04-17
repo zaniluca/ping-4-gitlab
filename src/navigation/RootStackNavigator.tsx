@@ -93,8 +93,9 @@ const RootStackNavigator = () => {
             options={{
               presentation: "modal",
               title: "Get Started",
-              headerLargeTitle: true,
               gestureEnabled: false,
+              // Hiding the back button on android
+              headerLeft: () => <></>,
             }}
           />
         </>

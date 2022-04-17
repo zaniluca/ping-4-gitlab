@@ -70,7 +70,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const q = query(collection(firestore, `users/test/notifications`));
+    const q = query(collection(firestore, `users/${"test"}/notifications`));
     const unsub = onSnapshot(q, (querySnapshot) => {
       let docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
