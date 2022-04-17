@@ -13,8 +13,35 @@ import { ThemeProvider } from "@shopify/restyle";
 import theme from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
+import * as Notifications from "expo-notifications";
+import { useEffect } from "react";
+import { registerForPushNotificationsAsync } from "./src/utils/notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+Notifications.addNotificationResponseReceivedListener((notification) => {
+  console.log("Notification recived", notification);
+});
 
 export default function App() {
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+
+  useEffect(() => {
+    if (lastNotificationResponse) {
+      console.log(lastNotificationResponse);
+    }
+  }, [lastNotificationResponse]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => console.log(token));
+  }, []);
+
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
     SourceSansPro_400Regular,

@@ -85,7 +85,6 @@ const RootStackNavigator = () => {
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
-
           {/* Modals */}
           <Stack.Screen
             name="GetStarted"
