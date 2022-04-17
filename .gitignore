@@ -10,5 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 .DS_Store
+.env
 
 google-services.json

@@ -1,9 +1,11 @@
 import React, { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
+import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -11,6 +13,7 @@ type Props = RootStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
+  const { userData } = useData();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,8 +23,14 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
         </IconButton>
       ),
     });
-    // navigation.navigate("GetStarted");
   }, [navigation]);
+
+  useEffect(() => {
+    if (!userData) return;
+    if (userData.onboarding) {
+      navigation.navigate("GetStarted");
+    }
+  }, [userData]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
