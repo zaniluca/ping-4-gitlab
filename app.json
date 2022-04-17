@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ping-4-gitlab",
+    "name": "Ping for Gitlab",
     "owner": "zaniluca",
     "slug": "ping4gitlab",
     "version": "1.0.0",
@@ -16,7 +16,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.zaniluca.ping4gitlab"
     },
     "android": {
       "adaptiveIcon": {

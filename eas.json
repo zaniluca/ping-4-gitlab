@@ -15,7 +15,15 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "simulator": false,
+        "buildConfiguration": "Debug",
+        "cocoapods": "1.11.2"
+      }
     },
     "production": {
       "ios": {

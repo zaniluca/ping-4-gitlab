@@ -11,11 +11,7 @@ import { RootStackScreenProps } from "../navigation/types";
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
-  const { signInAnonymously, user } = useAuth();
-
-  useEffect(() => {
-    if (user) navigation.navigate("Inbox");
-  }, [user]);
+  const { signInAnonymously } = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>

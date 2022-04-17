@@ -1,6 +1,6 @@
 import { TouchableOpacity } from "react-native";
 import React from "react";
-import { Notification } from "../../utils/types/types";
+import { Notification } from "../../utils/types";
 import InboxItemIcon from "./InboxItemIcon";
 import { Box, Text } from "../restyle";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";

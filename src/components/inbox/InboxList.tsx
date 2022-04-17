@@ -2,7 +2,7 @@ import { FlatList, ListRenderItem } from "react-native";
 import React, { useEffect } from "react";
 import InboxItem from "./InboxItem";
 import { ListSeparator } from "../ListSeparator";
-import { Notification } from "../../utils/types/types";
+import { Notification } from "../../utils/types";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { firestore } from "../../utils/firebase";
 import { useState } from "react";
