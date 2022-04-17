@@ -16,10 +16,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Box paddingHorizontal="m">
-        <Button
-          title="Let's get started!"
-          onPress={() => signInAnonymously()}
-        />
+        <Button title="Let's get started!" onPress={signInAnonymously} />
         <Disclaimer />
         <Box
           justifyContent="center"

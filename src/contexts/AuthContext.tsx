@@ -54,8 +54,8 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
 
   const signInAnonymously = async () => {
     try {
-      const user = await anonymousSignIn(auth);
-      console.log("Logged in with uid: ", user.user.uid);
+      const result = await anonymousSignIn(auth);
+      console.log("Logged in anonymously with uid: ", result.user.uid);
     } catch (error) {
       if (error.code === "auth/operation-not-allowed") {
         console.log("Enable anonymous in your firebase console.");

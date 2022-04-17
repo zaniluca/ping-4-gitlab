@@ -2,11 +2,13 @@ import { User as FirebaseUser } from "firebase/auth";
 
 export type NotificationType = "issue" | "merge" | "general";
 
-type UserProps = {
+export type UserData = {
   expo_push_token?: string;
+  onboarding?: boolean;
+  hook_id?: string;
 };
 
-export type User = (FirebaseUser & UserProps) | null;
+export type User = FirebaseUser | null;
 
 export type Notification = {
   id: string;

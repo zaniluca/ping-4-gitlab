@@ -31,6 +31,7 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "react-native-webview": "^11.18.1",
+    "unique-names-generator": "^4.7.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

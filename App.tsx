@@ -12,6 +12,7 @@ import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
 import theme from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
+import { DataProvider } from "./src/contexts/DataContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,12 +28,14 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <RootStackNavigator />
-          </NavigationContainer>
-        </SafeAreaProvider>
-        <StatusBar style="auto" />
+        <DataProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <RootStackNavigator />
+            </NavigationContainer>
+          </SafeAreaProvider>
+          <StatusBar style="auto" />
+        </DataProvider>
       </AuthProvider>
     </ThemeProvider>
   );
