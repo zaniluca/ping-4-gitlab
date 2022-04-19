@@ -16,6 +16,7 @@ import { DataProvider } from "./src/contexts/DataContext";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 import { registerForPushNotificationsAsync } from "./src/utils/notifications";
+import Toaster from "./src/components/Toaster";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -59,6 +60,7 @@ export default function App() {
           <SafeAreaProvider>
             <NavigationContainer>
               <RootStackNavigator />
+              <Toaster />
             </NavigationContainer>
           </SafeAreaProvider>
           <StatusBar style="auto" />

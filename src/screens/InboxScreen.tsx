@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import { useData } from "../contexts/DataContext";
@@ -31,6 +32,16 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
       navigation.navigate("GetStarted");
     }
   }, [userData]);
+
+  useEffect(() => {
+    Toast.show({
+      type: "success",
+      text1: "Please allow notifications",
+      text2:
+        "Seems like you didn't allow notifications, please enable them to make the app work",
+      autoHide: false,
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
