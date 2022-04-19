@@ -35,7 +35,7 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     Toast.show({
-      type: "success",
+      type: "info",
       text1: "Please allow notifications",
       text2:
         "Seems like you didn't allow notifications, please enable them to make the app work",
