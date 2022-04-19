@@ -27,7 +27,8 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     if (!hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
-      navigation.goBack();
+      if (navigation.canGoBack()) navigation.goBack();
+      else navigation.navigate("Inbox");
     }
   }, [userData]);
 

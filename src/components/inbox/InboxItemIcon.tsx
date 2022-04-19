@@ -1,5 +1,5 @@
 import React from "react";
-import { AtSign, Circle, GitBranch } from "react-native-feather";
+import { AtSign, Circle, GitPullRequest } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../utils/theme";
 import { Headers } from "../../utils/types";
@@ -16,7 +16,7 @@ const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {
     return <Circle {...props} stroke={colors.green} />;
   } else if (headers["x-gitlab-mergerequest-iid"]) {
     // If it has merge iid is from merge request
-    return <GitBranch {...props} stroke={colors.blue} />;
+    return <GitPullRequest {...props} stroke={colors.blue} />;
   }
   // otherwise display generic icon
   return <AtSign {...props} stroke={colors.purple} />;

@@ -28,8 +28,17 @@ const InboxItem: React.FC<Props> = ({ item }) => {
       onPress={() => navigation.navigate("NotificationDetail", item)}
     >
       <Box flexDirection="row" paddingHorizontal="m" paddingVertical="s">
-        <Box paddingRight="s">
+        <Box paddingRight="s" alignItems="center">
           <InboxItemIcon headers={headers} width={20} />
+          {!item.viewed && (
+            <Box
+              marginTop="xs"
+              width={9}
+              height={9}
+              borderRadius={100}
+              backgroundColor="blue"
+            />
+          )}
         </Box>
         <Box flexShrink={1}>
           <Box flexDirection="row" justifyContent="space-between">

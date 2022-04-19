@@ -12,12 +12,11 @@ type Props = {
 const CopyToCliboard: React.FC<Props> = ({ content }) => {
   const theme = useTheme();
 
-  const copyToCliboard = () => {
-    Clipboard.setString(content);
-  };
-
   return (
-    <TouchableOpacity onPress={copyToCliboard} activeOpacity={0.8}>
+    <TouchableOpacity
+      onPress={() => Clipboard.setString(content)}
+      activeOpacity={0.8}
+    >
       <Box
         style={{ paddingVertical: 12 }}
         paddingHorizontal="m"

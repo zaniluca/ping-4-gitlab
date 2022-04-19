@@ -1,4 +1,11 @@
-import { collection, doc, onSnapshot, query, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import {
   createContext,
   ReactNode,
@@ -70,7 +77,10 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const q = query(collection(firestore, `users/${user.uid}/notifications`));
+    const q = query(
+      collection(firestore, `users/${"test"}/notifications`),
+      orderBy("recived", "desc")
+    );
     const unsub = onSnapshot(q, (querySnapshot) => {
       let docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
