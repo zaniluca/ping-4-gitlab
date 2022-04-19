@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
@@ -15,7 +14,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Box paddingHorizontal="m">
+      <Box paddingHorizontal="m" marginBottom="xxl">
         <Button title="Let's get started!" onPress={signInAnonymously} />
         <Disclaimer />
         <Box
@@ -42,5 +41,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    justifyContent: "flex-end",
   },
 });
