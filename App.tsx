@@ -60,8 +60,8 @@ export default function App() {
           <SafeAreaProvider>
             <NavigationContainer>
               <RootStackNavigator />
-              <Toaster />
             </NavigationContainer>
+            <Toaster />
           </SafeAreaProvider>
           <StatusBar style="auto" />
         </DataProvider>
