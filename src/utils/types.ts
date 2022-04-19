@@ -1,4 +1,5 @@
 import { User as FirebaseUser } from "firebase/auth";
+import { Timestamp } from "firebase/firestore";
 
 export type NotificationType = "issue" | "merge" | "general";
 
@@ -17,7 +18,7 @@ export type Notification = {
   raw_text: string;
   headers: Headers;
   raw_headers: string;
-  recived: Date;
+  recived: Timestamp;
   viewed: boolean;
   html: string;
 };

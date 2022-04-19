@@ -4,6 +4,7 @@ import { Notification } from "../../utils/types";
 import InboxItemIcon from "./InboxItemIcon";
 import { Box, Text } from "../restyle";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import timeElapsed from "../../utils/time-elapsed";
 
 type Props = {
   item: Notification;
@@ -59,7 +60,7 @@ const InboxItem: React.FC<Props> = ({ item }) => {
               </Text>
             </Box>
             <Text variant="callout" color="gray600">
-              1h
+              {timeElapsed(item.recived.toDate())}
             </Text>
           </Box>
           <Text
