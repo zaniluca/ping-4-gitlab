@@ -64,6 +64,7 @@ const RootStackNavigator = () => {
             }}
           />
           <Stack.Screen
+            navigationKey="AuthenticatedLogin"
             name="Login"
             component={LoginScreen}
             options={{
@@ -71,6 +72,7 @@ const RootStackNavigator = () => {
             }}
           />
           <Stack.Screen
+            navigationKey="AuthenticatedSignup"
             name="Signup"
             component={SignupScreen}
             options={{
@@ -109,6 +111,7 @@ const RootStackNavigator = () => {
             }}
           />
           <Stack.Screen
+            navigationKey="UnauthenticatedLogin"
             name="Login"
             component={LoginScreen}
             options={{
@@ -116,6 +119,7 @@ const RootStackNavigator = () => {
             }}
           />
           <Stack.Screen
+            navigationKey="UnauthenticatedSignup"
             name="Signup"
             component={SignupScreen}
             options={{

@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
@@ -16,6 +16,8 @@ import Hint from "../components/Hint";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
+import { useAuth } from "../contexts/AuthContext";
+import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -26,8 +28,21 @@ const INITIAL_VALUES = {
 };
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
-  const handleSubmit = (values: typeof INITIAL_VALUES) => {
-    console.log(values);
+  const { signup } = useAuth();
+
+  const [firebaseError, setFirebaseError] = useState<string | undefined>();
+
+  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
+    setFirebaseError(undefined);
+    try {
+      await signup(values.email, values.password);
+    } catch (error) {
+      console.error("Error while signing up: ", error);
+
+      setFirebaseError(
+        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
+      );
+    }
   };
 
   return (
@@ -112,6 +127,20 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                       </Hint>
                     )}
                   </Box>
+                  {/* Firebase Error */}
+                  {firebaseError && (
+                    <Box marginTop="s">
+                      <Box>
+                        <Text color="red">Some errors occurred:</Text>
+                        <Box flexDirection="row">
+                          <Text color="red">{"\u2022"}</Text>
+                          <Text color="red" paddingLeft="xs">
+                            {firebaseError}
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )}
                   {/* Signup CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>

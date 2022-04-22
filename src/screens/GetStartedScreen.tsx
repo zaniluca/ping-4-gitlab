@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
-import { useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
@@ -41,10 +41,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
             any permission or access token, we simply use your mail
             notifications!
           </Text>
-          <Text
-            variant="body"
-            marginTop="m"
-          >{`${userData?.hook_id}@p4g.email`}</Text>
+          <CopyToCliboard content={`${userData?.hook_id}@p4g.email`} />
         </Box>
       </ScrollView>
     </SafeAreaView>

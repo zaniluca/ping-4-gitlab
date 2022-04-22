@@ -14,6 +14,9 @@ import { Formik } from "formik";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import { LoginSchema } from "../utils/validation";
+import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
+import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -23,8 +26,20 @@ const INITIAL_VALUES = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const handleSubmit = (values: typeof INITIAL_VALUES) => {
-    console.log(values);
+  const { login } = useAuth();
+  const [firebaseError, setFirebaseError] = useState<string | undefined>();
+
+  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
+    setFirebaseError(undefined);
+    try {
+      await login(values.email, values.password);
+    } catch (error) {
+      console.error("Error while signing up: ", error);
+
+      setFirebaseError(
+        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
+      );
+    }
   };
 
   return (
@@ -89,6 +104,20 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                             </Text>
                           </Box>
                         ))}
+                      </Box>
+                    </Box>
+                  )}
+                  {/* Firebase Error */}
+                  {firebaseError && (
+                    <Box marginTop="s">
+                      <Box>
+                        <Text color="red">Some errors occurred:</Text>
+                        <Box flexDirection="row">
+                          <Text color="red">{"\u2022"}</Text>
+                          <Text color="red" paddingLeft="xs">
+                            {firebaseError}
+                          </Text>
+                        </Box>
                       </Box>
                     </Box>
                   )}

@@ -67,31 +67,19 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   const signup = async (e: string, p: string) => {
     if (user) {
       // Anonymous user trying to get a permanent account
-      try {
-        const credential = EmailAuthProvider.credential(e, p);
-        const result = await linkWithCredential(user, credential);
-        console.log("Anonymous user upgraded to permanent: ", result.user.uid);
-      } catch (error) {
-        console.error("Error trying to upgrade anonymous user: ", error);
-      }
+      const credential = EmailAuthProvider.credential(e, p);
+      const result = await linkWithCredential(user, credential);
+      console.log("Anonymous user upgraded to permanent: ", result.user.uid);
     } else {
       // New user
-      try {
-        const result = await createUserWithEmailAndPassword(auth, e, p);
-        console.log("Signed up with uid: ", result.user.uid);
-      } catch (error) {
-        console.error(error);
-      }
+      const result = await createUserWithEmailAndPassword(auth, e, p);
+      console.log("Signed up with uid: ", result.user.uid);
     }
   };
 
   const login = async (e: string, p: string) => {
-    try {
-      const result = await signInWithEmailAndPassword(auth, e, p);
-      console.log("Logged in with uid: ", result.user.uid);
-    } catch (error) {
-      console.error(error);
-    }
+    const result = await signInWithEmailAndPassword(auth, e, p);
+    console.log("Logged in with uid: ", result.user.uid);
   };
 
   const logout = async () => {
