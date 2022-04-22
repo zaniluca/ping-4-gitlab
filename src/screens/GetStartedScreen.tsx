@@ -10,27 +10,27 @@ type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
-  const hasCompletedOnboarding = userData?.onboarding;
+  const hasCompletedOnboarding = !userData?.onboarding;
+
+  useLayoutEffect(() => {
+    if (hasCompletedOnboarding) {
+      // User correctly added the hook and recived a notification
+      if (navigation.canGoBack()) navigation.goBack();
+      else navigation.navigate("Inbox");
+    }
+  }, [navigation, userData]);
 
   // Disabling android hardware back buttons
   useLayoutEffect(() => {
     const listener = navigation.addListener("beforeRemove", (e) => {
       // When user has finished onboarding re-enable back button
-      if (!hasCompletedOnboarding) {
+      if (hasCompletedOnboarding) {
         e.preventDefault();
       }
       return;
     });
     return () => listener();
   }, [navigation, userData]);
-
-  useEffect(() => {
-    if (!hasCompletedOnboarding) {
-      // User correctly added the hook and recived a notification
-      if (navigation.canGoBack()) navigation.goBack();
-      else navigation.navigate("Inbox");
-    }
-  }, [userData]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
