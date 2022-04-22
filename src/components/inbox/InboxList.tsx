@@ -3,13 +3,16 @@ import InboxItem from "./InboxItem";
 import { ListSeparator } from "../ListSeparator";
 import { Notification } from "../../utils/types";
 import { useData } from "../../contexts/DataContext";
+import { useCallback } from "react";
 
-const renderItem: ListRenderItem<Notification> = ({ item }) => (
+const renderListRow: ListRenderItem<Notification> = ({ item }) => (
   <InboxItem item={item} />
 );
 
 const InboxList = () => {
   const { notifications } = useData();
+
+  const renderItem = useCallback(renderListRow, [notifications]);
 
   return (
     <FlatList
