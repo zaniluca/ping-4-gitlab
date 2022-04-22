@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
-    console.error("Must use physical device for Push Notifications");
+    console.log("Push notifications are not available on simulators");
     return;
   }
   const { status } = await Notifications.requestPermissionsAsync();
