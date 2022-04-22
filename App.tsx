@@ -17,6 +17,11 @@ import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 import { registerForPushNotificationsAsync } from "./src/utils/notifications";
 import Toaster from "./src/components/Toaster";
+import { LogBox } from "react-native";
+
+// Workaround to disable firebase console spamming
+// https://stackoverflow.com/a/64832663/12661017
+LogBox.ignoreLogs(["Setting a timer"]);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
