@@ -41,9 +41,9 @@ const InboxItem: React.FC<Props> = ({ item }) => {
             />
           )}
         </Box>
-        <Box flexShrink={1}>
+        <Box flex={1} flexShrink={1}>
           <Box flexDirection="row" justifyContent="space-between">
-            <Box flexShrink={1} justifyContent="space-between" paddingEnd="xxs">
+            <Box flexShrink={1} paddingEnd="xxs">
               {/* Only display if it has everything */}
               {iid && projectPath && (
                 <Text
