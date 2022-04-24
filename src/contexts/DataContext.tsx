@@ -26,11 +26,13 @@ type DataContextValues = {
     id: string,
     data: Partial<Notification>
   ) => Promise<void>;
+  updateUserData: (data: Partial<UserData>) => Promise<void>;
 };
 
 export const DataContext = createContext<DataContextValues>({
   notifications: [],
-  updateNotification: async (id: string, data: Partial<Notification>) => {},
+  updateNotification: async (_id: string, _data: Partial<Notification>) => {},
+  updateUserData: async (_data: Partial<UserData>) => {},
 });
 
 type DataContextProps = {
@@ -131,7 +133,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ notifications, userData, updateNotification }}
+      value={{ notifications, userData, updateNotification, updateUserData }}
     >
       {children}
     </DataContext.Provider>

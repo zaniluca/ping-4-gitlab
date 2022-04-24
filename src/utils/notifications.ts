@@ -5,12 +5,12 @@ import { Platform } from "react-native";
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
     console.log("Push notifications are not available on simulators");
-    return;
+    return { token: undefined, status: undefined };
   }
   const { status } = await Notifications.requestPermissionsAsync();
   if (status !== "granted") {
     console.error("Failed to get push token for push notification!");
-    return;
+    return { token: undefined, status };
   }
 
   if (Platform.OS === "android") {
@@ -27,6 +27,5 @@ export const registerForPushNotificationsAsync = async () => {
     })
   ).data;
 
-  // TODO: Upload
-  return token;
+  return { token, status };
 };

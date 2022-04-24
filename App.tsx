@@ -14,10 +14,9 @@ import theme from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import * as Notifications from "expo-notifications";
-import { useEffect } from "react";
-import { registerForPushNotificationsAsync } from "./src/utils/notifications";
 import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
+import { NotificationsProvider } from "./src/contexts/NotificationsContext";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
@@ -36,20 +35,6 @@ Notifications.addNotificationResponseReceivedListener((notification) => {
 });
 
 export default function App() {
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
-
-  useEffect(() => {
-    if (lastNotificationResponse) {
-      console.log("lastNotificationResponse: ", lastNotificationResponse);
-    }
-  }, [lastNotificationResponse]);
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      console.log("ExpoPushToken: ", token)
-    );
-  }, []);
-
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
     SourceSansPro_400Regular,
@@ -64,13 +49,15 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <DataProvider>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <RootStackNavigator />
-            </NavigationContainer>
-            <Toaster />
-          </SafeAreaProvider>
-          <StatusBar style="auto" />
+          <NotificationsProvider>
+            <SafeAreaProvider>
+              <NavigationContainer>
+                <RootStackNavigator />
+              </NavigationContainer>
+              <Toaster />
+            </SafeAreaProvider>
+            <StatusBar style="auto" />
+          </NotificationsProvider>
         </DataProvider>
       </AuthProvider>
     </ThemeProvider>

@@ -16,12 +16,23 @@ import { useAuth } from "../contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator } from "react-native";
 import { Text } from "../components/restyle";
+import { useEffect } from "react";
+import * as Notifications from "expo-notifications";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
   const { user, loading } = useAuth();
+  const navigation = useRootStackNavigation();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+
+  useEffect(() => {
+    if (lastNotificationResponse) {
+      console.log("lastNotificationResponse: ", lastNotificationResponse);
+      // TODO: get notification from firestore and navigate to its page
+    }
+  }, [lastNotificationResponse]);
 
   if (loading) {
     return (
