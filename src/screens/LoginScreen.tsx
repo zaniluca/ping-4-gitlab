@@ -26,13 +26,17 @@ const INITIAL_VALUES = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
   const handleSubmit = async (values: typeof INITIAL_VALUES) => {
     setFirebaseError(undefined);
+    const wasAnonymous = !!user;
+
     try {
       await login(values.email, values.password);
+      // If the user wasn't anonymous before this process the navigation is automatic
+      if (wasAnonymous) navigation.navigate("Inbox");
     } catch (error) {
       console.error("Error while signing up: ", error);
 
