@@ -58,9 +58,9 @@ const RootStackNavigator = () => {
               gestureEnabled: false,
               headerBackVisible: false,
               headerLargeTitle: true,
-              headerSearchBarOptions: {
-                placeholder: "Search for notifications",
-              },
+              // headerSearchBarOptions: {
+              //   placeholder: "Search for notifications",
+              // },
             }}
           />
           <Stack.Screen

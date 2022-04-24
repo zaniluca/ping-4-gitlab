@@ -12,7 +12,6 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { Formik } from "formik";
 import { SignupSchema } from "../utils/validation";
-import Hint from "../components/Hint";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
@@ -124,11 +123,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                         ))}
                       </Box>
                     ) : (
-                      <Hint>
+                      <Text variant="caption" color="gray600">
                         Your password must be 8 or more characters long &
                         contain a mix of upper & lower case letters, numbers &
                         symbols.
-                      </Hint>
+                      </Text>
                     )}
                   </Box>
                   {/* Firebase Error */}

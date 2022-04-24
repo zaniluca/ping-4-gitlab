@@ -36,15 +36,77 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <Box paddingHorizontal="m" paddingVertical="s">
+          <Text variant="headline">Welcome to Ping for Gitlab!</Text>
           <Text variant="body">
-            Welcome to Ping4Gitlab! To connect your gitlab account we don’t need
-            any permission or access token, we simply use your mail
-            notifications!
+            Connecting your Gitlab account is as simple as adding a new address
+            to your associated emails.
           </Text>
-          <CopyToCliboard content={`${userData?.hook_id}@p4g.email`} />
+          <Text variant="body" marginTop="m">
+            By adding the address we give you as the notifications address you
+            will start reciving messages delivered instanly to your phone.
+            everything else like which notifications to recive and so on and so
+            forth will be configurable from gitlab!
+          </Text>
+          <Text variant="headline" marginTop="m">
+            Make sure to read all the way throgh this guide before starting!
+          </Text>
+          <Text variant="body" marginTop="s">
+            In order to setuo your account you will need to follow these simple
+            steps:
+          </Text>
+          <BulletPointListItem>
+            Go to <Text color="blue">gitlab.com</Text> and login with your
+            account.
+          </BulletPointListItem>
+          <BulletPointListItem>
+            Head to <Text color="blue">Preferences</Text> and then{" "}
+            <Text color="blue">Emails</Text>.
+          </BulletPointListItem>
+          <BulletPointListItem>
+            You will need to add this email:
+          </BulletPointListItem>
+          <CopyToCliboard
+            marginTop="m"
+            content={`${userData?.hook_id}@p4g.email`}
+          />
+          <Text variant="caption" color="gray600" marginTop="xs">
+            Tap on this box to copy it to your clipboard!
+          </Text>
+          <Text marginTop="m" variant="headline">
+            Wait until the end before pressing{" "}
+            <Text color="blue">"Add email address"</Text> or this screen will
+            dismiss.
+          </Text>
+          <BulletPointListItem>
+            After adding the email this screen will dismiss and you will get
+            your first message in this app with the confirmation link, open the
+            message and <Text color="blue">Confirm the email address</Text>.
+          </BulletPointListItem>
+          <BulletPointListItem>
+            Lastly head over to the <Text color="blue">Notifications</Text>{" "}
+            section in gitlab preferences and set this newly added mail as your{" "}
+            <Text color="blue">Notification email</Text> (The address will only
+            appear after confirmation).
+          </BulletPointListItem>
+          <BulletPointListItem>
+            Thank you for reading all the way throug! now you can procede with
+            the steps above and enjoy reciving all your team updates directly on
+            your phone!
+          </BulletPointListItem>
         </Box>
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const BulletPointListItem: React.FC = ({ children }) => {
+  return (
+    <Box flexDirection="row" marginTop="s">
+      <Text variant="body">{"\u2022"}</Text>
+      <Text variant="body" paddingLeft="s">
+        {children}
+      </Text>
+    </Box>
   );
 };
 
