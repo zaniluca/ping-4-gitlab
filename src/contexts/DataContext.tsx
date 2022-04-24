@@ -77,7 +77,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
     try {
       await updateDoc(
-        doc(firestore, `users/${"test"}/notifications/${id}`),
+        doc(firestore, `users/${user.uid}/notifications/${id}`),
         data
       );
     } catch (error) {
@@ -87,7 +87,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const unsub = onSnapshot(doc(firestore, `users/${"test"}`), (doc) => {
+    const unsub = onSnapshot(doc(firestore, `users/${user.uid}`), (doc) => {
       const data = doc.data() as UserData;
 
       if (!data) {
@@ -103,12 +103,18 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !userData) return;
     const q = query(
-      collection(firestore, `users/${"test"}/notifications`),
+      collection(firestore, `users/${user.uid}/notifications`),
       orderBy("recived", "desc")
     );
     const unsub = onSnapshot(q, (querySnapshot) => {
+      if (!querySnapshot.empty && userData.onboarding) {
+        // User is in onboarding stage and recived the confirmation email
+        console.log(`${user.uid} added hook to gitlab succesfully`);
+        updateUserData({ onboarding: false });
+      }
+
       let docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
         const noti = doc.data() as Notification;
@@ -117,16 +123,11 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
         docs.push(noti);
       });
 
-      if (!!notifications.length && userData?.onboarding) {
-        // User is in onboarding stage and recived the confirmation email
-        updateUserData({ onboarding: false });
-      }
-
       setNotifications(docs);
     });
 
     return () => unsub();
-  }, [user]);
+  }, [user, userData]);
 
   return (
     <DataContext.Provider

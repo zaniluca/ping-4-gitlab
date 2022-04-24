@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
       if (error.code === "auth/operation-not-allowed") {
         console.log("Enable anonymous in your firebase console.");
       }
-      console.error(error);
+      console.error("Error signing in anonymously: ", error);
     }
   };
 
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     try {
       await signOut(auth);
     } catch (error) {
-      console.error(error);
+      console.error("Error during logout: ", error);
     }
   };
 

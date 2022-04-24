@@ -40,12 +40,14 @@ export default function App() {
 
   useEffect(() => {
     if (lastNotificationResponse) {
-      console.log(lastNotificationResponse);
+      console.log("lastNotificationResponse: ", lastNotificationResponse);
     }
   }, [lastNotificationResponse]);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => console.log(token));
+    registerForPushNotificationsAsync().then((token) =>
+      console.log("ExpoPushToken: ", token)
+    );
   }, []);
 
   const [fontsLoaded] = useFonts({
