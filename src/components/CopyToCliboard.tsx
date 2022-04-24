@@ -1,10 +1,12 @@
 import React from "react";
 import { Box, Text } from "./restyle";
 import * as Clipboard from "expo-clipboard";
+import * as Haptics from "expo-haptics";
 import { TouchableOpacity } from "react-native";
 import { Copy } from "react-native-feather";
 import { Theme, useTheme } from "../utils/theme";
 import { SpacingProps } from "@shopify/restyle";
+import Toast from "react-native-toast-message";
 
 type Props = SpacingProps<Theme> & {
   content: string;
@@ -13,12 +15,17 @@ type Props = SpacingProps<Theme> & {
 const CopyToCliboard: React.FC<Props> = ({ content, ...rest }) => {
   const theme = useTheme();
 
+  const handleOnPress = () => {
+    Toast.show({
+      text1: "Copied!",
+    });
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Clipboard.setString(content);
+  };
+
   return (
     <Box {...rest}>
-      <TouchableOpacity
-        onPress={() => Clipboard.setString(content)}
-        activeOpacity={0.8}
-      >
+      <TouchableOpacity onPress={handleOnPress} activeOpacity={0.5}>
         <Box
           style={{ paddingVertical: 12 }}
           paddingHorizontal="m"

@@ -8,7 +8,7 @@ import { Theme } from "../utils/theme";
 import { Box, Text } from "./restyle";
 import { CheckCircle, Info, CloudLightning } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 
 type CustomToastParams = {
   Icon?: (props: SvgProps) => JSX.Element;
@@ -34,7 +34,7 @@ const BaseToast: React.FC<CustomToastProps> = ({
       flexDirection="row"
       alignItems="center"
       minHeight={48}
-      width="95%"
+      width={Dimensions.get("screen").width * 0.95}
     >
       {Icon && (
         <Box paddingRight="m">

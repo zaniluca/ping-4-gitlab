@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
+import Toaster from "../components/Toaster";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
 
@@ -33,8 +34,11 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation, userData]);
 
   return (
-    <SafeAreaView style={styles.container} edges={["right", "left"]}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+    <SafeAreaView style={styles.container} edges={["right", "left", "bottom"]}>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
+      >
         <Box paddingHorizontal="m" paddingVertical="s">
           <Text variant="headline">Welcome to Ping for Gitlab!</Text>
           <Text variant="body">
@@ -67,7 +71,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           </BulletPointListItem>
           <CopyToCliboard
             marginTop="m"
-            content={`${userData?.hook_id}@p4g.email`}
+            content={`${userData?.hook_id}@${process.env.EMAIL_DOMAIN}`}
           />
           <Text variant="caption" color="gray600" marginTop="xs">
             Tap on this box to copy it to your clipboard!
@@ -95,6 +99,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           </BulletPointListItem>
         </Box>
       </ScrollView>
+      <Toaster />
     </SafeAreaView>
   );
 };
