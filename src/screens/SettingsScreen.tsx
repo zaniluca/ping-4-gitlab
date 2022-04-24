@@ -7,7 +7,7 @@ import SettingsHeader from "../components/settings/SettingsHeader";
 
 type Props = RootStackScreenProps<"Settings">;
 
-const SettingsScreen: React.FC<Props> = ({ navigation }) => {
+const SettingsScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <SettingsHeader />

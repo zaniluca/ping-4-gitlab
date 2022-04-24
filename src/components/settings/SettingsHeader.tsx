@@ -1,46 +1,49 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import React from "react";
-import theme, { useTheme } from "../../utils/theme";
+import { useTheme } from "../../utils/theme";
 import { ArrowRight } from "react-native-feather";
 import { Box, Text } from "../restyle";
 import { useAuth } from "../../contexts/AuthContext";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 
 export const SettingsHeader = () => {
+  const navigation = useRootStackNavigation();
   const theme = useTheme();
-  const { logout } = useAuth();
+  const { user } = useAuth();
 
   return (
-    <Box alignItems="center">
-      <Text variant="headline">Anonymous User</Text>
-      <Text variant="callout" color="gray600" paddingTop="xxs">
-        Login to save your data on all your device
+    <Box alignItems="center" paddingBottom="xxl">
+      <Text variant="headline">
+        {user?.isAnonymous ? "Anonymous User" : "You're logged in"}
       </Text>
-      <Box paddingTop="m" paddingBottom="xl">
-        <TouchableOpacity style={styles.btn} onPress={logout}>
-          <Box flexDirection="row">
-            <Text variant="headline" color="white">
-              Logout
-            </Text>
-            <ArrowRight stroke={theme.colors.white} width={20} />
-          </Box>
-        </TouchableOpacity>
-      </Box>
+      <Text variant="callout" color="gray600" paddingTop="xxs">
+        {user?.isAnonymous
+          ? "Signup to save data between devices"
+          : `with ${user?.email}`}
+      </Text>
+      {user?.isAnonymous && (
+        <Box paddingTop="m">
+          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+            <Box
+              flexDirection="row"
+              width={140}
+              backgroundColor="indigo"
+              alignItems="center"
+              justifyContent="center"
+              paddingVertical="s"
+              paddingHorizontal="m"
+              borderRadius={100}
+            >
+              <Text variant="headline" color="white">
+                Signup
+              </Text>
+              <ArrowRight stroke={theme.colors.white} width={20} />
+            </Box>
+          </TouchableOpacity>
+        </Box>
+      )}
     </Box>
   );
 };
 
 export default SettingsHeader;
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-  },
-  btn: {
-    width: 140,
-    backgroundColor: theme.colors.purple,
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 100,
-  },
-});

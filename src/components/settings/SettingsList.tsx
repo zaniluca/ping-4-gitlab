@@ -5,48 +5,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { AtSign, ChevronRight, Clock, Heart } from "react-native-feather";
+import { ChevronRight, LogOut } from "react-native-feather";
 import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
-
-const SETTINGS_SECTIONS: any[] = [
-  // {
-  //   title: "Content",
-  //   data: [
-  //     {
-  //       name: "Favourites",
-  //       icon: (props: SvgProps) => <Heart {...props} />,
-  //     },
-  //     {
-  //       name: "Work Hours",
-  //       icon: (props: SvgProps) => <Clock {...props} />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: "Content",
-  //   data: [
-  //     {
-  //       name: "Name",
-  //       icon: (props: SvgProps) => <AtSign {...props} />,
-  //     },
-  //     {
-  //       name: "Name",
-  //       icon: (props: SvgProps) => <AtSign {...props} />,
-  //     },
-  //     {
-  //       name: "Name",
-  //       icon: (props: SvgProps) => <AtSign {...props} />,
-  //     },
-  //   ],
-  // },
-];
+import { useAuth } from "../../contexts/AuthContext";
 
 type SectionItem = {
   name: string;
   icon: (props: SvgProps) => JSX.Element;
+  onPress?: () => void;
+  showChevron: boolean;
 };
 
 type SectionHeaderProps = {
@@ -55,6 +25,23 @@ type SectionHeaderProps = {
 
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
+  const { logout, user } = useAuth();
+
+  const SETTINGS_SECTIONS: any[] = [
+    {
+      title: "General",
+      data: [
+        // Maybe rethink this
+        !user?.isAnonymous
+          ? {
+              name: "Logout",
+              icon: (props: SvgProps) => <LogOut {...props} />,
+              onPress: logout,
+            }
+          : {},
+      ],
+    },
+  ];
 
   const renderSectionHeader = ({ section }: SectionHeaderProps) => {
     return (
@@ -73,7 +60,7 @@ const SettingsList = () => {
   };
 
   const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
-    <TouchableOpacity>
+    <TouchableOpacity activeOpacity={0.6} onPress={item.onPress}>
       <Box
         flexDirection="row"
         justifyContent="space-between"
@@ -86,7 +73,7 @@ const SettingsList = () => {
           </Box>
           <Text variant="headline">{item.name}</Text>
         </Box>
-        <ChevronRight stroke={colors.gray900} />
+        {item.showChevron && <ChevronRight stroke={colors.gray900} />}
       </Box>
     </TouchableOpacity>
   );
