@@ -7,7 +7,7 @@ import { Theme } from "../utils/theme";
 import { Box } from "./restyle";
 
 type Props = BoxProps<Theme> & {
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
 };
 
 const Skeleton: React.FC<Props> = ({ children, ...rest }) => {
@@ -32,10 +32,7 @@ const Skeleton: React.FC<Props> = ({ children, ...rest }) => {
 
   return (
     <Animated.View style={{ opacity: opacity.current, flex: 1 }}>
-      {/* Defaulting this background color, can be overrided by props */}
-      <Box backgroundColor="gray600" {...rest}>
-        {children}
-      </Box>
+      <Box {...rest}>{children}</Box>
     </Animated.View>
   );
 };
