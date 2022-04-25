@@ -35,7 +35,7 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
       }
 
       console.log("ExpoPushToken: ", token);
-      if (userData.expo_push_token === token) return;
+      if (userData.expo_push_token === token || !token) return;
 
       updateUserData({ expo_push_token: token });
     });

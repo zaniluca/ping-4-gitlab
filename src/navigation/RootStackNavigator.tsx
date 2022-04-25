@@ -13,12 +13,11 @@ import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../contexts/AuthContext";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ActivityIndicator } from "react-native";
-import { Text } from "../components/restyle";
 import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import { useData } from "../contexts/DataContext";
+import Skeleton from "../components/Skeleton";
+import Logo from "../components/Logo";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -53,12 +52,14 @@ const RootStackNavigator = () => {
 
   if (loading) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      <Skeleton
+        flex={1}
+        backgroundColor="white"
+        alignItems="center"
+        justifyContent="center"
       >
-        <ActivityIndicator />
-        <Text variant="body">Logging in...</Text>
-      </SafeAreaView>
+        <Logo fill={theme.colors.red} width={77} height={77} />
+      </Skeleton>
     );
   }
 
