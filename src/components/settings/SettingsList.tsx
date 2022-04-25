@@ -19,6 +19,11 @@ type SectionItem = {
   showChevron: boolean;
 };
 
+type SettingsSections = {
+  title: string;
+  data: SectionItem[];
+};
+
 type SectionHeaderProps = {
   section: SectionListData<SectionItem>;
 };
@@ -27,18 +32,20 @@ const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
   const { logout, user } = useAuth();
 
-  const SETTINGS_SECTIONS: any[] = [
+  const SETTINGS_SECTIONS: SettingsSections[] = [
     {
       title: "General",
       data: [
-        // Maybe rethink this
-        !user?.isAnonymous
-          ? {
-              name: "Logout",
-              icon: (props: SvgProps) => <LogOut {...props} />,
-              onPress: logout,
-            }
-          : {},
+        ...(!user?.isAnonymous
+          ? [
+              {
+                name: "Logout",
+                icon: (props: SvgProps) => <LogOut {...props} />,
+                onPress: logout,
+                showChevron: false,
+              },
+            ]
+          : []),
       ],
     },
   ];
@@ -59,24 +66,27 @@ const SettingsList = () => {
     );
   };
 
-  const renderItem: ListRenderItem<SectionItem> = ({ item }) => (
-    <TouchableOpacity activeOpacity={0.6} onPress={item.onPress}>
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        padding="m"
-        backgroundColor="white"
-      >
-        <Box flexDirection="row">
-          <Box paddingRight="m">
-            <item.icon stroke={colors.gray900} strokeWidth={2} />
+  const renderItem: ListRenderItem<SectionItem> = ({ item }) => {
+    const { name, onPress, showChevron } = item;
+    return (
+      <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          padding="m"
+          backgroundColor="white"
+        >
+          <Box flexDirection="row">
+            <Box paddingRight="m">
+              <item.icon stroke={colors.gray900} strokeWidth={2} />
+            </Box>
+            <Text variant="headline">{name}</Text>
           </Box>
-          <Text variant="headline">{item.name}</Text>
+          {showChevron && <ChevronRight stroke={colors.gray900} />}
         </Box>
-        {item.showChevron && <ChevronRight stroke={colors.gray900} />}
-      </Box>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SectionList

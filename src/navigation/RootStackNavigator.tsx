@@ -18,20 +18,37 @@ import { ActivityIndicator } from "react-native";
 import { Text } from "../components/restyle";
 import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
+import { useData } from "../contexts/DataContext";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
   const { user, loading } = useAuth();
+  const { getNotificationById } = useData();
+
   const navigation = useRootStackNavigation();
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
-    if (lastNotificationResponse) {
-      console.log("lastNotificationResponse: ", lastNotificationResponse);
-      // TODO: get notification from firestore and navigate to its page
+    if (!lastNotificationResponse) return;
+
+    console.log("lastNotificationResponse: ", lastNotificationResponse);
+    const nid = lastNotificationResponse.notification.request.content.data
+      .nid as string | undefined;
+    if (!nid) {
+      console.error("Notification id not present in notification data");
+      return;
     }
+
+    getNotificationById(nid).then((notification) => {
+      if (!notification) {
+        console.error("Notification not found with id: ", nid);
+        return;
+      }
+
+      navigation.navigate("NotificationDetail", notification);
+    });
   }, [lastNotificationResponse]);
 
   if (loading) {

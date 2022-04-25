@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
@@ -27,12 +28,14 @@ type DataContextValues = {
     data: Partial<Notification>
   ) => Promise<void>;
   updateUserData: (data: Partial<UserData>) => Promise<void>;
+  getNotificationById: (id: string) => Promise<Notification | undefined>;
 };
 
 export const DataContext = createContext<DataContextValues>({
   notifications: [],
   updateNotification: async (_id: string, _data: Partial<Notification>) => {},
   updateUserData: async (_data: Partial<UserData>) => {},
+  getNotificationById: async (id: string) => Promise.resolve(undefined),
 });
 
 type DataContextProps = {
@@ -68,6 +71,20 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
     } catch (error) {
       console.error("Error trying to update user document: ", error);
     }
+  };
+
+  const getNotificationById = async (id: string) => {
+    if (!user) return;
+    console.log("Getting notification with id: ", id);
+
+    const docSnap = await getDoc(
+      doc(firestore, `users/${user.uid}/notifications/${id}`)
+    );
+    if (!docSnap.exists) return;
+
+    const noti = docSnap.data() as Notification;
+    noti.id = docSnap.id;
+    return noti;
   };
 
   const updateNotification = async (
@@ -133,7 +150,13 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ notifications, userData, updateNotification, updateUserData }}
+      value={{
+        notifications,
+        userData,
+        updateNotification,
+        updateUserData,
+        getNotificationById,
+      }}
     >
       {children}
     </DataContext.Provider>
