@@ -10,18 +10,19 @@ export const SettingsHeader = () => {
   const navigation = useRootStackNavigation();
   const theme = useTheme();
   const { user } = useAuth();
+  const isAnonymous = user?.isAnonymous;
 
   return (
-    <Box alignItems="center" paddingBottom="xxl">
+    <Box alignItems="center" paddingVertical="xxl">
       <Text variant="headline">
-        {user?.isAnonymous ? "Anonymous User" : "You're logged in"}
+        {isAnonymous ? "Anonymous User" : "You're logged in"}
       </Text>
       <Text variant="callout" color="gray600" paddingTop="xxs">
-        {user?.isAnonymous
+        {isAnonymous
           ? "Signup to save data between devices"
           : `with ${user?.email}`}
       </Text>
-      {user?.isAnonymous && (
+      {isAnonymous && (
         <Box paddingTop="m">
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Box

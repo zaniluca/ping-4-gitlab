@@ -33,21 +33,21 @@ const SettingsList = () => {
   const { logout, user } = useAuth();
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
-    {
-      title: "General",
-      data: [
-        ...(!user?.isAnonymous
-          ? [
+    ...(!user?.isAnonymous
+      ? [
+          {
+            title: "General",
+            data: [
               {
                 name: "Logout",
                 icon: (props: SvgProps) => <LogOut {...props} />,
                 onPress: logout,
                 showChevron: false,
               },
-            ]
-          : []),
-      ],
-    },
+            ],
+          },
+        ]
+      : []),
   ];
 
   const renderSectionHeader = ({ section }: SectionHeaderProps) => {

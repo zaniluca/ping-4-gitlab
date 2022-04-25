@@ -153,13 +153,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </Box>
             {/* Forgot Password Button */}
-            <Box flexDirection="row" justifyContent="center" marginTop="m">
+            {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
               <TouchableOpacity>
                 <Text variant="headline" color="purpleDark">
                   I Forgot my Password :(
                 </Text>
               </TouchableOpacity>
-            </Box>
+            </Box> */}
           </Box>
         </KeyboardAvoid>
       </ScrollView>

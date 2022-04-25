@@ -9,7 +9,7 @@ type Props = RootStackScreenProps<"Settings">;
 
 const SettingsScreen: React.FC<Props> = () => {
   return (
-    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+    <SafeAreaView style={styles.container} edges={["right", "left"]}>
       <SettingsHeader />
       <SettingsList />
     </SafeAreaView>

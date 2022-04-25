@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Text } from "../restyle";
 import Constants from "expo-constants";
+import { openUrl } from "../../utils/open-url";
 
 const SettingsListFooter = () => {
   return (
@@ -8,6 +9,15 @@ const SettingsListFooter = () => {
       <Text variant="callout" color="gray600">
         {Constants.manifest?.name} v{Constants.manifest?.version}
       </Text>
+      {/* <Text marginTop="s" variant="caption" color="gray600">
+        This app is code is Open Source, check it out on{" "}
+        <Text
+          color="blue"
+          onPress={() => openUrl("https://github.com/zaniluca/ping-4-gitlab")}
+        >
+          Github
+        </Text>
+      </Text> */}
     </Box>
   );
 };
