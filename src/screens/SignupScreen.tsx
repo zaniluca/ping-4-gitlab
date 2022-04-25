@@ -124,7 +124,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                       </Box>
                     ) : (
                       <Text variant="caption" color="gray600">
-                        Your password must be 8 or more characters long &
+                        Your password must be 6 or more characters long &
                         contain a mix of upper & lower case letters, numbers &
                         symbols.
                       </Text>

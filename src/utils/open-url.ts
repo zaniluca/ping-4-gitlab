@@ -10,6 +10,6 @@ export const openUrl = (url: string) => {
       }
     })
     .catch((reason) => {
-      console.log("Can't open url", reason);
+      console.error("Can't open url", reason);
     });
 };
