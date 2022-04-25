@@ -3,32 +3,39 @@
     "version": ">= 0.49.0"
   },
   "build": {
+    "base": {
+      "android": {
+        "autoIncrement": true
+      },
+      "ios": {
+        "autoIncrement": true,
+        "cocoapods": "1.11.2"
+      }
+    },
     "development": {
+      "extends": "base",
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
         "simulator": true,
-        "buildConfiguration": "Debug",
-        "cocoapods": "1.11.2"
+        "buildConfiguration": "Debug"
       }
     },
     "preview": {
+      "extends": "base",
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
         "simulator": false,
-        "buildConfiguration": "Debug",
-        "cocoapods": "1.11.2"
+        "buildConfiguration": "Debug"
       }
     },
     "production": {
-      "ios": {
-        "cocoapods": "1.11.2"
-      }
+      "extends": "base"
     }
   },
   "submit": {
