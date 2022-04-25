@@ -23,6 +23,7 @@ import { useAuth } from "./AuthContext";
 type DataContextValues = {
   notifications: Notification[];
   userData?: UserData;
+  hasLoadedFirstSnapshot: boolean;
   updateNotification: (
     id: string,
     data: Partial<Notification>
@@ -33,6 +34,7 @@ type DataContextValues = {
 
 export const DataContext = createContext<DataContextValues>({
   notifications: [],
+  hasLoadedFirstSnapshot: false,
   updateNotification: async (_id: string, _data: Partial<Notification>) => {},
   updateUserData: async (_data: Partial<UserData>) => {},
   getNotificationById: async (id: string) => Promise.resolve(undefined),
@@ -43,6 +45,7 @@ type DataContextProps = {
 };
 
 export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
+  const [hasLoadedFirstSnapshot, setHasLoadedFirstSnapshot] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userData, setUserData] = useState<UserData>();
 
@@ -143,6 +146,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
       });
 
       setNotifications(docs);
+      setHasLoadedFirstSnapshot(true);
     });
 
     return () => unsub();
@@ -156,6 +160,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
         updateNotification,
         updateUserData,
         getNotificationById,
+        hasLoadedFirstSnapshot,
       }}
     >
       {children}
