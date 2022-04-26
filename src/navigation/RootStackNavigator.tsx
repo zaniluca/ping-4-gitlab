@@ -75,6 +75,9 @@ const RootStackNavigator = () => {
           fontWeight: "bold",
           fontFamily: theme.fontFamily.bold,
         },
+        headerBackTitleStyle: {
+          fontFamily: theme.fontFamily.semibold,
+        },
       }}
     >
       {user ? (
