@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
@@ -29,15 +27,13 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 2
+      "versionCode": 4
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/notification.wav"
-          ]
+          "sounds": ["./assets/notification.wav"]
         }
       ]
     ]
