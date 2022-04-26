@@ -8,4 +8,7 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
     "Password doesn't respect specified conditions",
   [AuthErrorCodes.INVALID_EMAIL]: "Email is invalid",
   [AuthErrorCodes.EMAIL_EXISTS]: "Email already in use",
+  [AuthErrorCodes.INVALID_PASSWORD]: "Wrong Password",
+  [AuthErrorCodes.USER_DELETED]: "User not found",
+  [AuthErrorCodes.USER_DISABLED]: "User disabled",
 };
