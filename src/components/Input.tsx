@@ -21,7 +21,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
     if (focused) {
       return colors.purple;
     } else {
-      return colors.gray600;
+      return colors.secondary;
     }
   };
 
@@ -34,7 +34,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
     if (focused) {
       return colors.purple + "60";
     } else {
-      return colors.gray600 + "60";
+      return colors.secondary + "60";
     }
   };
 
@@ -46,7 +46,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
     if (focused) {
       return colors.purple;
     } else {
-      return colors.gray900;
+      return colors.primary;
     }
   };
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
-    backgroundColor: theme.colors.gray100,
+    backgroundColor: theme.colors.quaternary,
   },
   labelWrapper: {
     flexGrow: 0,
@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     width: "100%",
-    backgroundColor: theme.colors.gray100,
+    backgroundColor: theme.colors.quaternary,
   },
 });
