@@ -4,7 +4,7 @@ import { Timestamp } from "firebase/firestore";
 export type NotificationType = "issue" | "merge" | "general";
 
 export type UserData = {
-  expo_push_token?: string;
+  expo_push_tokens?: string[];
   onboarding?: boolean;
   hook_id?: string;
 };
