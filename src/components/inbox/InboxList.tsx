@@ -6,7 +6,7 @@ import { useData } from "../../contexts/DataContext";
 import { useCallback } from "react";
 
 const renderListRow: ListRenderItem<Notification> = ({ item }) => (
-  <InboxItem item={item} />
+  <InboxItem notification={item} />
 );
 
 const InboxList = () => {

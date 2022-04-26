@@ -1,5 +1,11 @@
 import React from "react";
-import { AtSign, Circle, GitPullRequest } from "react-native-feather";
+import {
+  AtSign,
+  Circle,
+  GitPullRequest,
+  CheckCircle,
+  XCircle,
+} from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import { useTheme } from "../../utils/theme";
 import { Headers } from "../../utils/types";
@@ -11,12 +17,19 @@ type Props = SvgProps & {
 const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {
   const { colors } = useTheme();
 
-  if (headers["x-gitlab-issue-iid"]) {
-    // If it has issue iid it means is from an issue
+  const isIssue = headers["x-gitlab-issue-iid"];
+  const isMerge = headers["x-gitlab-mergerequest-iid"];
+  const isPipe = headers["x-gitlab-pipeline-id"];
+
+  if (isIssue) {
     return <Circle {...props} stroke={colors.green} />;
-  } else if (headers["x-gitlab-mergerequest-iid"]) {
-    // If it has merge iid is from merge request
+  } else if (isMerge) {
     return <GitPullRequest {...props} stroke={colors.blue} />;
+  } else if (isPipe) {
+    if (headers["x-gitlab-pipeline-status"] === "success") {
+      return <CheckCircle {...props} stroke={colors.green} />;
+    }
+    return <XCircle {...props} stroke={colors.red} />;
   }
   // otherwise display generic icon
   return <AtSign {...props} stroke={colors.purple} />;
