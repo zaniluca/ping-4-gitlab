@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Ping for Gitlab",
+    "name": "Ping",
     "owner": "zaniluca",
     "slug": "ping4gitlab",
     "version": "0.0.1",
@@ -32,12 +32,16 @@
       "versionCode": 5
     },
     "plugins": [
+      "sentry-expo",
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/notification.wav"
-          ]
+
+          "sounds": ["./assets/notification.wav"],
+          "icon": "./assets/notification-icon.png",
+          "color": "#E24329",
+          "androidMode": "collapse",
+          "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
         }
       ]
     ]
