@@ -6,10 +6,10 @@ import { openUrl } from "../../utils/open-url";
 const SettingsListFooter = () => {
   return (
     <Box flex={1} alignItems="center" paddingTop="l">
-      <Text variant="caption" color="gray600">
+      <Text variant="caption" color="secondary">
         {Constants.manifest?.name} ({Constants.manifest?.version})
       </Text>
-      {/* <Text marginTop="s" variant="caption" color="gray600">
+      {/* <Text marginTop="s" variant="caption" color="secondary">
         This app is code is Open Source, check it out on{" "}
         <Text
           color="blue"

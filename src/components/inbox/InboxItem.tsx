@@ -64,7 +64,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
                   numberOfLines={1}
                   ellipsizeMode="middle"
                   variant="body"
-                  color="gray600"
+                  color="secondary"
                 >
                   {projectPath} {iid ? `#${iid}` : ""}
                 </Text>
@@ -73,7 +73,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
                 {sanitizeSubject()}
               </Text>
             </Box>
-            <Text variant="callout" color="gray600">
+            <Text variant="callout" color="secondary">
               {timeElapsed(notification.recived.toDate())}
             </Text>
           </Box>
@@ -81,7 +81,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
             numberOfLines={1}
             ellipsizeMode="tail"
             variant="callout"
-            color="gray600"
+            color="secondary"
           >
             {notification.text}
           </Text>

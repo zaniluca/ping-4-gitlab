@@ -20,7 +20,7 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton onPress={() => navigation.navigate("Settings")}>
-          <Settings stroke={theme.colors.gray600} />
+          <Settings stroke={theme.colors.secondary} />
         </IconButton>
       ),
     });
