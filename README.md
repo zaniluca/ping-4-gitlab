@@ -1,5 +1,5 @@
 <div style="text-align:center">
-<a href="#"><img src="https://imgur.com/a/IIl84vW" style="display:block; margin:auto; width:100%; max-width:100%"/></a>
+  <img src="https://user-images.githubusercontent.com/59318963/166159990-04ff9ef3-6695-43f5-b260-7288eced9153.png" style="display:block; margin:auto; width:100%; max-width:100%"/>
 </div>
 
 ## Installation
@@ -25,5 +25,4 @@ cp .env.example .env
 ```
 
 ## What Now?
-
 Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to the [Server Repository README](https://github.com/zaniluca/ping-4-gitlab-firebase/blob/master/README.md)
