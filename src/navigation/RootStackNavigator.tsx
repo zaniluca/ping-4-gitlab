@@ -66,7 +66,7 @@ const RootStackNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerLargeTitleShadowVisible: false,
-        headerTintColor: theme.colors.gray900,
+        headerTintColor: theme.colors.primary,
         headerLargeTitleStyle: {
           fontWeight: "bold",
           fontFamily: theme.fontFamily.bold,

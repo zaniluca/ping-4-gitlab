@@ -52,7 +52,7 @@ const SettingsList = () => {
 
   const renderSectionHeader = ({ section }: SectionHeaderProps) => {
     return (
-      <Box padding="s" backgroundColor="gray100">
+      <Box padding="s" backgroundColor="quaternary">
         <Text
           variant="callout"
           fontFamily={fontFamily.semibold}
@@ -78,11 +78,11 @@ const SettingsList = () => {
         >
           <Box flexDirection="row">
             <Box paddingRight="m">
-              <item.icon stroke={colors.gray900} strokeWidth={2} />
+              <item.icon stroke={colors.primary} strokeWidth={2} />
             </Box>
             <Text variant="headline">{name}</Text>
           </Box>
-          {showChevron && <ChevronRight stroke={colors.gray900} />}
+          {showChevron && <ChevronRight stroke={colors.primary} />}
         </Box>
       </TouchableOpacity>
     );
@@ -90,7 +90,7 @@ const SettingsList = () => {
 
   return (
     <SectionList
-      style={{ backgroundColor: colors.gray100 }}
+      style={{ backgroundColor: colors.quaternary }}
       scrollEnabled={false}
       stickySectionHeadersEnabled={false}
       contentInsetAdjustmentBehavior="automatic"

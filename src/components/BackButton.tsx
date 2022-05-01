@@ -20,7 +20,7 @@ const BackButton = () => {
   return (
     <TouchableOpacity onPress={handleGoBack}>
       <Box flexDirection="row" alignItems="center">
-        <ArrowLeft stroke={colors.gray900} />
+        <ArrowLeft stroke={colors.primary} />
         <Text marginLeft="s" variant="headline">
           Back
         </Text>
