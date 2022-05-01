@@ -70,6 +70,7 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
             <Text
               variant="body"
               textTransform="capitalize"
+              numberOfLines={1}
               style={{ color: getLabelColor() }}
             >
               {label}
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   labelWrapper: {
     flexGrow: 0,
     flexShrink: 1,
-    flexBasis: 70,
+    flexBasis: 80,
   },
   inputWrapper: {
     paddingLeft: 12,

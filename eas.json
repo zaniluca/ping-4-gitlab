@@ -24,10 +24,10 @@
       }
     },
     "preview": {
-      "extends": "base",
       "distribution": "internal",
+      "extends": "base",
       "android": {
-        "gradleCommand": ":app:assembleDebug"
+        "gradleCommand": ":app:assembleRelease"
       },
       "ios": {
         "simulator": false,

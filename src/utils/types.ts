@@ -4,7 +4,7 @@ import { Timestamp } from "firebase/firestore";
 export type NotificationType = "issue" | "merge" | "general";
 
 export type UserData = {
-  expo_push_token?: string;
+  expo_push_tokens?: string[];
   onboarding?: boolean;
   hook_id?: string;
 };
@@ -23,7 +23,10 @@ export type Notification = {
   html: string;
 };
 
-export type Headers = ProjectHeaders & IssueHeaders & MergeHeaders;
+export type Headers = ProjectHeaders &
+  IssueHeaders &
+  MergeHeaders &
+  PipelineHeaders;
 
 type ProjectHeaders = {
   "x-gitlab-project"?: string;
@@ -40,3 +43,10 @@ type MergeHeaders = {
   "x-gitlab-mergerequest-id"?: string;
   "x-gitlab-mergerequest-iid"?: string;
 };
+
+type PipelineHeaders = {
+  "x-gitlab-pipeline-id"?: string;
+  "x-gitlab-pipeline-status"?: PipelineStatus;
+};
+
+export type PipelineStatus = "success" | "failed";

@@ -33,11 +33,16 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
         });
         return;
       }
-
+      const tokens = userData.expo_push_tokens ?? [];
       console.log("ExpoPushToken: ", token);
-      if (userData.expo_push_token === token || !token) return;
+      // We are on emulator or the user has not allowed notifications
+      if (!token) return;
+      // Token already present in firebase
+      if (tokens.includes(token)) return;
 
-      updateUserData({ expo_push_token: token });
+      updateUserData({
+        expo_push_tokens: [...tokens, token],
+      });
     });
   }, [userData]);
 
