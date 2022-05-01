@@ -17,7 +17,7 @@ export const SettingsHeader = () => {
       <Text variant="headline">
         {isAnonymous ? "Anonymous User" : "You're logged in"}
       </Text>
-      <Text variant="callout" color="gray600" paddingTop="xxs">
+      <Text variant="callout" color="secondary" paddingTop="xxs">
         {isAnonymous
           ? "Signup to save data between devices"
           : `with ${user?.email}`}

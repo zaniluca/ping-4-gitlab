@@ -29,13 +29,13 @@ const CopyToCliboard: React.FC<Props> = ({ content, ...rest }) => {
         <Box
           style={{ paddingVertical: 12 }}
           paddingHorizontal="m"
-          backgroundColor="gray100"
+          backgroundColor="quaternary"
           borderRadius={4}
           flexDirection="row"
           justifyContent="space-between"
         >
           <Text variant="headline">{content}</Text>
-          <Copy stroke={theme.colors.gray600} />
+          <Copy stroke={theme.colors.secondary} />
         </Box>
       </TouchableOpacity>
     </Box>

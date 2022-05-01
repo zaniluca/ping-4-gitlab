@@ -73,7 +73,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
             marginTop="m"
             content={`${userData?.hook_id}@${process.env.EMAIL_DOMAIN}`}
           />
-          <Text variant="caption" color="gray600" marginTop="xs">
+          <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>
           <Text marginTop="m" variant="headline">

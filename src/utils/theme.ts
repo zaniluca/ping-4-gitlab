@@ -8,10 +8,10 @@ const palette = {
   blue: "#1068BF",
   red: "#E24329",
   orange: "#FC6D26",
-  gray100: "#F9F9F9",
-  gray300: "#CCCCCC",
-  gray600: "#8C929D",
-  gray900: "#2E2E2E",
+  quaternary: "#F9F9F9",
+  tertiary: "#CCCCCC",
+  secondary: "#8C929D",
+  primary: "#2E2E2E",
   white: "#FFFFFF",
 };
 
@@ -45,32 +45,32 @@ const theme = createTheme({
     largeTitle: {
       fontFamily: font.bold,
       fontSize: 34,
-      color: "gray900",
+      color: "primary",
     },
     smallTitle: {
       fontFamily: font.bold,
       fontSize: 20,
-      color: "gray900",
+      color: "primary",
     },
     headline: {
       fontFamily: font.semibold,
       fontSize: 17,
-      color: "gray900",
+      color: "primary",
     },
     body: {
       fontFamily: font.regular,
       fontSize: 17,
-      color: "gray900",
+      color: "primary",
     },
     callout: {
       fontFamily: font.regular,
       fontSize: 16,
-      color: "gray900",
+      color: "primary",
     },
     caption: {
       fontFamily: font.regular,
       fontSize: 12,
-      color: "gray900",
+      color: "primary",
     },
   },
 });
