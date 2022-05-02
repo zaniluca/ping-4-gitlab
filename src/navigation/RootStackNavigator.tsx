@@ -18,6 +18,7 @@ import * as Notifications from "expo-notifications";
 import { useData } from "../contexts/DataContext";
 import Skeleton from "../components/Skeleton";
 import Logo from "../components/Logo";
+import { sanitizeSubject } from "../utils/sanitize";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -115,7 +116,7 @@ const RootStackNavigator = () => {
             name="NotificationDetail"
             component={NotificationDetail}
             options={({ route }) => ({
-              title: route.params.subject,
+              title: sanitizeSubject(route.params),
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />

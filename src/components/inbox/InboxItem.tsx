@@ -1,10 +1,11 @@
 import { TouchableOpacity } from "react-native";
 import React from "react";
-import { Notification, PipelineStatus } from "../../utils/types";
+import { Notification } from "../../utils/types";
 import InboxItemIcon from "./InboxItemIcon";
 import { Box, Text } from "../restyle";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import timeElapsed from "../../utils/time-elapsed";
+import { sanitizeSubject } from "../../utils/sanitize";
 
 type Props = {
   notification: Notification;
@@ -19,24 +20,6 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
 
   const projectPath =
     headers["x-gitlab-project-path"] ?? headers["x-gitlab-project"];
-
-  const sanitizeSubject = () => {
-    const isPipe = !!headers["x-gitlab-pipeline-id"];
-
-    const PIPELINE_SUBJECT: Record<PipelineStatus, string> = {
-      success: "Pipeline Succeded!",
-      failed: "Pipeline Failed!",
-    };
-
-    if (isPipe) {
-      const status = headers["x-gitlab-pipeline-status"];
-      return status ? PIPELINE_SUBJECT[status] : "Pipeline";
-    }
-
-    return notification.subject
-      .replace(`Re: ${headers["x-gitlab-project"]} | `, "")
-      .trimStart();
-  };
 
   return (
     <TouchableOpacity
@@ -70,7 +53,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
                 </Text>
               )}
               <Text numberOfLines={2} ellipsizeMode="tail" variant="body">
-                {sanitizeSubject()}
+                {sanitizeSubject(notification)}
               </Text>
             </Box>
             <Text variant="callout" color="secondary">
