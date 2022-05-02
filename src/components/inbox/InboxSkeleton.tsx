@@ -9,9 +9,9 @@ const InboxSkeleton = () => {
 
   const RandomIcon = () => {
     const icons = [
-      <GitPullRequest height={25} width={25} stroke={theme.colors.gray300} />,
-      <AtSign height={25} width={25} stroke={theme.colors.gray300} />,
-      <Circle height={25} width={25} stroke={theme.colors.gray300} />,
+      <GitPullRequest height={25} width={25} stroke={theme.colors.tertiary} />,
+      <AtSign height={25} width={25} stroke={theme.colors.tertiary} />,
+      <Circle height={25} width={25} stroke={theme.colors.tertiary} />,
     ];
     return icons[Math.floor(Math.random() * 3)];
   };
@@ -22,15 +22,15 @@ const InboxSkeleton = () => {
         <Box key={i} flexDirection="row" padding="m">
           <RandomIcon />
           <Box marginLeft="m" width="100%">
-            <Box backgroundColor="gray300" width="45%" height={11} />
+            <Box backgroundColor="tertiary" width="45%" height={11} />
             <Box
-              backgroundColor="gray300"
+              backgroundColor="tertiary"
               marginTop="s"
               width="88%"
               height={15}
             />
             <Box
-              backgroundColor="gray300"
+              backgroundColor="tertiary"
               marginTop="s"
               width="75%"
               height={12}
