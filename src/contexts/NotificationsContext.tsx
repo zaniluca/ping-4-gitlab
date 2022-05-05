@@ -28,7 +28,7 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
         Toast.show({
           type: "error",
           text1: "Notifications not permitted",
-          text2: "Please enable them for the app to work",
+          text2: "We suggest enabling them for the best experience!",
           autoHide: false,
         });
         return;
