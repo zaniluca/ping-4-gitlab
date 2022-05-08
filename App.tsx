@@ -1,6 +1,10 @@
 import "./src/utils/sentry";
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
@@ -12,12 +16,13 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
-import theme from "./src/utils/theme";
+import { lightTheme, darkTheme } from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import * as Notifications from "expo-notifications";
 import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
+import { useColorScheme } from "react-native";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
@@ -36,6 +41,8 @@ Notifications.addNotificationResponseReceivedListener((notification) => {
 });
 
 export default function App() {
+  const colorScheme = useColorScheme();
+
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
     SourceSansPro_400Regular,
@@ -47,17 +54,19 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
       <AuthProvider>
         <DataProvider>
           <NotificationsProvider>
             <SafeAreaProvider>
-              <NavigationContainer>
+              <NavigationContainer
+                theme={colorScheme === "light" ? DefaultTheme : DarkTheme}
+              >
                 <RootStackNavigator />
               </NavigationContainer>
               <Toaster />
             </SafeAreaProvider>
-            <StatusBar style="auto" />
+            <StatusBar />
           </NotificationsProvider>
         </DataProvider>
       </AuthProvider>

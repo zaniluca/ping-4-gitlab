@@ -21,7 +21,7 @@ const font = {
   regular: "SourceSansPro_400Regular",
 };
 
-const theme = createTheme({
+export const lightTheme = createTheme({
   colors: {
     ...palette,
   },
@@ -75,6 +75,14 @@ const theme = createTheme({
   },
 });
 
-export type Theme = typeof theme;
-export default theme;
+export type Theme = typeof lightTheme;
+
+export const darkTheme = createTheme({
+  ...lightTheme,
+  colors: {
+    ...lightTheme.colors,
+  },
+});
+
+export default lightTheme;
 export const useTheme = () => useRestyleTheme<Theme>();

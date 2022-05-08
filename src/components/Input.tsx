@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, StyleSheet, TextInputProps, StyleProp } from "react-native";
-import theme, { useTheme } from "../utils/theme";
+import lightTheme, { useTheme } from "../utils/theme";
 import { Text, Box } from "./restyle";
 
 type Props = TextInputProps & {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
-    backgroundColor: theme.colors.quaternary,
+    backgroundColor: lightTheme.colors.quaternary,
   },
   labelWrapper: {
     flexGrow: 0,
@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     width: "100%",
-    backgroundColor: theme.colors.quaternary,
+    backgroundColor: lightTheme.colors.quaternary,
   },
 });
