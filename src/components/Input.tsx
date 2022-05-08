@@ -64,7 +64,13 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 
   return (
     <Box style={style}>
-      <Box style={[styles.wrapper, { borderColor: getBorderColor() }]}>
+      <Box
+        style={[
+          styles.wrapper,
+          { borderColor: getBorderColor() },
+          { backgroundColor: colors.quaternary },
+        ]}
+      >
         {label && (
           <Box style={styles.labelWrapper}>
             <Text
@@ -106,7 +112,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
-    backgroundColor: lightTheme.colors.quaternary,
   },
   labelWrapper: {
     flexGrow: 0,

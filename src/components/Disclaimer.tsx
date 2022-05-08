@@ -4,14 +4,14 @@ import { Text } from "./restyle";
 
 const Disclaimer = () => {
   return (
-    <Text marginTop="m" textAlign="center">
+    <Text marginTop="m" textAlign="center" color="primary">
       By using the app you're agree to our{"\n"}
       {/* <Text color="purpleDark" onPress={() => openUrl("https://google.com")}>
         Terms of Use{" "}
       </Text>
       and */}
       <Text
-        color="purpleDark"
+        color="indigo"
         onPress={() => openUrl(process.env.PRIVACY_POLICY_URL ?? "")}
       >
         {/* {" "} */}

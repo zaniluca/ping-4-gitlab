@@ -1,6 +1,5 @@
 import React, { useLayoutEffect } from "react";
 import { useEffect } from "react";
-import { StyleSheet } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
@@ -34,17 +33,13 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
   }, [userData]);
 
   return (
-    <SafeAreaView style={styles.container} edges={["right", "left"]}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.primaryBackground }}
+      edges={["right", "left"]}
+    >
       {hasLoadedFirstSnapshot ? <InboxList /> : <InboxSkeleton />}
     </SafeAreaView>
   );
 };
 
 export default InboxScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-});

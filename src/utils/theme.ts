@@ -1,6 +1,6 @@
 import { createTheme, useTheme as useRestyleTheme } from "@shopify/restyle";
 
-const palette = {
+const lightPalette = {
   purple: "#6E49CB",
   purpleDark: "#380D75",
   indigo: "#29295E",
@@ -23,7 +23,9 @@ const font = {
 
 export const lightTheme = createTheme({
   colors: {
-    ...palette,
+    ...lightPalette,
+    primaryBackground: lightPalette.white,
+    divider: "#D2D2D2",
   },
   fontFamily: {
     ...font,
@@ -81,6 +83,11 @@ export const darkTheme = createTheme({
   ...lightTheme,
   colors: {
     ...lightTheme.colors,
+    quaternary: "#323232",
+    secondary: "#868686",
+    primary: lightPalette.white,
+    primaryBackground: "#1F1F1F",
+    divider: "#303030",
   },
 });
 
