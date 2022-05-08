@@ -1,3 +1,9 @@
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59318963/167304601-eb5b48fa-f914-4fa7-ab3e-137b05827299.png" alt="Ping for Gitlab" width="84" height="84"> 
+</p>
+
+_Receive instant push notifications directly from GitLab to your devices. Ping for GitLab is the best way to stay up to date with your team_
+
 # Ping for Gitlab
 
 [![runs with expo](https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://github.com/expo/expo)
