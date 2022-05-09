@@ -83,11 +83,11 @@ export const darkTheme = createTheme({
   ...lightTheme,
   colors: {
     ...lightTheme.colors,
-    quaternary: "#323232",
+    quaternary: "#333333",
     secondary: "#868686",
-    primary: lightPalette.white,
+    primary: "#ffffff",
     primaryBackground: "#1F1F1F",
-    divider: "#303030",
+    divider: "#333333",
   },
 });
 
