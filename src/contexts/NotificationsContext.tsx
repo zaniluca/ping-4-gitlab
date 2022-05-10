@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { registerForPushNotificationsAsync } from "../utils/notifications";
 import { useData } from "./DataContext";
+import * as Notifications from "expo-notifications";
 
 type NotificationsContextValues = {};
 
@@ -12,6 +13,33 @@ export const NotificationsContext = createContext<NotificationsContextValues>(
 type NotificationsContextProps = {
   children: ReactNode;
 };
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+  handleSuccess: async (nid) => {
+    console.log("Recived push notification in foreground with id: ", nid);
+
+    Toast.show({
+      type: "info",
+      text1: "New notification recived!",
+      text2: "Take a look at your inbox",
+    });
+  },
+  handleError: async (nid, error) =>
+    console.error(
+      "Error when reciving push notification in foreground with id: ",
+      nid,
+      error
+    ),
+});
+
+Notifications.addNotificationResponseReceivedListener((notification) => {
+  console.log("Notification recived", notification);
+});
 
 export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
