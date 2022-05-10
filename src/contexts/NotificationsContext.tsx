@@ -1,6 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import Toast from "react-native-toast-message";
-import { registerForPushNotificationsAsync } from "../utils/notifications";
+import {
+  registerForPushNotificationsAsync,
+  resetAppBadge,
+} from "../utils/notifications";
 import { useData } from "./DataContext";
 import * as Notifications from "expo-notifications";
 
@@ -14,6 +17,7 @@ type NotificationsContextProps = {
   children: ReactNode;
 };
 
+// Handler for foreground notifications
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: false,
@@ -37,9 +41,9 @@ Notifications.setNotificationHandler({
     ),
 });
 
-Notifications.addNotificationResponseReceivedListener((notification) => {
-  console.log("Notification recived", notification);
-});
+Notifications.addNotificationResponseReceivedListener((notification) =>
+  console.log("Notification recived", notification)
+);
 
 export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
@@ -73,6 +77,10 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
       });
     });
   }, [userData]);
+
+  useEffect(() => {
+    resetAppBadge();
+  }, []);
 
   return (
     <NotificationsContext.Provider value={{}}>
