@@ -11,17 +11,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/bdcab203-d9ce-48aa-95db-938dbfe1be17"
+    },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "8",
+      "buildNumber": "9",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -40,9 +42,7 @@
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/notification.wav"
-          ],
+          "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
           "androidMode": "collapse",
