@@ -3,7 +3,7 @@
     "name": "Ping",
     "owner": "zaniluca",
     "slug": "ping4gitlab",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,8 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/bdcab203-d9ce-48aa-95db-938dbfe1be17"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,7 +25,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "8",
+      "buildNumber": "10",
       "config": {
         "usesNonExemptEncryption": false
       }
