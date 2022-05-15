@@ -1,4 +1,3 @@
-import "./src/utils/sentry";
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -18,6 +17,7 @@ import { DataProvider } from "./src/contexts/DataContext";
 import * as Notifications from "expo-notifications";
 import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
+import "./src/utils/sentry";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
