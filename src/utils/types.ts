@@ -7,6 +7,7 @@ export type UserData = {
   expo_push_tokens?: string[];
   onboarding?: boolean;
   hook_id?: string;
+  hasDisabledNotifications?: boolean;
 };
 
 export type User = FirebaseUser | null;

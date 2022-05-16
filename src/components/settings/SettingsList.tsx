@@ -2,21 +2,24 @@ import {
   ListRenderItem,
   SectionList,
   SectionListData,
+  Switch,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { ChevronRight, LogOut } from "react-native-feather";
+import { BellOff, ChevronRight, LogOut } from "react-native-feather";
 import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
 import { useAuth } from "../../contexts/AuthContext";
+import { useData } from "../../contexts/DataContext";
+import Toast from "react-native-toast-message";
 
 type SectionItem = {
   name: string;
   icon: (props: SvgProps) => JSX.Element;
   onPress?: () => void;
-  showChevron: boolean;
+  right?: JSX.Element;
 };
 
 type SettingsSections = {
@@ -29,8 +32,20 @@ type SectionHeaderProps = {
 };
 
 const SettingsList = () => {
+  const { userData, updateUserData } = useData();
   const { colors, fontFamily } = useTheme();
   const { logout, user } = useAuth();
+
+  const togglePauseNotifications = async () => {
+    const newValue = !userData?.hasDisabledNotifications;
+    await updateUserData({
+      hasDisabledNotifications: newValue,
+    });
+
+    Toast.show({
+      text1: `Notifications ${newValue ? "Paused" : "Resumed"}`,
+    });
+  };
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
     ...(!user?.isAnonymous
@@ -39,10 +54,22 @@ const SettingsList = () => {
             title: "General",
             data: [
               {
+                name: "Pause Notifications",
+                icon: (props: SvgProps) => <BellOff {...props} />,
+                right: (
+                  <Switch
+                    trackColor={{ true: colors.orange }}
+                    // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                    onChange={togglePauseNotifications}
+                    value={userData?.hasDisabledNotifications}
+                  />
+                ),
+              },
+              {
                 name: "Logout",
                 icon: (props: SvgProps) => <LogOut {...props} />,
                 onPress: logout,
-                showChevron: false,
+                right: <ChevronRight stroke={colors.primary} />,
               },
             ],
           },
@@ -67,7 +94,7 @@ const SettingsList = () => {
   };
 
   const renderItem: ListRenderItem<SectionItem> = ({ item }) => {
-    const { name, onPress, showChevron } = item;
+    const { name, onPress, right } = item;
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
         <Box
@@ -82,7 +109,7 @@ const SettingsList = () => {
             </Box>
             <Text variant="headline">{name}</Text>
           </Box>
-          {showChevron && <ChevronRight stroke={colors.primary} />}
+          {right}
         </Box>
       </TouchableOpacity>
     );
