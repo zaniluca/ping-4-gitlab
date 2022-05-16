@@ -23,7 +23,7 @@
 
 ## Running Locally
 
-```bash
+```
 $ git clone https://github.com/zaniluca/ping-4-gitlab.git
 $ cd ping-4-gitlab
 $ nvm use
