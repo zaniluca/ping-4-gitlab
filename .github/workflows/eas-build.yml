@@ -57,9 +57,23 @@ jobs:
     steps:
       - name: Check for EXPO_TOKEN
         run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: Check for EXPO_APPLE_APP_SPECIFIC_PASSWORD
+        run: |
           if [ -z "${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}" ]; then
             echo "You must provide an EXPO_APPLE_APP_SPECIFIC_PASSWORD to deploy to testflight"
           fi
+
+      - name: Check for EXPO_APPLE_ID
+        run: |
+          if [ -z "${{ secrets.EXPO_APPLE_ID }}" ]; then
+            echo "You must provide an EXPO_APPLE_ID to deploy to testflight"
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -91,7 +105,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Submit to testflight
-        run: EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} npx eas-cli submit -p ios --latest --non-interactive
+        run: EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} npx eas-cli submit -p ios --latest --non-interactive
 
       - name: Submit to playstore
         run: npx eas-cli submit -p android --latest --non-interactive
