@@ -1,4 +1,3 @@
-name: EAS PIPELINE
 name: build and deploy
 on:
   push:
@@ -110,7 +109,6 @@ jobs:
 
       - name: Submit to testflight
         run: EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} npx eas-cli submit -p ios --latest --non-interactive
-
 
       - name: Submit to playstore
         run: npx eas-cli submit -p android --latest --non-interactive
