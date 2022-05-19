@@ -10,7 +10,9 @@
 [![supports Android](https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff)](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www)
 
 ## Overview
+The app is build using Expo and React Native, the entire codebase is written in Typescript and uses [restyle](https://github.com/Shopify/restyle) for styling.
 
+### File Structure
 - `assets/*` - Assets data like images and sounds.
 - `src/components/*` - Collection of reusable components.
 - `src/contexts/*` - React Contexts used to share data and logic throughout the app.
