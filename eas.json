@@ -24,6 +24,7 @@
       }
     },
     "preview": {
+      "channel": "master",
       "distribution": "internal",
       "extends": "base",
       "android": {
@@ -35,10 +36,16 @@
       }
     },
     "production": {
+      "channel": "production",
       "extends": "base"
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "ascAppId": "1620904531",
+        "appleTeamId": "R263JVGPBB"
+      }
+    }
   }
 }

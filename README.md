@@ -1,30 +1,38 @@
-![Banner](https://user-images.githubusercontent.com/59318963/166159990-04ff9ef3-6695-43f5-b260-7288eced9153.png)
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59318963/167304601-eb5b48fa-f914-4fa7-ab3e-137b05827299.png" alt="Ping for Gitlab" width="84" height="84"> 
+</p>
+
+# Ping for Gitlab
+> Receive instant push notifications directly from GitLab to your devices. Ping for GitLab is the best way to stay up to date with your team
+
 [![runs with expo](https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://github.com/expo/expo)
 [![supports iOS](https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff)](https://itunes.apple.com/app/apple-store/id)
 [![supports Android](https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff)](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www)
 
-## Installation
+## Overview
+The app is build using Expo and React Native, the entire codebase is written in Typescript and uses [restyle](https://github.com/Shopify/restyle) for styling.
 
-To install the dependencies you must be on the correct version of nodejs (specified inside [.nvmrc](.nvmrc)).
+### File Structure
+- `assets/*` - Assets data like images and sounds.
+- `src/components/*` - Collection of reusable components.
+- `src/contexts/*` - React Contexts used to share data and logic throughout the app.
+- `src/navigation/*` - Everything regarding navigation (we use [React Navigation](https://reactnavigation.org/))
+- `src/screens/*` - App Views.
+- `src/utils/*` - Shared utilities like validation functions, parsing, configurations etc.
+- [`app.json`](app.json) - Expo configuration file ([app.config.js](app.config.js) only used for dynamic configuration)
+- [`eas.json`](eas.json) - Configuration file used for [EAS Build service](https://docs.expo.dev/build/introduction/)
+- [`App.tsx`](App.tsx) - Main entrypoint
 
-We recommend using [nvm](https://github.com/nvm-sh/nvm) for managing multiple node versions.
+## Running Locally
 
-```shell
-nvm use
 ```
-
-The when you're on the correct version of node simply run
-
-```bash
-yarn install # or npm install
-```
-
-You're almost done, now you need to make a copy of the environment variables by running
-
-```shell
-cp .env.example .env
+$ git clone https://github.com/zaniluca/ping-4-gitlab.git
+$ cd ping-4-gitlab
+$ nvm use
+$ yarn
+$ yarn start
 ```
 
 ## What Now?
 
-Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to the [Server Repository README](https://github.com/zaniluca/ping-4-gitlab-firebase/blob/master/README.md)
+Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to the [this readme](https://github.com/zaniluca/ping-4-gitlab-firebase/blob/master/README.md)
