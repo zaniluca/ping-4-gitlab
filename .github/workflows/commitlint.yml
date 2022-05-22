@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Yarn install
-        uses: ./.github/actions/yarn-install.yml
+        uses: ./.github/actions/yarn-install
 
       - name: Validate all commits from PR
         run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
