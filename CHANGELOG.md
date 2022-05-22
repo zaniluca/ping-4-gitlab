@@ -1,13 +1,21 @@
 # Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+
 ## [1.0.1] - Unreleased
 
 ### Added
+
 - When a notification is recived with the app on the foreground a toast is displayed
 
 ### Fixed
-- App Badge now resets on open
 
-## [1.0.0] - 2022-02-15
+- App Badge now resets on open
+- If you are on the "Get Started" page now you can go back to the landing page
+
+## [1.0.0] - 2022-05-06
 
 ### Added
 
