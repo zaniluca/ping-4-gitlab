@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-## [1.0.1] - Unreleased
+## [unreleased]
+
+### Fixed
+
+- Skeleton loading bug on Inbox
+
+## [1.0.1] - 2022-05-22
 
 ### Added
 
-- When a notification is recived with the app on the foreground a toast is displayed
+- When a notification is received with the app in the foreground a toast is displayed
 
 ### Fixed
 
