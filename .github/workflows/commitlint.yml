@@ -36,3 +36,28 @@ jobs:
 
       - name: Validate all commits from PR
         run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+      - name: Parse app.json
+        id: parse_manifest
+        run: |
+          content=`cat ./app.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=manifest::$content"
+
+      - name: Print Tag
+        run: |
+          echo "${{fromJson(steps.parse_manifest.outputs.manifest).version}}"
+
+      - name: Parse app.json 2
+        id: parse_manifest_2
+        run: |
+          content=`cat ./app.json`
+          echo "::set-output name=manifest::$content"
+
+      - name: Print Tag 2
+        run: |
+          echo "${{fromJson(steps.parse_manifest_2.outputs.manifest).version}}"

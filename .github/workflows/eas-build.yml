@@ -51,20 +51,29 @@ jobs:
         run: yarn install --immutable
 
       - name: Build on EAS
-        run: EAS_BUILD_AUTOCOMMIT=${{1}} npx eas-cli build --platform all --non-interactive
+        run: npx eas-cli build --platform all --non-interactive
 
       - name: Bump build on master
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: bumped build number"
+          commit_message: "chore: bumped build numbers"
           commit_options: "--no-verify"
           branch: master
 
-      - name: Bump build on production
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "chore: bumped build number"
-          commit_options: "--no-verify"
+      # - name: Parse app.json
+      #   id: set_var
+      #   run: |
+      #     content=`cat ./app.json`
+      #     # the following lines are only required for multi line json
+      #     content="${content//'%'/'%25'}"
+      #     content="${content//$'\n'/'%0A'}"
+      #     content="${content//$'\r'/'%0D'}"
+      #     # end of optional handling for multi line json
+      #     echo "::set-output name=appJson::$content"
+
+      # - name: Print Tag
+      #   run: |
+      #     echo "${{fromJson(steps.set_var.outputs.appJson).version}}"
 
   deploy:
     name: Deploy
