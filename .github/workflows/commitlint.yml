@@ -42,6 +42,6 @@ jobs:
         uses: notiz-dev/github-action-json-property@release
         with:
           path: "app.json"
-          prop_path: "version"
+          prop_path: "expo.version"
 
       - run: echo ${{steps.version.outputs.prop}}
