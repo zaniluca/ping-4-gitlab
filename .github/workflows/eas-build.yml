@@ -53,27 +53,20 @@ jobs:
       - name: Build on EAS
         run: npx eas-cli build --platform all --non-interactive
 
-      - name: Bump build on master
+      - name: Get version from manifest
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "app.json"
+          prop_path: "expo.version"
+
+      - name: Bump build and tag on master
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          branch: master
           commit_message: "chore: bumped build numbers"
           commit_options: "--no-verify"
-          branch: master
-
-      # - name: Parse app.json
-      #   id: set_var
-      #   run: |
-      #     content=`cat ./app.json`
-      #     # the following lines are only required for multi line json
-      #     content="${content//'%'/'%25'}"
-      #     content="${content//$'\n'/'%0A'}"
-      #     content="${content//$'\r'/'%0D'}"
-      #     # end of optional handling for multi line json
-      #     echo "::set-output name=appJson::$content"
-
-      # - name: Print Tag
-      #   run: |
-      #     echo "${{fromJson(steps.set_var.outputs.appJson).version}}"
+          tagging_message: "v${{steps.version.outputs.prop}}"
 
   deploy:
     name: Deploy
