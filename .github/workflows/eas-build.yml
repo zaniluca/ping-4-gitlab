@@ -53,6 +53,19 @@ jobs:
       - name: Build on EAS
         run: EAS_BUILD_AUTOCOMMIT=${{1}} npx eas-cli build --platform all --non-interactive
 
+      - name: Bump build on master
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: bumped build number"
+          commit_options: "--no-verify"
+          branch: master
+
+      - name: Bump build on production
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: bumped build number"
+          commit_options: "--no-verify"
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
