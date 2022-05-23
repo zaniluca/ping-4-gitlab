@@ -14,7 +14,6 @@ import { ThemeProvider } from "@shopify/restyle";
 import theme from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
-import * as Notifications from "expo-notifications";
 import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
 import "./src/utils/sentry";
@@ -22,18 +21,6 @@ import "./src/utils/sentry";
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
 LogBox.ignoreLogs(["Setting a timer"]);
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
-Notifications.addNotificationResponseReceivedListener((notification) => {
-  console.log("Notification recived", notification);
-});
 
 export default function App() {
   const [fontsLoaded] = useFonts({
