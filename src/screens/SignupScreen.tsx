@@ -26,6 +26,9 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
+const PASSWORD_RULES_IOS =
+  "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
+
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const { signup, user } = useAuth();
 
@@ -104,6 +107,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="next"
+                    passwordRules={PASSWORD_RULES_IOS}
                     textContentType="newPassword"
                   />
                   <Input
@@ -120,6 +124,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     autoCorrect={false}
                     returnKeyType="done"
                     textContentType="newPassword"
+                    passwordRules={PASSWORD_RULES_IOS}
                     onSubmitEditing={() => submit()}
                   />
                   {/* Validation errors */}
