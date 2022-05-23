@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -83,6 +84,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -94,6 +100,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.password}
                     label="password"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    textContentType="password"
+                    onSubmitEditing={() => submit()}
                   />
                   {/* Validation Errors */}
                   {!!Object.entries(errors).length && (

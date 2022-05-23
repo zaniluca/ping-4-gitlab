@@ -85,6 +85,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -96,6 +101,10 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.password}
                     label="password"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    textContentType="newPassword"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -107,6 +116,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.confirmPassword}
                     label="confirm"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    textContentType="newPassword"
+                    onSubmitEditing={() => submit()}
                   />
                   {/* Validation errors */}
                   <Box marginTop="s">
