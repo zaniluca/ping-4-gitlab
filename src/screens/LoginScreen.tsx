@@ -18,6 +18,7 @@ import { LoginSchema } from "../utils/validation";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -109,31 +110,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Validation Errors */}
                   {!!Object.entries(errors).length && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <Box key={key} flexDirection="row">
-                            <Text color="red">{"\u2022"}</Text>
-                            <Text color="red" paddingLeft="xs">
-                              {value}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Box>
+                      <ErrorsList errors={errors} />
                     </Box>
                   )}
                   {/* Firebase Error */}
                   {firebaseError && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        <Box flexDirection="row">
-                          <Text color="red">{"\u2022"}</Text>
-                          <Text color="red" paddingLeft="xs">
-                            {firebaseError}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <ErrorsList errors={{ firebaseError }} />
                     </Box>
                   )}
                   {/* Login CTA */}

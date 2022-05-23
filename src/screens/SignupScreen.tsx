@@ -17,6 +17,7 @@ import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
 import { useAuth } from "../contexts/AuthContext";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -130,17 +131,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Validation errors */}
                   <Box marginTop="s">
                     {!!Object.entries(errors).length ? (
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <Box key={key} flexDirection="row">
-                            <Text color="red">{"\u2022"}</Text>
-                            <Text color="red" paddingLeft="xs">
-                              {value}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Box>
+                      <ErrorsList errors={errors} />
                     ) : (
                       <Text variant="caption" color="secondary">
                         Your password must be 6 or more characters long &
@@ -152,15 +143,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Firebase Error */}
                   {firebaseError && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        <Box flexDirection="row">
-                          <Text color="red">{"\u2022"}</Text>
-                          <Text color="red" paddingLeft="xs">
-                            {firebaseError}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <ErrorsList errors={{ firebaseError }} />
                     </Box>
                   )}
                   {/* Signup CTA */}
