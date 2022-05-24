@@ -7,7 +7,13 @@ export const registerForPushNotificationsAsync = async () => {
     console.log("Push notifications are not available on simulators");
     return { token: undefined, status: undefined };
   }
-  const { status } = await Notifications.requestPermissionsAsync();
+  const { status } = await Notifications.requestPermissionsAsync({
+    ios: {
+      allowAlert: true,
+      allowBadge: true,
+      allowSound: true,
+    },
+  });
   if (status !== "granted") {
     console.error("Failed to get push token for push notification!");
     return { token: undefined, status };
@@ -29,3 +35,5 @@ export const registerForPushNotificationsAsync = async () => {
 
   return { token, status };
 };
+
+export const resetAppBadge = () => Notifications.setBadgeCountAsync(0);

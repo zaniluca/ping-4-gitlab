@@ -1,5 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { useEffect } from "react";
+import { ScrollView } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
@@ -37,7 +38,16 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: theme.colors.primaryBackground }}
       edges={["right", "left"]}
     >
-      {hasLoadedFirstSnapshot ? <InboxList /> : <InboxSkeleton />}
+      {hasLoadedFirstSnapshot ? (
+        <InboxList />
+      ) : (
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          showsVerticalScrollIndicator={false}
+        >
+          <InboxSkeleton />
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
