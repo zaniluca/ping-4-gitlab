@@ -1,13 +1,19 @@
 name: "Yarn install or retrive from cache"
 description: "Install dependencies from cache if available"
 
+inputs:
+  node-version:
+    description: "Node version to use"
+    required: true
+    default: 14.x
+
 runs:
   using: "composite"
   steps:
     - name: Setup Node
       uses: actions/setup-node@v2
       with:
-        node-version: 14.x
+        node-version: ${{ inputs.node-version }}
         cache: yarn
 
     - name: Find yarn cache
