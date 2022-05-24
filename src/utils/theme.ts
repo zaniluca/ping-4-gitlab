@@ -31,6 +31,7 @@ export const lightTheme = createTheme({
     ...lightPalette,
     primaryBackground: lightPalette.white,
     divider: "#D2D2D2",
+    accent: lightPalette.indigo,
   },
   fontFamily: {
     ...font,
@@ -93,6 +94,7 @@ export const darkTheme = createTheme({
     primary: "#ffffff",
     primaryBackground: "#1F1F1F",
     divider: "#333333",
+    accent: lightPalette.purple,
   },
 });
 

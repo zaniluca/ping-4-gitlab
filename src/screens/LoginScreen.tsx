@@ -156,7 +156,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text variant="headline" color="indigo" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Signup
                 </Text>
               </TouchableOpacity>
@@ -164,7 +164,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             {/* Forgot Password Button */}
             {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
               <TouchableOpacity>
-                <Text variant="headline" color="indigo">
+                <Text variant="headline" color="accent">
                   I Forgot my Password :(
                 </Text>
               </TouchableOpacity>
