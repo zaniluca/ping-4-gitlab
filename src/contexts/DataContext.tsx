@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDoc,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -128,7 +129,8 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
     if (!user || !userData) return;
     const q = query(
       collection(firestore, `users/${user.uid}/notifications`),
-      orderBy("recived", "desc")
+      orderBy("recived", "desc"),
+      limit(50)
     );
     const unsub = onSnapshot(q, (querySnapshot) => {
       if (!querySnapshot.empty && userData.onboarding) {
