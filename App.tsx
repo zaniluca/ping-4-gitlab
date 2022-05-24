@@ -1,7 +1,6 @@
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
 import {
-  DarkTheme,
-  DefaultTheme,
+  DefaultTheme as NavLightTheme,
   NavigationContainer,
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -15,11 +14,11 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
-import { lightTheme, darkTheme } from "./src/utils/theme";
+import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import Toaster from "./src/components/Toaster";
-import { LogBox } from "react-native";
+import { LogBox, Platform } from "react-native";
 import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
 
@@ -47,7 +46,7 @@ export default function App() {
           <NotificationsProvider>
             <SafeAreaProvider>
               <NavigationContainer
-                theme={colorScheme === "light" ? DefaultTheme : DarkTheme}
+                theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
               >
                 <RootStackNavigator />
               </NavigationContainer>
