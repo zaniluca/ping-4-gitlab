@@ -24,11 +24,8 @@ jobs:
       - name: Copy Google Services files from secrets
         run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json && echo ${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} | base64 --decode > ./GoogleService-Info.plist
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: yarn
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
@@ -36,20 +33,6 @@ jobs:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Find yarn cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --immutable
 
       - name: Build on EAS
         run: npx eas-cli build --platform all --non-interactive
@@ -68,7 +51,7 @@ jobs:
           commit_message: "chore: bumped build numbers"
           commit_options: "--no-verify"
           tagging_message: "v${{steps.version.outputs.prop}}"
-          
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -96,11 +79,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: yarn
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
@@ -108,20 +88,6 @@ jobs:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Find yarn cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --immutable
 
       - name: Submit to testflight
         run: EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} npx eas-cli submit -p ios --latest --non-interactive
