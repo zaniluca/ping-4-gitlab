@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
+    "runtimeVersion": "exposdk:44.0.0",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -22,7 +20,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "10",
+      "buildNumber": "12",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -34,7 +32,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 8
+      "versionCode": 10
     },
     "plugins": [
       "sentry-expo",
