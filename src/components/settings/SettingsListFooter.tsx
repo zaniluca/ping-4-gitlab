@@ -2,12 +2,17 @@ import React from "react";
 import { Box, Text } from "../restyle";
 import Constants from "expo-constants";
 import { openUrl } from "../../utils/open-url";
+import { Platform } from "react-native";
 
 const SettingsListFooter = () => {
   return (
     <Box flex={1} alignItems="center" paddingTop="l">
       <Text variant="caption" color="secondary">
-        {Constants.manifest?.name} ({Constants.manifest?.version})
+        {Constants.manifest?.name} {Constants.manifest?.version} (
+        {Platform.OS === "ios"
+          ? Constants.manifest?.ios?.buildNumber
+          : Constants.manifest?.android?.versionCode}
+        )
       </Text>
       {/* <Text marginTop="s" variant="caption" color="secondary">
         This app is code is Open Source, check it out on{" "}
