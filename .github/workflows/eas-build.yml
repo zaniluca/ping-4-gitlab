@@ -8,8 +8,11 @@ on:
 
 jobs:
   build:
-    name: Install and build
+    name: Build ${{ matrix.platform }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ios, android]
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -35,7 +38,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
-        run: npx eas-cli build --platform all --non-interactive
+        run: npx eas-cli build --platform ${{ matrix.platform }} --non-interactive
 
       - name: Get version from manifest
         id: version
@@ -49,7 +52,7 @@ jobs:
         id: auto_commit
         with:
           branch: master
-          commit_message: "chore: bumped build numbers"
+          commit_message: "chore: bumped ${{ matrix.platform }} build number"
           commit_options: "--no-verify"
           tagging_message: "v${{steps.version.outputs.prop}}"
 
