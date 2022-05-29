@@ -6,8 +6,11 @@ import SettingsSectionedList, {
   SettingsSettingsSections,
 } from "../../components/settings/SettingsSectionedList";
 import { Box, Text } from "../../components/restyle";
+import { useAuth } from "../../contexts/AuthContext";
 
 const DeleteAccount = () => {
+  const { logout, deleteUser } = useAuth();
+
   const handlePress = () => {
     Alert.alert(
       "Attention!",
@@ -20,7 +23,10 @@ const DeleteAccount = () => {
         {
           text: "Proceed",
           style: "destructive",
-          onPress: () => console.log("Delete account"),
+          onPress: async () => {
+            await logout();
+            await deleteUser();
+          },
         },
       ]
     );

@@ -35,19 +35,19 @@ const SettingsList = () => {
   const navigation = useRootStackNavigation();
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
+    {
+      title: "General",
+      data: [
+        {
+          name: "Account",
+          icon: (props: SvgProps) => <User {...props} />,
+          onPress: () => navigation.navigate("AccountSettings"),
+          showChevron: true,
+        },
+      ],
+    },
     ...(!user?.isAnonymous
       ? [
-          {
-            title: "General",
-            data: [
-              {
-                name: "Account",
-                icon: (props: SvgProps) => <User {...props} />,
-                onPress: () => navigation.navigate("AccountSettings"),
-                showChevron: true,
-              },
-            ],
-          },
           {
             title: "",
             data: [
