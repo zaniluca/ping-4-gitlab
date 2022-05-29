@@ -35,4 +35,4 @@ $ yarn start
 
 ## What Now?
 
-Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to the [this readme](https://github.com/zaniluca/ping-4-gitlab-firebase/blob/master/README.md)
+Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to [this repo](https://github.com/zaniluca/ping-4-gitlab-firebase)
