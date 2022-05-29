@@ -3,39 +3,30 @@ import { ListRenderItem, SectionList, SectionListData } from "react-native";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 
-type SectionItem = {
+export type SettingsSectionItem = {
   key: any;
   view: JSX.Element;
 };
 
-type SettingsSections = {
+export type SettingsSettingsSections = {
   title?: string;
-  data: SectionItem[];
+  data: SettingsSectionItem[];
 };
 
-type SectionHeaderProps = {
-  section: SectionListData<SectionItem>;
+type SettingsSectionHeaderProps = {
+  section: SectionListData<SettingsSectionItem>;
 };
 
-const Test = () => {
-  return <Text>Hi!</Text>;
+type Props = {
+  sections: SettingsSettingsSections[];
 };
 
-const SettingsSectionedList = () => {
+const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
   const { colors, fontFamily } = useTheme();
 
-  const SETTINGS_SECTIONS: SettingsSections[] = [
-    {
-      data: [
-        {
-          key: "dsdad",
-          view: <Test />,
-        },
-      ],
-    },
-  ];
-
-  const renderSectionHeader = ({ section: { title } }: SectionHeaderProps) => {
+  const renderSectionHeader = ({
+    section: { title },
+  }: SettingsSectionHeaderProps) => {
     return (
       <Box padding="s" backgroundColor="quaternary">
         {title && (
@@ -53,7 +44,7 @@ const SettingsSectionedList = () => {
     );
   };
 
-  const renderItem: ListRenderItem<SectionItem> = ({ item }) => {
+  const renderItem: ListRenderItem<SettingsSectionItem> = ({ item }) => {
     const { view } = item;
     return (
       <Box
@@ -73,7 +64,7 @@ const SettingsSectionedList = () => {
       scrollEnabled={false}
       stickySectionHeadersEnabled={false}
       contentInsetAdjustmentBehavior="automatic"
-      sections={SETTINGS_SECTIONS}
+      sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
       keyExtractor={(item) => item.key}
