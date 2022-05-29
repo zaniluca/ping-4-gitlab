@@ -5,7 +5,8 @@ import { Box, Text } from "../restyle";
 
 export type SettingsSectionItem = {
   key: any;
-  view: JSX.Element;
+  content: JSX.Element;
+  footer?: JSX.Element;
 };
 
 export type SettingsSettingsSections = {
@@ -45,16 +46,23 @@ const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
   };
 
   const renderItem: ListRenderItem<SettingsSectionItem> = ({ item }) => {
-    const { view } = item;
+    const { content, footer } = item;
     return (
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        padding="m"
-        backgroundColor="white"
-      >
-        {view}
-      </Box>
+      <>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          padding="m"
+          backgroundColor="white"
+        >
+          {content}
+        </Box>
+        {footer && (
+          <Box marginTop="xs" marginHorizontal="m">
+            {footer}
+          </Box>
+        )}
+      </>
     );
   };
 

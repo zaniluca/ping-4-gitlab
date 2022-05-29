@@ -45,7 +45,7 @@ const AccountSettingsScreen: React.FC<Props> = () => {
       data: [
         {
           key: "delete-account",
-          view: <DeleteAccount />,
+          content: <DeleteAccount />,
         },
       ],
     },
