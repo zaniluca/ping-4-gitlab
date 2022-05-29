@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -18,6 +13,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
+import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -92,6 +88,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -103,35 +104,22 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.password}
                     label="password"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    textContentType="password"
+                    onSubmitEditing={() => submit()}
                   />
                   {/* Validation Errors */}
                   {!!Object.entries(errors).length && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <Box key={key} flexDirection="row">
-                            <Text color="red">{"\u2022"}</Text>
-                            <Text color="red" paddingLeft="xs">
-                              {value}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Box>
+                      <ErrorsList errors={errors} />
                     </Box>
                   )}
                   {/* Firebase Error */}
                   {firebaseError && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        <Box flexDirection="row">
-                          <Text color="red">{"\u2022"}</Text>
-                          <Text color="red" paddingLeft="xs">
-                            {firebaseError}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <ErrorsList errors={{ firebaseError }} />
                     </Box>
                   )}
                   {/* Login CTA */}

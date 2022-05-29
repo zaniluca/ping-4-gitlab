@@ -55,8 +55,10 @@ jobs:
 
       - name: Bump build on production
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
-          git checkout -b production origin/production
+          git checkout production
           git cherry-pick ${{ steps.auto_commit.outputs.commit_hash }}
           git push --set-upstream origin production
 
