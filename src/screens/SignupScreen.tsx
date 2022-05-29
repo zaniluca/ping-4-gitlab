@@ -171,7 +171,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text variant="headline" color="indigo" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Login
                 </Text>
               </TouchableOpacity>

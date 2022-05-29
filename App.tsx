@@ -18,7 +18,7 @@ import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import Toaster from "./src/components/Toaster";
-import { LogBox, Platform } from "react-native";
+import { LogBox } from "react-native";
 import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
 
@@ -44,14 +44,24 @@ export default function App() {
       <AuthProvider>
         <DataProvider>
           <NotificationsProvider>
-            <SafeAreaProvider>
-              <NavigationContainer
-                theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+            <NavigationContainer
+              theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+            >
+              {/*  
+              Workaround to fix React navigation background on navigation beeing white even on darkmode 
+              https://stackoverflow.com/a/67606259/12661017
+              */}
+              <SafeAreaProvider
+                style={
+                  colorScheme === "dark" && {
+                    backgroundColor: darkTheme.colors.primaryBackground,
+                  }
+                }
               >
                 <RootStackNavigator />
-              </NavigationContainer>
+              </SafeAreaProvider>
               <Toaster />
-            </SafeAreaProvider>
+            </NavigationContainer>
             <StatusBar />
           </NotificationsProvider>
         </DataProvider>
