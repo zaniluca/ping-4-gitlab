@@ -1,22 +1,20 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackScreenProps } from "../navigation/types";
-import SettingsList from "../components/settings/SettingsList";
-import SettingsHeader from "../components/settings/SettingsHeader";
+import { RootStackScreenProps } from "../../navigation/types";
+import SettingsSectionedList from "../../components/settings/SettingsSectionedList";
 
 type Props = RootStackScreenProps<"Settings">;
 
-const SettingsScreen: React.FC<Props> = () => {
+const AccountSettingsScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>
-      <SettingsHeader />
-      <SettingsList />
+      <SettingsSectionedList />
     </SafeAreaView>
   );
 };
 
-export default SettingsScreen;
+export default AccountSettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
