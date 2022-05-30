@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
@@ -8,11 +8,13 @@ import Toaster from "../components/Toaster";
 import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
+import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
+  const { colors } = useTheme();
   const { deleteUser } = useAuth();
 
   useLayoutEffect(() => {
@@ -43,7 +45,13 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const hasCompletedOnboarding = !userData?.onboarding;
 
   return (
-    <SafeAreaView style={styles.container} edges={["right", "left", "bottom"]}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.primaryBackground,
+      }}
+      edges={["right", "left", "bottom"]}
+    >
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
@@ -132,10 +140,3 @@ const BulletPointListItem: React.FC = ({ children }) => {
 };
 
 export default GetStartedScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-});

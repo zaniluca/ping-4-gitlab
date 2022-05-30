@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  TextInput,
-} from "react-native";
+import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -18,6 +12,7 @@ import { LoginSchema } from "../utils/validation";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Login">;
@@ -29,6 +24,7 @@ const INITIAL_VALUES = {
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const { login, user } = useAuth();
+  const { colors } = useTheme();
   const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
   const handleSubmit = async (values: typeof INITIAL_VALUES) => {
@@ -49,7 +45,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        backgroundColor: colors.primaryBackground,
+        paddingTop: 32,
+      }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
@@ -141,7 +144,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text variant="headline" color="purpleDark" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Signup
                 </Text>
               </TouchableOpacity>
@@ -149,7 +152,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             {/* Forgot Password Button */}
             {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
               <TouchableOpacity>
-                <Text variant="headline" color="purpleDark">
+                <Text variant="headline" color="accent">
                   I Forgot my Password :(
                 </Text>
               </TouchableOpacity>
@@ -162,12 +165,3 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "white",
-    paddingTop: 32,
-  },
-});

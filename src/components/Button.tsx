@@ -20,7 +20,7 @@ const Button: React.FC<Props> = ({ onPress, title, style, children }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      style={[styles.button, style, { backgroundColor: colors.indigo }]}
+      style={[styles.button, style, { backgroundColor: colors.accent }]}
       onPress={onPress}
     >
       <Text

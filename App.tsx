@@ -1,5 +1,8 @@
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  DefaultTheme as NavLightTheme,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
@@ -11,11 +14,12 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { ThemeProvider } from "@shopify/restyle";
-import theme from "./src/utils/theme";
+import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
+import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
 
 // Workaround to disable firebase console spamming
@@ -23,6 +27,8 @@ import "./src/utils/sentry";
 LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
+  const colorScheme = useColorScheme();
+
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
     SourceSansPro_400Regular,
@@ -34,17 +40,29 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
       <AuthProvider>
         <DataProvider>
           <NotificationsProvider>
-            <SafeAreaProvider>
-              <NavigationContainer>
+            <NavigationContainer
+              theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+            >
+              {/*  
+              Workaround to fix React navigation background on navigation beeing white even on darkmode 
+              https://stackoverflow.com/a/67606259/12661017
+              */}
+              <SafeAreaProvider
+                style={
+                  colorScheme === "dark" && {
+                    backgroundColor: darkTheme.colors.primaryBackground,
+                  }
+                }
+              >
                 <RootStackNavigator />
-              </NavigationContainer>
+              </SafeAreaProvider>
               <Toaster />
-            </SafeAreaProvider>
-            <StatusBar style="auto" />
+            </NavigationContainer>
+            <StatusBar />
           </NotificationsProvider>
         </DataProvider>
       </AuthProvider>
