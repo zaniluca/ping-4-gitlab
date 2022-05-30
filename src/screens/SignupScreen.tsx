@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -17,6 +12,7 @@ import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
 import { useAuth } from "../contexts/AuthContext";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Signup">;
@@ -32,6 +28,7 @@ const PASSWORD_RULES_IOS =
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const { signup, user } = useAuth();
+  const { colors } = useTheme();
 
   const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
@@ -53,7 +50,14 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        backgroundColor: colors.primaryBackground,
+        paddingTop: 32,
+      }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
@@ -169,7 +173,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text variant="headline" color="purpleDark" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Login
                 </Text>
               </TouchableOpacity>
@@ -182,12 +186,3 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default SignupScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "white",
-    paddingTop: 32,
-  },
-});

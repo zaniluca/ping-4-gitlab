@@ -1,6 +1,11 @@
+import {
+  DarkTheme as NavigationDarkTheme,
+  Theme as NavigationTheme,
+} from "@react-navigation/native";
 import { createTheme, useTheme as useRestyleTheme } from "@shopify/restyle";
+import { Platform } from "react-native";
 
-const palette = {
+const lightPalette = {
   purple: "#6E49CB",
   purpleDark: "#380D75",
   indigo: "#29295E",
@@ -21,9 +26,12 @@ const font = {
   regular: "SourceSansPro_400Regular",
 };
 
-const theme = createTheme({
+export const lightTheme = createTheme({
   colors: {
-    ...palette,
+    ...lightPalette,
+    primaryBackground: lightPalette.white,
+    divider: "#D2D2D2",
+    accent: lightPalette.indigo,
   },
   fontFamily: {
     ...font,
@@ -75,6 +83,32 @@ const theme = createTheme({
   },
 });
 
-export type Theme = typeof theme;
-export default theme;
+export type Theme = typeof lightTheme;
+
+export const darkTheme = createTheme({
+  ...lightTheme,
+  colors: {
+    ...lightTheme.colors,
+    quaternary: "#333333",
+    secondary: "#868686",
+    primary: "#ffffff",
+    primaryBackground: "#1F1F1F",
+    divider: "#333333",
+    accent: lightPalette.purple,
+  },
+});
+
+const AndroidNavDarkTheme = NavigationDarkTheme;
+const IosNavDarkTheme: NavigationTheme = {
+  ...NavigationDarkTheme,
+  colors: {
+    ...NavigationDarkTheme.colors,
+    card: darkTheme.colors.primaryBackground,
+  },
+};
+
+export const NavDarkTheme =
+  Platform.OS === "ios" ? IosNavDarkTheme : AndroidNavDarkTheme;
+
+export default lightTheme;
 export const useTheme = () => useRestyleTheme<Theme>();

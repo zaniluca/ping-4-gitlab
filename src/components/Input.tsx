@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, StyleSheet, TextInputProps, StyleProp } from "react-native";
-import theme, { useTheme } from "../utils/theme";
+import lightTheme, { useTheme } from "../utils/theme";
 import { Text, Box } from "./restyle";
 
 type Props = TextInputProps & {
@@ -64,7 +64,13 @@ const Input: React.FC<Props> = ({ style, error, label, ...props }) => {
 
   return (
     <Box style={style}>
-      <Box style={[styles.wrapper, { borderColor: getBorderColor() }]}>
+      <Box
+        style={[
+          styles.wrapper,
+          { borderColor: getBorderColor() },
+          { backgroundColor: colors.quaternary },
+        ]}
+      >
         {label && (
           <Box style={styles.labelWrapper}>
             <Text
@@ -106,7 +112,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
-    backgroundColor: theme.colors.quaternary,
   },
   labelWrapper: {
     flexGrow: 0,
@@ -122,6 +127,6 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     width: "100%",
-    backgroundColor: theme.colors.quaternary,
+    backgroundColor: lightTheme.colors.quaternary,
   },
 });

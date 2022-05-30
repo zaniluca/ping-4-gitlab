@@ -1,6 +1,6 @@
 import { FlatList, ListRenderItem } from "react-native";
 import InboxItem from "./InboxItem";
-import { ListSeparator } from "../ListSeparator";
+import { Divider } from "../ListSeparator";
 import { Notification } from "../../utils/types";
 import { useData } from "../../contexts/DataContext";
 import { useCallback } from "react";
@@ -41,7 +41,7 @@ const InboxList = () => {
       contentInsetAdjustmentBehavior="automatic"
       data={notifications}
       renderItem={renderItem}
-      ItemSeparatorComponent={ListSeparator}
+      ItemSeparatorComponent={Divider}
       keyExtractor={(item) => item.id}
       removeClippedSubviews
       ListFooterComponent={ListFooterComponent}

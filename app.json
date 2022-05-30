@@ -5,6 +5,7 @@
     "slug": "ping4gitlab",
     "version": "1.0.2",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

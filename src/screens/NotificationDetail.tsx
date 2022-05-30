@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { RootStackScreenProps } from "../navigation/types";
 import { WebView } from "react-native-webview";
 import { useData } from "../contexts/DataContext";
+import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"NotificationDetail">;
 
