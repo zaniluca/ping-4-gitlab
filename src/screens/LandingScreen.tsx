@@ -1,19 +1,27 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
 import { useAuth } from "../contexts/AuthContext";
 import { RootStackScreenProps } from "../navigation/types";
+import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { signInAnonymously } = useAuth();
+  const { colors } = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.primaryBackground,
+        justifyContent: "flex-end",
+      }}
+    >
       <Box paddingHorizontal="m" marginBottom="xxl">
         <Button title="Let's get started!" onPress={signInAnonymously} />
         <Disclaimer />
@@ -25,7 +33,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         >
           <Text variant="body">Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text variant="headline" color="purpleDark" marginLeft="xs">
+            <Text variant="headline" color="accent" marginLeft="xs">
               Login
             </Text>
           </TouchableOpacity>
@@ -36,11 +44,3 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default LandingScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    justifyContent: "flex-end",
-  },
-});

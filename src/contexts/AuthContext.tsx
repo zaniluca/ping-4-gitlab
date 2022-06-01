@@ -24,6 +24,7 @@ type AuthContextValues = {
   signup: (e: string, p: string) => Promise<void>;
   login: (e: string, p: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteUser: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextValues>({
@@ -33,6 +34,7 @@ export const AuthContext = createContext<AuthContextValues>({
   signup: async () => {},
   login: async () => {},
   logout: async () => {},
+  deleteUser: async () => {},
 });
 
 type AuthContextProps = {
@@ -51,6 +53,15 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
+
+  const deleteUser = async () => {
+    try {
+      await user?.delete();
+      console.log("Deleted user with id: ", user?.uid);
+    } catch (error) {
+      console.error("Error deleting user: ", error);
+    }
+  };
 
   const signInAnonymously = async () => {
     try {
@@ -92,7 +103,15 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, signInAnonymously, signup, login, logout }}
+      value={{
+        user,
+        loading,
+        signInAnonymously,
+        signup,
+        login,
+        logout,
+        deleteUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

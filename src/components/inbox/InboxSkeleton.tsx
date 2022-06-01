@@ -17,7 +17,7 @@ const InboxSkeleton = () => {
   };
 
   return (
-    <Skeleton backgroundColor="white">
+    <Skeleton backgroundColor="primaryBackground">
       {[...Array(8)].map((_, i) => (
         <Box key={i} flexDirection="row" padding="m">
           <RandomIcon />

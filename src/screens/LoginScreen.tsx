@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -17,6 +12,8 @@ import { LoginSchema } from "../utils/validation";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import { useTheme } from "../utils/theme";
+import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -27,6 +24,7 @@ const INITIAL_VALUES = {
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const { login, user } = useAuth();
+  const { colors } = useTheme();
   const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
   const handleSubmit = async (values: typeof INITIAL_VALUES) => {
@@ -47,7 +45,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        backgroundColor: colors.primaryBackground,
+        paddingTop: 32,
+      }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
@@ -83,6 +88,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -94,35 +104,22 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.password}
                     label="password"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    textContentType="password"
+                    onSubmitEditing={() => submit()}
                   />
                   {/* Validation Errors */}
                   {!!Object.entries(errors).length && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <Box key={key} flexDirection="row">
-                            <Text color="red">{"\u2022"}</Text>
-                            <Text color="red" paddingLeft="xs">
-                              {value}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Box>
+                      <ErrorsList errors={errors} />
                     </Box>
                   )}
                   {/* Firebase Error */}
                   {firebaseError && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        <Box flexDirection="row">
-                          <Text color="red">{"\u2022"}</Text>
-                          <Text color="red" paddingLeft="xs">
-                            {firebaseError}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <ErrorsList errors={{ firebaseError }} />
                     </Box>
                   )}
                   {/* Login CTA */}
@@ -147,7 +144,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text variant="headline" color="purpleDark" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Signup
                 </Text>
               </TouchableOpacity>
@@ -155,7 +152,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             {/* Forgot Password Button */}
             {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
               <TouchableOpacity>
-                <Text variant="headline" color="purpleDark">
+                <Text variant="headline" color="accent">
                   I Forgot my Password :(
                 </Text>
               </TouchableOpacity>
@@ -168,12 +165,3 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "white",
-    paddingTop: 32,
-  },
-});
