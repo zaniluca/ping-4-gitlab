@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Fixed
+
+- Notifications dates older than a month not displayed correctly
+
 ## [1.1.0] - 2022-05-31
 
 ### Added
