@@ -87,7 +87,7 @@ const SettingsList = () => {
           flexDirection="row"
           justifyContent="space-between"
           padding="m"
-          backgroundColor="white"
+          backgroundColor="primaryBackground"
         >
           <Box flexDirection="row">
             <Box paddingRight="m">
