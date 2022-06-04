@@ -53,12 +53,7 @@ const RootStackNavigator = () => {
 
   if (loading) {
     return (
-      <Skeleton
-        flex={1}
-        backgroundColor="white"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Skeleton flex={1} alignItems="center" justifyContent="center">
         <Logo fill={theme.colors.red} width={77} height={77} />
       </Skeleton>
     );
