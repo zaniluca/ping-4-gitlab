@@ -16,15 +16,13 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import { useData } from "../contexts/DataContext";
-import Skeleton from "../components/Skeleton";
-import Logo from "../components/Logo";
 import { sanitizeSubject } from "../utils/sanitize";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const { getNotificationById } = useData();
 
   const navigation = useRootStackNavigation();
@@ -50,14 +48,6 @@ const RootStackNavigator = () => {
       navigation.navigate("NotificationDetail", notification);
     });
   }, [lastNotificationResponse]);
-
-  if (loading) {
-    return (
-      <Skeleton flex={1} alignItems="center" justifyContent="center">
-        <Logo fill={theme.colors.red} width={77} height={77} />
-      </Skeleton>
-    );
-  }
 
   return (
     <Stack.Navigator
