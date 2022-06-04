@@ -6,6 +6,7 @@ import {
 } from "../utils/notifications";
 import { useData } from "./DataContext";
 import * as Notifications from "expo-notifications";
+import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 
 type NotificationsContextValues = {};
 
@@ -48,7 +49,30 @@ Notifications.addNotificationResponseReceivedListener((notification) =>
 export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
 }) => {
-  const { updateUserData, userData } = useData();
+  const { updateUserData, userData, getNotificationById } = useData();
+  const navigation = useRootStackNavigation();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+
+  useEffect(() => {
+    if (!lastNotificationResponse) return;
+
+    console.log("lastNotificationResponse: ", lastNotificationResponse);
+    const nid = lastNotificationResponse.notification.request.content.data
+      .nid as string | undefined;
+    if (!nid) {
+      console.error("Notification id not present in notification data");
+      return;
+    }
+
+    getNotificationById(nid).then((notification) => {
+      if (!notification) {
+        console.error("Notification not found with id: ", nid);
+        return;
+      }
+
+      navigation.navigate("NotificationDetail", notification);
+    });
+  }, [lastNotificationResponse]);
 
   useEffect(() => {
     if (!userData) return;

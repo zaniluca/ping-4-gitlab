@@ -43,10 +43,10 @@ export default function App() {
     <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
       <AuthProvider>
         <DataProvider>
-          <NotificationsProvider>
-            <NavigationContainer
-              theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
-            >
+          <NavigationContainer
+            theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+          >
+            <NotificationsProvider>
               {/*  
               Workaround to fix React navigation background on navigation beeing white even on darkmode 
               https://stackoverflow.com/a/67606259/12661017
@@ -61,9 +61,9 @@ export default function App() {
                 <RootStackNavigator />
               </SafeAreaProvider>
               <Toaster />
-            </NavigationContainer>
-            <StatusBar />
-          </NotificationsProvider>
+            </NotificationsProvider>
+          </NavigationContainer>
+          <StatusBar />
         </DataProvider>
       </AuthProvider>
     </ThemeProvider>
