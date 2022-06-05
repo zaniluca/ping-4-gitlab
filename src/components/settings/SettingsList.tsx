@@ -5,12 +5,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { ChevronRight, LogOut } from "react-native-feather";
+import { ChevronRight, LogOut, User } from "react-native-feather";
 import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
 import { useAuth } from "../../contexts/AuthContext";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 
 type SectionItem = {
   name: string;
@@ -31,12 +32,24 @@ type SectionHeaderProps = {
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
   const { logout, user } = useAuth();
+  const navigation = useRootStackNavigation();
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
+    {
+      title: "General",
+      data: [
+        {
+          name: "Account",
+          icon: (props: SvgProps) => <User {...props} />,
+          onPress: () => navigation.navigate("AccountSettings"),
+          showChevron: true,
+        },
+      ],
+    },
     ...(!user?.isAnonymous
       ? [
           {
-            title: "General",
+            title: "",
             data: [
               {
                 name: "Logout",

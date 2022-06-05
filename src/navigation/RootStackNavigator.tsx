@@ -5,7 +5,7 @@ import {
 import { RootStackParamList } from "./types";
 import NotificationDetail from "../screens/NotificationDetail";
 import LoginScreen from "../screens/LoginScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
 import { useTheme } from "../utils/theme";
@@ -19,6 +19,7 @@ import { useData } from "../contexts/DataContext";
 import Skeleton from "../components/Skeleton";
 import Logo from "../components/Logo";
 import { sanitizeSubject } from "../utils/sanitize";
+import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -115,6 +116,13 @@ const RootStackNavigator = () => {
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen
+            name="AccountSettings"
+            component={AccountSettingsScreen}
+            options={{
+              title: "Account",
+            }}
+          />
           {/* Modals */}
           <Stack.Screen
             name="GetStarted"
