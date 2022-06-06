@@ -53,7 +53,7 @@ const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
           flexDirection="row"
           justifyContent="space-between"
           padding="m"
-          backgroundColor="white"
+          backgroundColor="primaryBackground"
         >
           {content}
         </Box>
