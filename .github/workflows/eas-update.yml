@@ -1,4 +1,4 @@
-name: update
+name: Update
 on:
   push:
     branches:
@@ -19,11 +19,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: yarn
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v7
@@ -31,20 +28,6 @@ jobs:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Find yarn cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --immutable
 
       - name: Publish update
         run: eas update --auto

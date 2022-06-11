@@ -4,6 +4,7 @@ import { Notification } from "../utils/types";
 export type RootStackParamList = {
   Inbox: undefined;
   Settings: undefined;
+  AccountSettings: undefined;
   GetStarted: undefined;
   NotificationDetail: Notification;
   Login: undefined;

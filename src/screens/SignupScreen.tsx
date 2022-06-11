@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
@@ -17,6 +12,8 @@ import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
 import { useAuth } from "../contexts/AuthContext";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
+import { useTheme } from "../utils/theme";
+import ErrorsList from "../components/ErrorsList";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -26,8 +23,12 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
+const PASSWORD_RULES_IOS =
+  "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
+
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const { signup, user } = useAuth();
+  const { colors } = useTheme();
 
   const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
@@ -49,7 +50,14 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        backgroundColor: colors.primaryBackground,
+        paddingTop: 32,
+      }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
@@ -85,6 +93,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     label="email"
                     autoCompleteType="email"
                     spellCheck={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    textContentType="emailAddress"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -96,6 +109,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.password}
                     label="password"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    passwordRules={PASSWORD_RULES_IOS}
+                    textContentType="newPassword"
                   />
                   <Input
                     style={{ marginTop: 8 }}
@@ -107,21 +125,17 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     error={errors.confirmPassword}
                     label="confirm"
                     autoCompleteType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    textContentType="newPassword"
+                    passwordRules={PASSWORD_RULES_IOS}
+                    onSubmitEditing={() => submit()}
                   />
                   {/* Validation errors */}
                   <Box marginTop="s">
                     {!!Object.entries(errors).length ? (
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <Box key={key} flexDirection="row">
-                            <Text color="red">{"\u2022"}</Text>
-                            <Text color="red" paddingLeft="xs">
-                              {value}
-                            </Text>
-                          </Box>
-                        ))}
-                      </Box>
+                      <ErrorsList errors={errors} />
                     ) : (
                       <Text variant="caption" color="secondary">
                         Your password must be 6 or more characters long &
@@ -133,15 +147,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Firebase Error */}
                   {firebaseError && (
                     <Box marginTop="s">
-                      <Box>
-                        <Text color="red">Some errors occurred:</Text>
-                        <Box flexDirection="row">
-                          <Text color="red">{"\u2022"}</Text>
-                          <Text color="red" paddingLeft="xs">
-                            {firebaseError}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <ErrorsList errors={{ firebaseError }} />
                     </Box>
                   )}
                   {/* Signup CTA */}
@@ -167,7 +173,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
             >
               <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text variant="headline" color="purpleDark" marginLeft="xs">
+                <Text variant="headline" color="accent" marginLeft="xs">
                   Login
                 </Text>
               </TouchableOpacity>
@@ -180,12 +186,3 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default SignupScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "white",
-    paddingTop: 32,
-  },
-});

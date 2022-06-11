@@ -1,17 +1,21 @@
 import { useLayoutEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
+import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
+import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
-  const hasCompletedOnboarding = !userData?.onboarding;
+  const { colors } = useTheme();
+  const { deleteUser, user } = useAuth();
 
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
@@ -33,8 +37,24 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     return () => listener();
   }, [navigation, userData]);
 
+  const handleGoBackToLanding = async () => {
+    if (user?.isAnonymous) {
+      // Only deleting anonymous users
+      await deleteUser();
+    }
+    navigation.navigate("Landing");
+  };
+
+  const hasCompletedOnboarding = !userData?.onboarding;
+
   return (
-    <SafeAreaView style={styles.container} edges={["right", "left", "bottom"]}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.primaryBackground,
+      }}
+      edges={["right", "left", "bottom"]}
+    >
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
@@ -71,7 +91,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           </BulletPointListItem>
           <CopyToCliboard
             marginTop="m"
-            content={`${userData?.hook_id}@${process.env.EMAIL_DOMAIN}`}
+            content={`${userData?.hook_id}@pfg.app`}
           />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
@@ -93,10 +113,17 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
             appear after confirmation).
           </BulletPointListItem>
           <BulletPointListItem>
-            Thank you for reading all the way throug! now you can procede with
+            Thank you for reading all the way throug! Now you can procede with
             the steps above and enjoy reciving all your team updates directly on
             your phone!
           </BulletPointListItem>
+          <Text variant="body" marginTop="xl">
+            In case you already have an account and went here by mistake press
+            the button below!
+          </Text>
+        </Box>
+        <Box padding="m">
+          <Button onPress={handleGoBackToLanding}>Go back to landing</Button>
         </Box>
       </ScrollView>
       <Toaster />
@@ -116,10 +143,3 @@ const BulletPointListItem: React.FC = ({ children }) => {
 };
 
 export default GetStartedScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-});

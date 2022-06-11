@@ -5,7 +5,7 @@ import {
 import { RootStackParamList } from "./types";
 import NotificationDetail from "../screens/NotificationDetail";
 import LoginScreen from "../screens/LoginScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
 import InboxScreen from "../screens/InboxScreen";
 import { useTheme } from "../utils/theme";
@@ -13,56 +13,14 @@ import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
-import * as Notifications from "expo-notifications";
-import { useData } from "../contexts/DataContext";
-import Skeleton from "../components/Skeleton";
-import Logo from "../components/Logo";
 import { sanitizeSubject } from "../utils/sanitize";
+import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { user, loading } = useAuth();
-  const { getNotificationById } = useData();
-
-  const navigation = useRootStackNavigation();
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
-
-  useEffect(() => {
-    if (!lastNotificationResponse) return;
-
-    console.log("lastNotificationResponse: ", lastNotificationResponse);
-    const nid = lastNotificationResponse.notification.request.content.data
-      .nid as string | undefined;
-    if (!nid) {
-      console.error("Notification id not present in notification data");
-      return;
-    }
-
-    getNotificationById(nid).then((notification) => {
-      if (!notification) {
-        console.error("Notification not found with id: ", nid);
-        return;
-      }
-
-      navigation.navigate("NotificationDetail", notification);
-    });
-  }, [lastNotificationResponse]);
-
-  if (loading) {
-    return (
-      <Skeleton
-        flex={1}
-        backgroundColor="white"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Logo fill={theme.colors.red} width={77} height={77} />
-      </Skeleton>
-    );
-  }
+  const { user } = useAuth();
 
   return (
     <Stack.Navigator
@@ -120,6 +78,13 @@ const RootStackNavigator = () => {
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen
+            name="AccountSettings"
+            component={AccountSettingsScreen}
+            options={{
+              title: "Account",
+            }}
+          />
           {/* Modals */}
           <Stack.Screen
             name="GetStarted"
