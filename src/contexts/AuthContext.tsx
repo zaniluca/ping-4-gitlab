@@ -16,10 +16,12 @@ import {
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { User } from "../utils/types";
+import Logo from "../components/Logo";
+import Skeleton from "../components/Skeleton";
+import { useTheme } from "../utils/theme";
 
 type AuthContextValues = {
   user: User;
-  loading: boolean;
   signInAnonymously: () => Promise<void>;
   signup: (e: string, p: string) => Promise<void>;
   login: (e: string, p: string) => Promise<void>;
@@ -29,7 +31,6 @@ type AuthContextValues = {
 
 export const AuthContext = createContext<AuthContextValues>({
   user: null,
-  loading: true,
   signInAnonymously: async () => {},
   signup: async () => {},
   login: async () => {},
@@ -44,6 +45,7 @@ type AuthContextProps = {
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User>(auth.currentUser);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -101,11 +103,18 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     }
   };
 
+  if (loading) {
+    return (
+      <Skeleton flex={1} alignItems="center" justifyContent="center">
+        <Logo fill={colors.red} width={77} height={77} />
+      </Skeleton>
+    );
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        loading,
         signInAnonymously,
         signup,
         login,
