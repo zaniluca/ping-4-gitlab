@@ -1,5 +1,6 @@
 import {
   ListRenderItem,
+  Platform,
   SectionList,
   SectionListData,
   Switch,
@@ -15,6 +16,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 import Toast from "react-native-toast-message";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+
 type SectionItem = {
   name: string;
   icon: (props: SvgProps) => JSX.Element;
@@ -31,11 +33,9 @@ type SectionHeaderProps = {
   section: SectionListData<SectionItem>;
 };
 
-const SettingsList = () => {
+const PauseNotificationsSwitch = () => {
   const { userData, updateUserData } = useData();
-  const { colors, fontFamily } = useTheme();
-  const { logout, user } = useAuth();
-  const navigation = useRootStackNavigation();
+  const { colors } = useTheme();
 
   const togglePauseNotifications = async () => {
     const newValue = !userData?.hasDisabledNotifications;
@@ -48,6 +48,29 @@ const SettingsList = () => {
     });
   };
 
+  return (
+    <Switch
+      trackColor={{
+        true: Platform.OS === "android" ? `${colors.orange}60` : colors.orange,
+      }}
+      thumbColor={
+        Platform.OS === "android"
+          ? userData?.hasDisabledNotifications
+            ? colors.orange
+            : colors.primary
+          : undefined
+      }
+      onChange={togglePauseNotifications}
+      value={userData?.hasDisabledNotifications}
+    />
+  );
+};
+
+const SettingsList = () => {
+  const { colors, fontFamily } = useTheme();
+  const { logout, user } = useAuth();
+  const navigation = useRootStackNavigation();
+
   const SETTINGS_SECTIONS: SettingsSections[] = [
     {
       title: "General",
@@ -57,17 +80,7 @@ const SettingsList = () => {
               {
                 name: "Pause Notifications",
                 icon: (props: SvgProps) => <BellOff {...props} />,
-                onPress: togglePauseNotifications,
-                right: (
-                  <Switch
-                    trackColor={{ true: colors.orange }}
-                    thumbColor={
-                      userData?.hasDisabledNotifications ? "#f5dd4b" : "#f4f3f4"
-                    }
-                    onChange={togglePauseNotifications}
-                    value={userData?.hasDisabledNotifications}
-                  />
-                ),
+                right: <PauseNotificationsSwitch />,
               },
             ]
           : []),
@@ -115,7 +128,7 @@ const SettingsList = () => {
   const renderItem: ListRenderItem<SectionItem> = ({ item }) => {
     const { name, onPress, right } = item;
     return (
-      <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
+      <TouchableOpacity activeOpacity={onPress ? 0.6 : 1} onPress={onPress}>
         <Box
           flexDirection="row"
           justifyContent="space-between"
