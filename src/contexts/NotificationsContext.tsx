@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Toast from "react-native-toast-message";
 import {
   registerForPushNotificationsAsync,
@@ -7,7 +13,9 @@ import {
 import { useData } from "./DataContext";
 import * as Notifications from "expo-notifications";
 
-type NotificationsContextValues = {};
+type NotificationsContextValues = {
+  pushToken?: string;
+};
 
 export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
@@ -49,6 +57,7 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
 }) => {
   const { updateUserData, userData } = useData();
+  const [pushToken, setPushToken] = useState();
 
   useEffect(() => {
     if (!userData) return;
@@ -82,7 +91,7 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   }, []);
 
   return (
-    <NotificationsContext.Provider value={{}}>
+    <NotificationsContext.Provider value={{ pushToken }}>
       {children}
     </NotificationsContext.Provider>
   );
