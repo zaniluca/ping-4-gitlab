@@ -12,6 +12,8 @@ import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
 import { useAuth } from "../../contexts/AuthContext";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useData } from "../../contexts/DataContext";
+import { useNotifications } from "../../contexts/NotificationsContext";
 
 type SectionItem = {
   name: string;
@@ -32,7 +34,18 @@ type SectionHeaderProps = {
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
   const { logout, user } = useAuth();
+  const { updateUserData, userData } = useData();
+  const { pushToken } = useNotifications();
   const navigation = useRootStackNavigation();
+
+  const handleLogout = async () => {
+    await updateUserData({
+      expo_push_tokens: userData?.expo_push_tokens?.filter(
+        (t) => t !== pushToken
+      ),
+    });
+    await logout();
+  };
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
     {
@@ -54,7 +67,7 @@ const SettingsList = () => {
               {
                 name: "Logout",
                 icon: (props: SvgProps) => <LogOut {...props} />,
-                onPress: logout,
+                onPress: handleLogout,
                 showChevron: false,
               },
             ],

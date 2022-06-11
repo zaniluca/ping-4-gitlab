@@ -12,6 +12,7 @@ import {
 } from "../utils/notifications";
 import { useData } from "./DataContext";
 import * as Notifications from "expo-notifications";
+import { useAuth } from "./AuthContext";
 
 type NotificationsContextValues = {
   pushToken?: string;
@@ -57,13 +58,15 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
 }) => {
   const { updateUserData, userData } = useData();
-  const [pushToken, setPushToken] = useState();
+  const { user } = useAuth();
+  const [pushToken, setPushToken] = useState<string | undefined>();
 
   useEffect(() => {
-    if (!userData) return;
+    if (!userData || !user) return;
 
     registerForPushNotificationsAsync().then((res) => {
       const { token, status } = res;
+      setPushToken(token);
 
       if (status === "denied") {
         Toast.show({
@@ -84,7 +87,10 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
         expo_push_tokens: [...tokens, token],
       });
     });
-  }, [userData]);
+    // Here we put userData.onboarding to avoid re-adding the expo_push_token when the user logs out
+    // If the user logs out and so removes the expo_push_token, we MUST NOT re-execute this effect
+    // see: https://github.com/zaniluca/ping-4-gitlab/issues/86
+  }, [userData?.onboarding, user]);
 
   useEffect(() => {
     resetAppBadge();
