@@ -45,7 +45,7 @@ const InboxList = () => {
       keyExtractor={(item) => item.id}
       removeClippedSubviews
       ListFooterComponent={
-        notifications.length > 50 ? ListFooterComponent : null
+        notifications.length >= 50 ? ListFooterComponent : null
       }
     />
   );
