@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Notifications dates older than a month not displayed correctly
 - Logging out from the device won't stop notifications from coming in
+- Going back to the landing page on onboarding after creating a new account with credentials deletes it
 
 ## [1.1.0] - 2022-05-31
 
