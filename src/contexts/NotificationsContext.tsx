@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Toast from "react-native-toast-message";
 import {
   registerForPushNotificationsAsync,
@@ -6,8 +12,12 @@ import {
 } from "../utils/notifications";
 import { useData } from "./DataContext";
 import * as Notifications from "expo-notifications";
+import { useAuth } from "./AuthContext";
+import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 
-type NotificationsContextValues = {};
+type NotificationsContextValues = {
+  pushToken?: string;
+};
 
 export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
@@ -48,13 +58,39 @@ Notifications.addNotificationResponseReceivedListener((notification) =>
 export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
 }) => {
-  const { updateUserData, userData } = useData();
+  const { user } = useAuth();
+  const [pushToken, setPushToken] = useState<string | undefined>();
+  const { updateUserData, userData, getNotificationById } = useData();
+  const navigation = useRootStackNavigation();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
-    if (!userData) return;
+    if (!lastNotificationResponse) return;
+
+    console.log("lastNotificationResponse: ", lastNotificationResponse);
+    const nid = lastNotificationResponse.notification.request.content.data
+      .nid as string | undefined;
+    if (!nid) {
+      console.error("Notification id not present in notification data");
+      return;
+    }
+
+    getNotificationById(nid).then((notification) => {
+      if (!notification) {
+        console.error("Notification not found with id: ", nid);
+        return;
+      }
+
+      navigation.navigate("NotificationDetail", notification);
+    });
+  }, [lastNotificationResponse]);
+
+  useEffect(() => {
+    if (!userData || !user) return;
 
     registerForPushNotificationsAsync().then((res) => {
       const { token, status } = res;
+      setPushToken(token);
 
       if (status === "denied") {
         Toast.show({
@@ -75,14 +111,17 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
         expo_push_tokens: [...tokens, token],
       });
     });
-  }, [userData]);
+    // Here we put userData.onboarding to avoid re-adding the expo_push_token when the user logs out
+    // If the user logs out and so removes the expo_push_token, we MUST NOT re-execute this effect
+    // see: https://github.com/zaniluca/ping-4-gitlab/issues/86
+  }, [userData?.onboarding, user]);
 
   useEffect(() => {
     resetAppBadge();
   }, []);
 
   return (
-    <NotificationsContext.Provider value={{}}>
+    <NotificationsContext.Provider value={{ pushToken }}>
       {children}
     </NotificationsContext.Provider>
   );

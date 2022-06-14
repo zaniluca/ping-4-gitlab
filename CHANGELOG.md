@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- User account deletion
+
+### Fixed
+
+- Notifications dates older than a month not displayed correctly
+- Logging out from the device won't stop notifications from coming in
+- Going back to the landing page on onboarding after creating a new account with credentials deletes it
+
+## [1.1.0] - 2022-05-31
+
+### Added
+
 - Support for dark mode
 
 ## [1.0.2] - 2022-05-26
@@ -38,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First relase on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.0.2...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.1.0...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
+[1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0

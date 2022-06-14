@@ -44,7 +44,9 @@ const InboxList = () => {
       ItemSeparatorComponent={Divider}
       keyExtractor={(item) => item.id}
       removeClippedSubviews
-      ListFooterComponent={ListFooterComponent}
+      ListFooterComponent={
+        notifications.length >= 50 ? ListFooterComponent : null
+      }
     />
   );
 };

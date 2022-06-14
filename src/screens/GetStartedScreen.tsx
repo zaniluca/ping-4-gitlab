@@ -15,7 +15,7 @@ type Props = RootStackScreenProps<"GetStarted">;
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser } = useAuth();
+  const { deleteUser, user } = useAuth();
 
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
@@ -38,7 +38,10 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation, userData]);
 
   const handleGoBackToLanding = async () => {
-    await deleteUser();
+    if (user?.isAnonymous) {
+      // Only deleting anonymous users
+      await deleteUser();
+    }
     navigation.navigate("Landing");
   };
 
