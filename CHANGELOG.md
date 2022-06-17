@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [1.1.1] - 2022-06-15
+
 ### Added
 
 - User account deletion
@@ -13,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Notifications dates older than a month not displayed correctly
+- Logging out from the device won't stop notifications from coming in
+- Going back to the landing page on onboarding after creating a new account with credentials deletes it
 
 ## [1.1.0] - 2022-05-31
 
@@ -48,7 +52,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First relase on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.1.1...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
+[1.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.1

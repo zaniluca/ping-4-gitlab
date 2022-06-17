@@ -16,6 +16,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 import Toast from "react-native-toast-message";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useNotifications } from "../../contexts/NotificationsContext";
 
 type SectionItem = {
   name: string;
@@ -69,7 +70,18 @@ const PauseNotificationsSwitch = () => {
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
   const { logout, user } = useAuth();
+  const { updateUserData, userData } = useData();
+  const { pushToken } = useNotifications();
   const navigation = useRootStackNavigation();
+
+  const handleLogout = async () => {
+    await updateUserData({
+      expo_push_tokens: userData?.expo_push_tokens?.filter(
+        (t) => t !== pushToken
+      ),
+    });
+    await logout();
+  };
 
   const SETTINGS_SECTIONS: SettingsSections[] = [
     {
@@ -100,7 +112,7 @@ const SettingsList = () => {
               {
                 name: "Logout",
                 icon: (props: SvgProps) => <LogOut {...props} />,
-                onPress: logout,
+                onPress: handleLogout,
                 right: <ChevronRight stroke={colors.primary} />,
               },
             ],
