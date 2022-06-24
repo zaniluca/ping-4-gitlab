@@ -29,11 +29,11 @@ The app is build using Expo and React Native, the entire codebase is written in 
 ## Running Locally
 
 ```
-$ git clone https://github.com/zaniluca/ping-4-gitlab.git
-$ cd ping-4-gitlab
-$ nvm use
-$ yarn
-$ yarn start
+git clone https://github.com/zaniluca/ping-4-gitlab.git
+cd ping-4-gitlab
+nvm use
+yarn
+yarn start
 ```
 
 ## What Now?
