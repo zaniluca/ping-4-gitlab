@@ -1,25 +1,28 @@
 import {
   ListRenderItem,
+  Platform,
   SectionList,
   SectionListData,
+  Switch,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { ChevronRight, LogOut, User } from "react-native-feather";
+import { BellOff, ChevronRight, LogOut, User } from "react-native-feather";
 import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
 import { useAuth } from "../../contexts/AuthContext";
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useData } from "../../contexts/DataContext";
+import Toast from "react-native-toast-message";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useNotifications } from "../../contexts/NotificationsContext";
 
 type SectionItem = {
   name: string;
   icon: (props: SvgProps) => JSX.Element;
   onPress?: () => void;
-  showChevron: boolean;
+  right?: JSX.Element;
 };
 
 type SettingsSections = {
@@ -29,6 +32,39 @@ type SettingsSections = {
 
 type SectionHeaderProps = {
   section: SectionListData<SectionItem>;
+};
+
+const PauseNotificationsSwitch = () => {
+  const { userData, updateUserData } = useData();
+  const { colors } = useTheme();
+
+  const togglePauseNotifications = async () => {
+    const newValue = !userData?.hasDisabledNotifications;
+    await updateUserData({
+      hasDisabledNotifications: newValue,
+    });
+
+    Toast.show({
+      text1: `Notifications ${newValue ? "Paused" : "Resumed"}`,
+    });
+  };
+
+  return (
+    <Switch
+      trackColor={{
+        true: Platform.OS === "android" ? `${colors.orange}60` : colors.orange,
+      }}
+      thumbColor={
+        Platform.OS === "android"
+          ? userData?.hasDisabledNotifications
+            ? colors.orange
+            : colors.primary
+          : undefined
+      }
+      onChange={togglePauseNotifications}
+      value={userData?.hasDisabledNotifications}
+    />
+  );
 };
 
 const SettingsList = () => {
@@ -51,11 +87,20 @@ const SettingsList = () => {
     {
       title: "General",
       data: [
+        ...(!user?.isAnonymous
+          ? [
+              {
+                name: "Pause Notifications",
+                icon: (props: SvgProps) => <BellOff {...props} />,
+                right: <PauseNotificationsSwitch />,
+              },
+            ]
+          : []),
         {
           name: "Account",
           icon: (props: SvgProps) => <User {...props} />,
           onPress: () => navigation.navigate("AccountSettings"),
-          showChevron: true,
+          right: <ChevronRight stroke={colors.primary} />,
         },
       ],
     },
@@ -68,7 +113,7 @@ const SettingsList = () => {
                 name: "Logout",
                 icon: (props: SvgProps) => <LogOut {...props} />,
                 onPress: handleLogout,
-                showChevron: false,
+                right: <ChevronRight stroke={colors.primary} />,
               },
             ],
           },
@@ -93,12 +138,13 @@ const SettingsList = () => {
   };
 
   const renderItem: ListRenderItem<SectionItem> = ({ item }) => {
-    const { name, onPress, showChevron } = item;
+    const { name, onPress, right } = item;
     return (
-      <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
+      <TouchableOpacity activeOpacity={onPress ? 0.6 : 1} onPress={onPress}>
         <Box
           flexDirection="row"
           justifyContent="space-between"
+          alignItems="center"
           padding="m"
           backgroundColor="primaryBackground"
         >
@@ -108,7 +154,7 @@ const SettingsList = () => {
             </Box>
             <Text variant="headline">{name}</Text>
           </Box>
-          {showChevron && <ChevronRight stroke={colors.primary} />}
+          {right}
         </Box>
       </TouchableOpacity>
     );
