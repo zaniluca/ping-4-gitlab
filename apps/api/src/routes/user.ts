@@ -20,7 +20,7 @@ router.get("/", async (req: ExpressJwtRequest, res) => {
 });
 
 router.put("/", async (req: AuthRequestWithPayload<User>, res) => {
-  const { password, email } = req.body;
+  const { password, email, hookId } = req.body;
 
   const user = await prisma.user.update({
     where: {
@@ -28,6 +28,7 @@ router.put("/", async (req: AuthRequestWithPayload<User>, res) => {
     },
     data: {
       email,
+      hookId,
       password: password ? bcrypt.hashSync(password, 10) : undefined,
     },
     select: USER_PUBLIC_FIELDS,

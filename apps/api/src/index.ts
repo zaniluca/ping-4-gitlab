@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import user from "./routes/user";
 import auth from "./routes/auth";
+import webhook from "./routes/webhook";
 import { handleUnauthorizedError } from "./middlewares";
 import { expressjwt } from "express-jwt";
 
@@ -23,6 +24,7 @@ app.use(
 // Routes
 app.use("/user", user);
 app.use("/", auth);
+app.use("/", webhook);
 
 // Error handling
 app.use(handleUnauthorizedError);

@@ -8,7 +8,28 @@ generator client {
 }
 
 model User {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  email    String? @unique
-  password String?
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String?        @unique
+  hookId        String?        @unique
+  password      String?
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  subject     String
+  html        String
+  text        String?
+  rawText     String?
+  headers     Json
+  rawHeaders  String
+  recived     DateTime @default(now())
+  viewed      Boolean  @default(false)
+  contentHash String   @unique
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
 }

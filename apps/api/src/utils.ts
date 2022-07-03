@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import type { CustomJWTClaims } from "./types";
+import type { CustomJWTClaims, Headers } from "./types";
 
 /**
  * Generate a short lived JWT token for the user.
@@ -61,4 +61,19 @@ export const validateRefreshToken = (token: string) => {
     console.error("Could not decode refresh token: ", e);
     return false;
   }
+};
+
+export const parseHeaders = (headers: string) => {
+  let json: Record<string, string> = {};
+  const sanitized = headers.trimEnd().replace(/[']+/g, "").split("\n");
+
+  console.log("Sanitized headers:", sanitized);
+
+  sanitized.map((e) => {
+    let elements = e.split(": ");
+    if (elements.length > 2) return;
+    json[elements[0].trim().toLocaleLowerCase()] = elements[1];
+  });
+
+  return json as Headers;
 };
