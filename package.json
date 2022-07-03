@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "eas-build-pre-install": "echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > ./google-services.json && echo $GOOGLE_SERVICES_IOS_BASE64 | base64 --decode > ./GoogleService-Info.plist",
-    "prepare": "husky install"
+    "prepare": "husky install && chmod ug+x .husky/*"
   },
   "dependencies": {
     "@expo-google-fonts/source-sans-pro": "^0.2.2",
