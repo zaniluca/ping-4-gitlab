@@ -10,15 +10,17 @@ import {
 } from "../utils";
 import { authRequired } from "../middlewares";
 import type { User } from "@prisma/client";
+import yup, { ValidationError } from "yup";
+import { SignupSchema } from "../validation";
 
 const router = Router();
 
-type AuthPayload = {
+type LoginPayload = {
   email: string;
   password: string;
 };
 
-router.post("/login", async (req: RequestWithPayload<AuthPayload>, res) => {
+router.post("/login", async (req: RequestWithPayload<LoginPayload>, res) => {
   const { email, password } = req.body;
 
   if (!password || !email) {
@@ -45,18 +47,24 @@ router.post("/login", async (req: RequestWithPayload<AuthPayload>, res) => {
   });
 });
 
+type SignupPayload = yup.InferType<typeof SignupSchema>;
+
 router.post(
   "/signup",
   authRequired({ failIfNoTokenFound: false }),
-  async (req: AuthRequestWithPayload<AuthPayload>, res) => {
+  async (req: AuthRequestWithPayload<SignupPayload>, res) => {
+    try {
+      SignupSchema.validateSync(req.body);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({
+          message: error.errors[0],
+        });
+      }
+    }
+
     const { password, email } = req.body;
     const isAnonymous = !!req.auth?.uid;
-
-    if (!password || !email) {
-      return res.status(400).json({
-        message: "Missing required fields",
-      });
-    }
 
     const alreadyExists = await prisma.user.count({
       where: {
