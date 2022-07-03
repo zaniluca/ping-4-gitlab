@@ -5,6 +5,7 @@ import { prisma } from "../../prisma/client";
 import type { User } from "@prisma/client";
 import multer from "multer";
 import { parseHeaders } from "../utils";
+import { NOTIFICATION_ESSENTIALS_FIELDS } from "../constants";
 
 const router = Router();
 
@@ -69,9 +70,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
         contentHash,
         userId: user.id,
       },
-      select: {
-        id: true,
-      },
+      select: NOTIFICATION_ESSENTIALS_FIELDS,
     });
 
     res.status(201).json(notification);

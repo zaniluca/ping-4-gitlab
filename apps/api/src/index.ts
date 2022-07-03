@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import user from "./routes/user";
+import notification from "./routes/notification";
 import auth from "./routes/auth";
 import webhook from "./routes/webhook";
 import { handleUnauthorizedError } from "./middlewares";
@@ -23,6 +24,7 @@ app.use(
 
 // Routes
 app.use("/user", user);
+app.use("/notification", notification);
 app.use("/", auth);
 app.use("/", webhook);
 
