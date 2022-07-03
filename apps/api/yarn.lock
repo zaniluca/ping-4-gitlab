@@ -508,6 +508,14 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
+expo-server-sdk@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/expo-server-sdk/-/expo-server-sdk-3.6.0.tgz#b13e5e77f622d11009bdd533df857b08225a4d00"
+  integrity sha512-GyA0BTcFBKk/5gTEO4WOScP9hEttR+GitrcOIl7XwXwE1FHFvbluKiUc9yEjsfEYMgyd78+XhSpGVGQnutGOdA==
+  dependencies:
+    node-fetch "^2.6.0"
+    promise-limit "^2.7.0"
+
 express-jwt@^7.7.5:
   version "7.7.5"
   resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-7.7.5.tgz#5b46e056be33abdfbcbcb3d8ddc79639e6994508"
@@ -968,7 +976,7 @@ node-addon-api@^3.1.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-3.2.1.tgz#81325e0a2117789c0128dab65e7e38f07ceba161"
   integrity sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==
 
-node-fetch@^2.6.7:
+node-fetch@^2.6.0, node-fetch@^2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
@@ -1062,6 +1070,11 @@ process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
+
+promise-limit@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/promise-limit/-/promise-limit-2.7.0.tgz#eb5737c33342a030eaeaecea9b3d3a93cb592b26"
+  integrity sha512-7nJ6v5lnJsXwGprnGXga4wx6d1POjvi5Qmf1ivTRxTjH4Z/9Czja/UCMLVmB9N93GeWOU93XaFaEt6jbuoagNw==
 
 property-expr@^2.0.4:
   version "2.0.5"

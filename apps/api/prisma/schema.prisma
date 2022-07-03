@@ -8,11 +8,12 @@ generator client {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  email         String?        @unique
-  hookId        String?        @unique
-  password      String?
-  notifications Notification[]
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  email          String?        @unique
+  hookId         String?        @unique
+  password       String?
+  expoPushTokens String[]       @default([])
+  notifications  Notification[]
 
   @@map("users")
 }
