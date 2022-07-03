@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [1.2.0] - 2022-07-04
+
+### Added
+
+- Pause notifications from app settings
+
 ## [1.1.1] - 2022-06-15
 
 ### Added
@@ -52,8 +58,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First relase on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.1.1...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.2.0...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
 [1.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.1
+[1.2.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.2.0
