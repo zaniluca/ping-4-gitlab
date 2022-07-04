@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Pause notifications from app settings
+- App code is now open source!
 
 ## [1.1.1] - 2022-06-15
 
