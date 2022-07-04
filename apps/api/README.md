@@ -17,4 +17,4 @@ We're using [mongodb atlas](https://cloud.mongodb.com) as our database provider 
 
 Now simply run `yarn install` and `yarn start` to start the server
 
-This project is forked from [prisma-mongodb-anonymous-auth](https://github.com/zaniluca/prisma-mongodb-anonymous-auth)
+This project is based out of my own repo [prisma-mongodb-anonymous-auth](https://github.com/zaniluca/prisma-mongodb-anonymous-auth)
