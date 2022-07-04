@@ -29,14 +29,16 @@ The app is build using Expo and React Native, the entire codebase is written in 
 ## Running Locally
 
 ```
-$ git clone https://github.com/zaniluca/ping-4-gitlab.git
-$ cd ping-4-gitlab
-$ nvm use
-$ yarn
-$ yarn start
+git clone https://github.com/zaniluca/ping-4-gitlab.git
+cd ping-4-gitlab
+nvm use
+yarn
+yarn start
 ```
 
 ## What Now?
+
+At the current state the backend (firebase) is not available for local testing so you can't test the app locally with a working backend. soon it will be available at the repo linked below.
 
 Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to [this repo](https://github.com/zaniluca/ping-4-gitlab-firebase)
 
