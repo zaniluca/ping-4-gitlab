@@ -76,7 +76,14 @@ const sanitizeText = (text: string) => {
 };
 
 router.post("/webhook", multer().none(), async (req: Request, res) => {
-  // Parsing the body content that is sent by sendgrid as a multipart form
+  const { token } = req.query;
+
+  if (!token || token !== process.env.WEBHOOK_SECRET) {
+    return res.status(403).json({
+      message: "Unauthorized",
+    });
+  }
+
   const body = req.body as WebhookPayload;
   console.log("Body parsed", body);
 
@@ -133,7 +140,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).end();
+    res.status(400).end();
     return;
   }
 
@@ -166,6 +173,8 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
       console.error(error);
     }
   }
+
+  res.status(200).end();
 });
 
 export default router;
