@@ -21,6 +21,10 @@ import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
 import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
+import { QueryClientProvider } from "react-query";
+import queryClient from "./src/utils/query-client";
+import { useRefetchOnAppFocus } from "./src/hooks/useRefetch";
+import { useOnlineManager } from "./src/hooks/useOnlineManager";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
@@ -28,6 +32,12 @@ LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
   const colorScheme = useColorScheme();
+
+  // https://react-query.tanstack.com/react-native#refetch-on-app-focus
+  useRefetchOnAppFocus();
+
+  // https://react-query.tanstack.com/react-native#online-status-management
+  useOnlineManager();
 
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
@@ -41,31 +51,33 @@ export default function App() {
 
   return (
     <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
-      <AuthProvider>
-        <DataProvider>
-          <NavigationContainer
-            theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
-          >
-            <NotificationsProvider>
-              {/*  
-              Workaround to fix React navigation background on navigation beeing white even on darkmode 
-              https://stackoverflow.com/a/67606259/12661017
-              */}
-              <SafeAreaProvider
-                style={
-                  colorScheme === "dark" && {
-                    backgroundColor: darkTheme.colors.primaryBackground,
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <DataProvider>
+            <NavigationContainer
+              theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+            >
+              <NotificationsProvider>
+                {/*  
+                  Workaround to fix React navigation background on navigation beeing white even on darkmode 
+                  https://stackoverflow.com/a/67606259/12661017
+                */}
+                <SafeAreaProvider
+                  style={
+                    colorScheme === "dark" && {
+                      backgroundColor: darkTheme.colors.primaryBackground,
+                    }
                   }
-                }
-              >
-                <RootStackNavigator />
-              </SafeAreaProvider>
-              <Toaster />
-            </NotificationsProvider>
-          </NavigationContainer>
-          <StatusBar />
-        </DataProvider>
-      </AuthProvider>
+                >
+                  <RootStackNavigator />
+                </SafeAreaProvider>
+                <Toaster />
+              </NotificationsProvider>
+            </NavigationContainer>
+            <StatusBar />
+          </DataProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
