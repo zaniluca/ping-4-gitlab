@@ -6,6 +6,7 @@ import {
   getAccessToken,
   getRefreshToken,
   getUidFromToken,
+  updateLastLogin,
   validateRefreshToken,
 } from "../utils";
 import { authRequired } from "../middlewares";
@@ -40,6 +41,8 @@ router.post("/login", async (req: RequestWithPayload<LoginPayload>, res) => {
       message: "Invalid credentials",
     });
   }
+
+  await updateLastLogin(user.id);
 
   return res.status(200).json({
     accessToken: getAccessToken(user.id),
@@ -149,6 +152,8 @@ router.post(
     }
 
     const uid = getUidFromToken(refreshToken);
+
+    await updateLastLogin(uid);
 
     return res.status(200).json({
       accessToken: getAccessToken(uid),

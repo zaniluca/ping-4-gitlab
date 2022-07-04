@@ -1,5 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import type { CustomJWTClaims, Headers } from "./types";
+import { prisma } from "../prisma/client";
 
 /**
  * Generate a short lived JWT token for the user.
@@ -76,4 +77,15 @@ export const parseHeaders = (headers: string) => {
   });
 
   return json as Headers;
+};
+
+export const updateLastLogin = async (id: string) => {
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      lastLogin: new Date(),
+    },
+  });
 };

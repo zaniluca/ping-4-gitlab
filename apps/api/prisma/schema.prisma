@@ -14,6 +14,9 @@ model User {
   password       String?
   expoPushTokens String[]       @default([])
   notifications  Notification[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  lastLogin      DateTime       @default(now())
 
   @@map("users")
 }
