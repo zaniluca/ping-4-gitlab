@@ -12,6 +12,10 @@ router.get("/list", async (req: ExpressJwtRequest, res) => {
     where: {
       id: req.auth?.uid,
     },
+    orderBy: {
+      recived: "desc",
+    },
+    take: 50,
   });
 
   return res.json(notifications);
