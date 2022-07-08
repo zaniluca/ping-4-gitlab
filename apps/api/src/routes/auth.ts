@@ -12,14 +12,16 @@ import {
   updateLastLogin,
   validateRefreshToken,
 } from "../utils/common";
-import { authRequired } from "../middlewares";
 import type { User } from "@prisma/client";
 import { SignupSchema } from "../utils/validation";
 import { BadRequestError, CredentialsError } from "../utils/errors";
-import { UnauthorizedError } from "express-jwt";
+import { expressjwt, UnauthorizedError } from "express-jwt";
 import yup, { ValidationError } from "yup";
+import dotenv from "dotenv";
 
 const router = Router();
+
+dotenv.config();
 
 type LoginPayload = {
   email: string;
@@ -55,7 +57,11 @@ type SignupPayload = yup.InferType<typeof SignupSchema>;
 
 router.post(
   "/signup",
-  authRequired({ failIfNoTokenFound: false }),
+  expressjwt({
+    secret: process.env.JWT_ACCESS_SECRET!,
+    algorithms: ["HS256"],
+    credentialsRequired: false,
+  }),
   async (req: AuthRequestWithPayload<SignupPayload>, res) => {
     try {
       SignupSchema.validateSync(req.body);

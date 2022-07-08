@@ -1,19 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { expressjwt } from "express-jwt";
 import { ErrorWithStatus } from "./utils/errors";
-
-type AuthRequiredOptions = {
-  failIfNoTokenFound: boolean;
-};
-
-export const authRequired = (
-  options: AuthRequiredOptions | undefined = undefined
-) =>
-  expressjwt({
-    secret: process.env.JWT_ACCESS_SECRET!,
-    algorithms: ["HS256"],
-    credentialsRequired: options?.failIfNoTokenFound,
-  });
 
 export const handleUnauthorizedError = (
   err: Error,
