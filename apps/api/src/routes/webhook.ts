@@ -1,11 +1,13 @@
 import { Router, Request } from "express";
-import type { Headers, PipelineStatus, WebhookPayload } from "../types";
+import type { Headers, PipelineStatus, WebhookPayload } from "../utils/types";
 import hash from "object-hash";
 import { prisma } from "../../prisma/client";
 import type { Notification, User } from "@prisma/client";
 import multer from "multer";
-import { parseHeaders } from "../utils";
 import { Expo, ExpoPushMessage } from "expo-server-sdk";
+import { parseHeaders } from "../utils/common";
+import { UnauthorizedError } from "express-jwt";
+import { ErrorWithStatus } from "../utils/errors";
 
 const router = Router();
 
@@ -79,9 +81,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
   const { token } = req.query;
 
   if (!token || token !== process.env.WEBHOOK_SECRET) {
-    return res.status(403).json({
-      message: "Unauthorized",
-    });
+    throw new ErrorWithStatus(403, "Unauthorized");
   }
 
   const body = req.body as WebhookPayload;
@@ -148,9 +148,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
 
   if (pushTokens.length === 0) {
     console.warn("User doesn't have any valid token");
-    return res.status(400).json({
-      message: "User doesn't have any valid token",
-    });
+    throw new ErrorWithStatus(400, "User doesn't have any valid token");
   }
 
   const notificationPayload: ExpoPushMessage = {

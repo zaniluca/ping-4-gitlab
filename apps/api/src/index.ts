@@ -4,7 +4,7 @@ import user from "./routes/user";
 import notification from "./routes/notification";
 import auth from "./routes/auth";
 import webhook from "./routes/webhook";
-import { handleUnauthorizedError } from "./middlewares";
+import { handleErrorWithStatus, handleUnauthorizedError } from "./middlewares";
 import { expressjwt } from "express-jwt";
 
 dotenv.config();
@@ -30,6 +30,7 @@ app.use("/", webhook);
 
 // Error handling
 app.use(handleUnauthorizedError);
+app.use(handleErrorWithStatus);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

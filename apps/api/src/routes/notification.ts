@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { prisma } from "../../prisma/client";
 import type { Request as ExpressJwtRequest } from "express-jwt";
-import type { AuthRequestWithPayload } from "../types";
 import type { Notification } from "@prisma/client";
-import { NOTIFICATION_ESSENTIALS_FIELDS } from "../constants";
+import { NOTIFICATION_ESSENTIALS_FIELDS } from "../utils/constants";
+import type { AuthRequestWithPayload } from "../utils/types";
 
 const router = Router();
 

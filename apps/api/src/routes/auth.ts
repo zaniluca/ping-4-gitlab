@@ -1,18 +1,23 @@
 import { Router, Request } from "express";
 import { prisma } from "../../prisma/client";
 import bcrypt from "bcrypt";
-import type { AuthRequestWithPayload, RequestWithPayload } from "../types";
+import type {
+  AuthRequestWithPayload,
+  RequestWithPayload,
+} from "../utils/types";
 import {
   getAccessToken,
   getRefreshToken,
   getUidFromToken,
   updateLastLogin,
   validateRefreshToken,
-} from "../utils";
+} from "../utils/common";
 import { authRequired } from "../middlewares";
 import type { User } from "@prisma/client";
+import { SignupSchema } from "../utils/validation";
+import { BadRequestError, CredentialsError } from "../utils/errors";
+import { UnauthorizedError } from "express-jwt";
 import yup, { ValidationError } from "yup";
-import { SignupSchema } from "../validation";
 
 const router = Router();
 
@@ -25,9 +30,7 @@ router.post("/login", async (req: RequestWithPayload<LoginPayload>, res) => {
   const { email, password } = req.body;
 
   if (!password || !email) {
-    return res.status(400).json({
-      message: "Missing required fields",
-    });
+    throw new CredentialsError("Missing required fields");
   }
 
   const user = await prisma.user.findUnique({
@@ -37,9 +40,7 @@ router.post("/login", async (req: RequestWithPayload<LoginPayload>, res) => {
   });
 
   if (!user || !bcrypt.compareSync(password, user.password!)) {
-    return res.status(400).json({
-      message: "Invalid credentials",
-    });
+    throw new CredentialsError("Invalid credentials");
   }
 
   await updateLastLogin(user.id);
@@ -76,9 +77,7 @@ router.post(
     });
 
     if (alreadyExists) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      throw new CredentialsError("User already exists");
     }
 
     let user: Pick<User, "id">;
@@ -140,13 +139,11 @@ router.post(
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
-      return res.status(400).json({
-        message: "Missing required fields",
-      });
+      throw new BadRequestError("Missing required fields");
     }
 
     if (!validateRefreshToken(refreshToken)) {
-      return res.status(403).json({
+      throw new UnauthorizedError("invalid_token", {
         message: "Invalid refresh token",
       });
     }

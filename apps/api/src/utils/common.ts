@@ -1,12 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import type { CustomJWTClaims, Headers } from "./types";
-import { prisma } from "../prisma/client";
+import { prisma } from "../../prisma/client";
 
-/**
- * Generate a short lived JWT token for the user.
- * @param uid User ID to be associated with the token
- * @returns JWT access token
- */
 export const getAccessToken = (uid: string) => {
   return jwt.sign(
     {
@@ -19,12 +14,6 @@ export const getAccessToken = (uid: string) => {
   );
 };
 
-/**
- * Generate a long lived JWT token for the user.
- * used to get a new token when the old one expires.
- * @param uid User ID to be associated with the token
- * @returns JWT refresh token
- */
 export const getRefreshToken = (uid: string) => {
   return jwt.sign(
     {
@@ -37,11 +26,6 @@ export const getRefreshToken = (uid: string) => {
   );
 };
 
-/**
- * Decodes a JWT token and returns the user ID.
- * @param token JWT token
- * @returns user ID associatex with provided token
- */
 export const getUidFromToken = (token: string) => {
   try {
     return (jwt.decode(token) as CustomJWTClaims).uid;
@@ -50,10 +34,6 @@ export const getUidFromToken = (token: string) => {
   }
 };
 
-/**
- * Validate if a refresh token is valid.
- * @param token JWT token
- */
 export const validateRefreshToken = (token: string) => {
   try {
     jwt.decode(token);
