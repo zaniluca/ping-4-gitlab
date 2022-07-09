@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev --no-notify --respawn src/index.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
     "prepare": "husky install"
@@ -26,7 +26,7 @@
     "typescript": "^4.7.3"
   },
   "engines": {
-    "node": "16.15.1"
+    "node": "16.15.1 || 16.13.0"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
