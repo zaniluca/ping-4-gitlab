@@ -32,6 +32,8 @@ app.use("/", webhook);
 app.use(handleUnauthorizedError);
 app.use(handleErrorWithStatus);
 
+app.get("/health", (_req, res) => res.sendStatus(200).end());
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
