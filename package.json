@@ -59,8 +59,9 @@
     "husky": "^8.0.1",
     "typescript": "~4.3.5"
   },
+  "packageManager": "pnpm",
   "engines": {
-    "node": "v14.19.1"
-  },
-  "packageManager": "pnpm"
+    "node": ">=v14.19.1",
+    "pnpm": ">=7.0.0"
+  }
 }
