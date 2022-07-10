@@ -17,11 +17,8 @@ import { SignupSchema } from "../utils/validation";
 import { BadRequestError, CredentialsError } from "../utils/errors";
 import { expressjwt, UnauthorizedError } from "express-jwt";
 import yup, { ValidationError } from "yup";
-import dotenv from "dotenv";
 
 const router = Router();
-
-dotenv.config();
 
 type LoginPayload = {
   email: string;

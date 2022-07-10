@@ -1,13 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import user from "./routes/user";
 import notification from "./routes/notification";
 import auth from "./routes/auth";
 import webhook from "./routes/webhook";
 import { handleErrorWithStatus, handleUnauthorizedError } from "./middlewares";
 import { expressjwt } from "express-jwt";
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT ?? 8080;
