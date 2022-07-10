@@ -1,4 +1,5 @@
 import * as Sentry from "sentry-expo";
+import Constants from "expo-constants";
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -8,4 +9,5 @@ Sentry.init({
   // Sessions close after app is 10 seconds in the background.
   sessionTrackingIntervalMillis: 10000,
   tracesSampleRate: 0.75,
+  release: Constants.manifest?.revisionId,
 });
