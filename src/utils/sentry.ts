@@ -7,4 +7,5 @@ Sentry.init({
   enableAutoSessionTracking: true,
   // Sessions close after app is 10 seconds in the background.
   sessionTrackingIntervalMillis: 10000,
+  tracesSampleRate: 0.75,
 });
