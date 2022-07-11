@@ -12,5 +12,5 @@ jobs:
       - name: Yarn install
         uses: ./.github/actions/yarn-install
 
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore
+      - name: Run Lint
+        run: yarn lint
