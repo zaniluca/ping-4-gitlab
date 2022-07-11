@@ -1,0 +1,16 @@
+name: Lint
+on: push
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Run ESLint
+        run: eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore
