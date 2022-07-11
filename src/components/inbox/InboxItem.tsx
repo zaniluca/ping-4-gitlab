@@ -1,11 +1,12 @@
-import { TouchableOpacity } from "react-native";
 import React from "react";
-import { Notification } from "../../utils/types";
-import InboxItemIcon from "./InboxItemIcon";
-import { Box, Text } from "../restyle";
+import { TouchableOpacity } from "react-native";
+
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
-import timeElapsed from "../../utils/time-elapsed";
 import { sanitizeSubject } from "../../utils/sanitize";
+import timeElapsed from "../../utils/time-elapsed";
+import { Notification } from "../../utils/types";
+import { Box, Text } from "../restyle";
+import InboxItemIcon from "./InboxItemIcon";
 
 type Props = {
   notification: Notification;

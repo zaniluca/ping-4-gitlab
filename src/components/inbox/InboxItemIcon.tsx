@@ -7,6 +7,7 @@ import {
   XCircle,
 } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
+
 import { useTheme } from "../../utils/theme";
 import { Headers } from "../../utils/types";
 

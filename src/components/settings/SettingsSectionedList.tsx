@@ -1,5 +1,6 @@
 import React from "react";
 import { ListRenderItem, SectionList, SectionListData } from "react-native";
+
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 

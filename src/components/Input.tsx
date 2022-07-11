@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, StyleSheet, TextInputProps, StyleProp } from "react-native";
+
 import lightTheme, { useTheme } from "../utils/theme";
 import { Text, Box } from "./restyle";
 

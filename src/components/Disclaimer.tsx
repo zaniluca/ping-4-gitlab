@@ -1,4 +1,5 @@
 import React from "react";
+
 import { openUrl } from "../utils/open-url";
 import { Text } from "./restyle";
 
