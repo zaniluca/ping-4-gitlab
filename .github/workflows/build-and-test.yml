@@ -23,6 +23,14 @@ on:
           - production
 jobs:
   build:
+    # strategy:
+    #   matrix:
+    #     include:
+    #       - platform: "ios"
+    #         os: "macos-latest"
+    #       - platform: "android"
+    #         os: "ubuntu-latest"
+
     runs-on: ${{ github.event.inputs.os }}
     steps:
       - name: Check for EXPO_TOKEN
