@@ -1,37 +1,37 @@
 name: Build and Test
 on:
   workflow_dispatch:
-    inputs:
-      os:
-        type: choice
-        description: OS to build on. Ubuntu is faster, MacOS supports iOS builds, Windows is unsupported
-        options:
-          - macos-latest
-          - ubuntu-latest
-      platform:
-        type: choice
-        description: Platform to build for
-        options:
-          - android
-          - ios
-      profile:
-        type: choice
-        description: Build profile to use
-        options:
-          - development
-          - preview
-          - production
+    # inputs:
+    #   os:
+    #     type: choice
+    #     description: OS to build on. Ubuntu is faster, MacOS supports iOS builds, Windows is unsupported
+    #     options:
+    #       - macos-latest
+    #       - ubuntu-latest
+    #   platform:
+    #     type: choice
+    #     description: Platform to build for
+    #     options:
+    #       - android
+    #       - ios
+    #   profile:
+    #     type: choice
+    #     description: Build profile to use
+    #     options:
+    #       - development
+    #       - preview
+    #       - production
 jobs:
   build:
-    # strategy:
-    #   matrix:
-    #     include:
-    #       - platform: "ios"
-    #         os: "macos-latest"
-    #       - platform: "android"
-    #         os: "ubuntu-latest"
+    strategy:
+      matrix:
+        include:
+          - platform: "ios"
+            os: "macos-latest"
+          - platform: "android"
+            os: "ubuntu-latest"
 
-    runs-on: ${{ github.event.inputs.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -43,8 +43,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Copy Google Services files from secrets
+      - name: Copy Google Services files from secrets root
         run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json && echo ${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} | base64 --decode > ./GoogleService-Info.plist
+
+      - name: Copy Google Services files from secrets folders
+        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./android/app/google-services.json && echo ${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} | base64 --decode > ./ios/GoogleService-Info.plist
 
       - name: Yarn install
         uses: ./.github/actions/yarn-install
@@ -67,8 +70,8 @@ jobs:
           eas build --local \
             --non-interactive \
             --output=./out \
-            --platform=${{ github.event.inputs.platform }} \
-            --profile=${{ github.event.inputs.profile }}
+            --platform=${{ matrix.platform }} \
+            --profile=production
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
@@ -78,5 +81,5 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ping-4-gitlab-${{ github.event.inputs.platform }}
+          name: ping-4-gitlab-${{ matrix.platform }}
           path: out
