@@ -16,5 +16,3 @@ WEBHOOK_SECRET=<your-secret-here>
 We're using [mongodb atlas](https://cloud.mongodb.com) as our database provider because `Prisma needs to perform transactions, which requires your MongoDB server to be run as a replica set`; which is doable in a local dev environment but it's quite a pain so this is the easiest way to get started
 
 Now simply run `yarn install` and `yarn start` to start the server
-
-This project is based out of my own repo [prisma-mongodb-anonymous-auth](https://github.com/zaniluca/prisma-mongodb-anonymous-auth)
