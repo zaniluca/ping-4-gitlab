@@ -1,11 +1,4 @@
 import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import {
   createUserWithEmailAndPassword,
   EmailAuthProvider,
   linkWithCredential,
@@ -14,11 +7,19 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../utils/firebase";
-import { User } from "../utils/types";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
+import { auth } from "../utils/firebase";
 import { useTheme } from "../utils/theme";
+import { User } from "../utils/types";
 
 type AuthContextValues = {
   user: User;

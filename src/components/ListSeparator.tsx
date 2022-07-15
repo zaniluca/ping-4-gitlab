@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Box } from "./restyle";
 
 export const Divider: React.FC = () => (

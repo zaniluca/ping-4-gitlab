@@ -1,8 +1,9 @@
-import React from "react";
-import { Box, Text } from "../restyle";
 import Constants from "expo-constants";
-import { openUrl } from "../../utils/open-url";
+import React from "react";
 import { Platform } from "react-native";
+
+import { openUrl } from "../../utils/open-url";
+import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
   return (

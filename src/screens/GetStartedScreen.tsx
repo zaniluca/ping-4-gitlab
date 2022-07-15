@@ -1,10 +1,11 @@
 import { useLayoutEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
-import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
+import { Box, Text } from "../components/restyle";
 import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
@@ -32,7 +33,6 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       if (hasCompletedOnboarding) {
         e.preventDefault();
       }
-      return;
     });
     return () => listener();
   }, [navigation, userData]);
