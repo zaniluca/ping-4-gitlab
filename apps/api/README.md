@@ -13,4 +13,4 @@ JWT_REFRESH_SECRET=<your-secret-here>
 WEBHOOK_SECRET=<your-secret-here>
 ```
 
-Now simply run `yarn install` and `yarn start` to start the server
+Now simply run `pnpm install` and `pnpm start` to start the server
