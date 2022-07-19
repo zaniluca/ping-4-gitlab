@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -8,31 +8,29 @@ generator client {
 }
 
 model User {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(cuid())
   email          String?        @unique
-  hookId         String?        @unique
+  hookId         String?        @unique @map("hook_id")
   password       String?
-  expoPushTokens String[]       @default([])
+  expoPushTokens String[]       @default([]) @map("expo_push_tokens")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  lastLogin      DateTime       @default(now()) @map("last_login")
   notifications  Notification[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  lastLogin      DateTime       @default(now())
 
   @@map("users")
 }
 
 model Notification {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   subject     String
   html        String
   text        String?
-  rawText     String?
   headers     Json
-  rawHeaders  String
   recived     DateTime @default(now())
   viewed      Boolean  @default(false)
-  contentHash String   @unique
-  userId      String   @db.ObjectId
+  contentHash String   @unique @map("content_hash")
+  userId      String   @map("user_id")
   user        User     @relation(fields: [userId], references: [id])
 
   @@map("notifications")
