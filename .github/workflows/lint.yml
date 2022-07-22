@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependecies
-        uses: ./.github/actions/pnpm-install.yml
+        uses: ./.github/actions/pnpm-install
 
       - name: Run Lint
         run: pnpm lint
