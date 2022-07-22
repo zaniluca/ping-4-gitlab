@@ -28,12 +28,13 @@ The app is build using Expo and React Native, the entire codebase is written in 
 
 ## Running Locally
 
+We use `nvm` to manage node versions. We suggest running `nvm use` to set the correct version of node from the `.nvmrc`. As for our package manager we chose [pnpm](https://pnpm.io/).
+
 ```
 git clone https://github.com/zaniluca/ping-4-gitlab.git
 cd ping-4-gitlab
-nvm use
-yarn
-yarn start
+pnpm install
+pnpm start
 ```
 
 ## What Now?
