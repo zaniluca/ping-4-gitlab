@@ -1,7 +1,7 @@
 import { Headers } from "./types";
 
 export const parseHeaders = (headers: string): Headers => {
-  let json: Record<string, string> = {};
+  const json: Record<string, string> = {};
   const sanitized = headers
     .trimEnd()
     .replace(/[']+/g, "")
@@ -9,7 +9,7 @@ export const parseHeaders = (headers: string): Headers => {
     .filter((_e, i) => i % 2 !== 0);
 
   sanitized.map((e) => {
-    let elements = e.split(": ");
+    const elements = e.split(": ");
     if (elements.length > 2) return;
     const key = elements[0].toLowerCase().trim();
     json[key] = elements[1];

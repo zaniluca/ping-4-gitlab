@@ -1,12 +1,13 @@
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackScreenProps } from "../../navigation/types";
+
+import { Box, Text } from "../../components/restyle";
 import SettingsSectionedList, {
   SettingsSettingsSections,
 } from "../../components/settings/SettingsSectionedList";
-import { Box, Text } from "../../components/restyle";
 import { useAuth } from "../../contexts/AuthContext";
+import { RootStackScreenProps } from "../../navigation/types";
 
 const DeleteAccount = () => {
   const { logout, deleteUser } = useAuth();

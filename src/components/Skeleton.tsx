@@ -1,8 +1,7 @@
-import { Animated } from "react-native";
-import React from "react";
-import { useRef } from "react";
-import { useEffect } from "react";
 import { BoxProps } from "@shopify/restyle";
+import React, { useRef, useEffect } from "react";
+import { Animated } from "react-native";
+
 import { Theme } from "../utils/theme";
 import { Box } from "./restyle";
 

@@ -1,20 +1,21 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { RootStackParamList } from "./types";
-import NotificationDetail from "../screens/NotificationDetail";
-import LoginScreen from "../screens/LoginScreen";
-import SettingsScreen from "../screens/settings/SettingsScreen";
-import SignupScreen from "../screens/SignupScreen";
-import InboxScreen from "../screens/InboxScreen";
-import { useTheme } from "../utils/theme";
-import GetStartedScreen from "../screens/GetStartedScreen";
-import LandingScreen from "../screens/LandingScreen";
-import { useNavigation } from "@react-navigation/native";
+
 import { useAuth } from "../contexts/AuthContext";
-import { sanitizeSubject } from "../utils/sanitize";
+import GetStartedScreen from "../screens/GetStartedScreen";
+import InboxScreen from "../screens/InboxScreen";
+import LandingScreen from "../screens/LandingScreen";
+import LoginScreen from "../screens/LoginScreen";
+import NotificationDetail from "../screens/NotificationDetail";
+import SignupScreen from "../screens/SignupScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
+import { sanitizeSubject } from "../utils/sanitize";
+import { useTheme } from "../utils/theme";
+import { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
