@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
-import { focusManager } from "react-query";
+import { focusManager } from "@tanstack/react-query";
 import { useFocusEffect } from "@react-navigation/native";
 
 function onAppStateChange(status: AppStateStatus) {

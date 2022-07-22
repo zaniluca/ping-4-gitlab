@@ -21,10 +21,10 @@ import Toaster from "./src/components/Toaster";
 import { LogBox } from "react-native";
 import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "./src/utils/query-client";
-import { useRefetchOnAppFocus } from "./src/hooks/useRefetch";
 import { useOnlineManager } from "./src/hooks/useOnlineManager";
+import { useAppState } from "./src/hooks/refetch-hooks";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
@@ -33,11 +33,8 @@ LogBox.ignoreLogs(["Setting a timer"]);
 export default function App() {
   const colorScheme = useColorScheme();
 
-  // https://react-query.tanstack.com/react-native#refetch-on-app-focus
-  useRefetchOnAppFocus();
-
-  // https://react-query.tanstack.com/react-native#online-status-management
   useOnlineManager();
+  useAppState();
 
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,

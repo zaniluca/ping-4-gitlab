@@ -1,5 +1,5 @@
 import axios from "axios";
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 const BACKEND_URL = __DEV__
   ? "http://localhost:8080"

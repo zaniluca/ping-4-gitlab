@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useRef } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
-import { focusManager } from "react-query";
+import { focusManager } from "@tanstack/react-query";
 import { useFocusEffect } from "@react-navigation/native";
 
-function onAppStateChange(status: AppStateStatus) {
+const onAppStateChange = (status: AppStateStatus) => {
   if (Platform.OS !== "web") {
     focusManager.setFocused(status === "active");
   }
-}
+};
 
-export const useRefetchOnAppFocus = () => {
+export const useAppState = () => {
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", onAppStateChange);
-
-    return () => subscription;
+    AppState.addEventListener("change", onAppStateChange);
+    return () => {
+      AppState.removeEventListener("change", onAppStateChange);
+    };
   }, []);
 };
 
