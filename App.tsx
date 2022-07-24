@@ -1,25 +1,26 @@
-import { NotificationsProvider } from "./src/contexts/NotificationsContext";
-import {
-  DefaultTheme as NavLightTheme,
-  NavigationContainer,
-} from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
   SourceSansPro_700Bold,
   SourceSansPro_400Regular,
   SourceSansPro_600SemiBold,
 } from "@expo-google-fonts/source-sans-pro";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
-import RootStackNavigator from "./src/navigation/RootStackNavigator";
+import {
+  DefaultTheme as NavLightTheme,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
-import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
+import AppLoading from "expo-app-loading";
+import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
+import { LogBox, useColorScheme } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+import Toaster from "./src/components/Toaster";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
-import Toaster from "./src/components/Toaster";
-import { LogBox } from "react-native";
-import { useColorScheme } from "react-native";
+import { NotificationsProvider } from "./src/contexts/NotificationsContext";
+import RootStackNavigator from "./src/navigation/RootStackNavigator";
+import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
+
 import "./src/utils/sentry";
 
 // Workaround to disable firebase console spamming

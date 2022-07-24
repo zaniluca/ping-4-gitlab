@@ -1,3 +1,4 @@
+import * as Notifications from "expo-notifications";
 import {
   createContext,
   ReactNode,
@@ -6,14 +7,14 @@ import {
   useState,
 } from "react";
 import Toast from "react-native-toast-message";
+
+import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 import {
   registerForPushNotificationsAsync,
   resetAppBadge,
 } from "../utils/notifications";
-import { useData } from "./DataContext";
-import * as Notifications from "expo-notifications";
 import { useAuth } from "./AuthContext";
-import { useRootStackNavigation } from "../navigation/RootStackNavigator";
+import { useData } from "./DataContext";
 
 type NotificationsContextValues = {
   pushToken?: string;

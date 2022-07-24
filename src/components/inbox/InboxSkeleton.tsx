@@ -1,8 +1,9 @@
 import React from "react";
-import Skeleton from "../Skeleton";
-import { useTheme } from "../../utils/theme";
-import { Box } from "../restyle";
 import { AtSign, Circle, GitPullRequest } from "react-native-feather";
+
+import { useTheme } from "../../utils/theme";
+import Skeleton from "../Skeleton";
+import { Box } from "../restyle";
 
 const InboxSkeleton = () => {
   const theme = useTheme();

@@ -1,9 +1,10 @@
-import { TouchableOpacity } from "react-native";
 import React from "react";
-import { useTheme } from "../utils/theme";
+import { TouchableOpacity } from "react-native";
 import { ArrowLeft } from "react-native-feather";
-import { Box, Text } from "./restyle";
+
 import { useRootStackNavigation } from "../navigation/RootStackNavigator";
+import { useTheme } from "../utils/theme";
+import { Box, Text } from "./restyle";
 
 const BackButton = () => {
   const navigation = useRootStackNavigation();

@@ -1,0 +1,16 @@
+name: Lint
+on: push
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependecies
+        uses: ./.github/actions/pnpm-install
+
+      - name: Run Lint
+        run: pnpm lint

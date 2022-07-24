@@ -1,10 +1,11 @@
+import React from "react";
 import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
-import React from "react";
+
 import { useTheme } from "../utils/theme";
 import { Text } from "./restyle";
 

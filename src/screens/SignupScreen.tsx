@@ -1,19 +1,20 @@
-import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import KeyboardAvoid from "../components/KeyboardAvoid";
-import BackButton from "../components/BackButton";
-import Input from "../components/Input";
-import Button from "../components/Button";
 import { Formik } from "formik";
-import { SignupSchema } from "../utils/validation";
-import { RootStackScreenProps } from "../navigation/types";
-import { Box, Text } from "../components/restyle";
+import React, { useState } from "react";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import BackButton from "../components/BackButton";
+import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
+import ErrorsList from "../components/ErrorsList";
+import Input from "../components/Input";
+import KeyboardAvoid from "../components/KeyboardAvoid";
+import { Box, Text } from "../components/restyle";
 import { useAuth } from "../contexts/AuthContext";
+import { RootStackScreenProps } from "../navigation/types";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
-import ErrorsList from "../components/ErrorsList";
+import { SignupSchema } from "../utils/validation";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -134,7 +135,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                   />
                   {/* Validation errors */}
                   <Box marginTop="s">
-                    {!!Object.entries(errors).length ? (
+                    {Object.entries(errors).length ? (
                       <ErrorsList errors={errors} />
                     ) : (
                       <Text variant="caption" color="secondary">

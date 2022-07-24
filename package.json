@@ -9,6 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
     "eas-build-pre-install": "echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > ./google-services.json && echo $GOOGLE_SERVICES_IOS_BASE64 | base64 --decode > ./GoogleService-Info.plist",
     "prepare": "husky install"
   },
@@ -51,12 +52,22 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.1.6",
     "@commitlint/cli": "^16.3.0",
     "@commitlint/config-conventional": "^16.2.4",
     "@types/node": "^17.0.24",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "eslint": "^8.19.0",
+    "eslint-config-universe": "^11.0.0",
     "husky": "^8.0.1",
+    "prettier": "^2.7.1",
     "typescript": "~4.3.5"
+  },
+  "engines": {
+    "node": ">=v14.19.1",
+    "pnpm": ">=7.0.0"
   }
 }

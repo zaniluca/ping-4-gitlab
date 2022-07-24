@@ -1,5 +1,6 @@
-import { TouchableOpacity } from "react-native";
 import React from "react";
+import { TouchableOpacity } from "react-native";
+
 import { Box } from "./restyle";
 
 type Props = {
