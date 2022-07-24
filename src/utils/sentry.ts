@@ -1,5 +1,5 @@
-import * as Sentry from "sentry-expo";
 import Constants from "expo-constants";
+import * as Sentry from "sentry-expo";
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
