@@ -12,7 +12,7 @@ model User {
   email          String?        @unique
   hookId         String?        @unique @map("hook_id")
   password       String?
-  expoPushTokens String[]       @default([]) @map("expo_push_tokens")
+  expoPushTokens String[]       @map("expo_push_tokens")
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   lastLogin      DateTime       @default(now()) @map("last_login")

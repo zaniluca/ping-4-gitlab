@@ -1,0 +1,31 @@
+name: Build and Test
+
+on:
+  pull_request:
+    # types: [ready_for_review]
+  push:
+    branches:
+      - master
+      - production
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
+        with:
+          node-version: 16.15.1
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test

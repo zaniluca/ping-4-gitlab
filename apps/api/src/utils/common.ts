@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import type { CustomJWTClaims, Headers } from "./types";
-import { prisma } from "../../prisma/client";
+import prisma from "../../prisma/client";
 
 export const getAccessToken = (uid: string) => {
   return jwt.sign(

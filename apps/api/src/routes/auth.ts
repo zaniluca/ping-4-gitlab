@@ -1,5 +1,5 @@
 import { Router, Request } from "express";
-import { prisma } from "../../prisma/client";
+import prisma from "../../prisma/client";
 import bcrypt from "bcrypt";
 import type {
   AuthRequestWithPayload,
@@ -25,30 +25,33 @@ type LoginPayload = {
   password: string;
 };
 
-router.post("/login", async (req: RequestWithPayload<LoginPayload>, res) => {
-  const { email, password } = req.body;
+router.post(
+  "/login",
+  async (req: RequestWithPayload<LoginPayload>, res, next) => {
+    const { email, password } = req.body;
 
-  if (!password || !email) {
-    throw new CredentialsError("Missing required fields");
+    if (!password || !email) {
+      return next(new BadRequestError("Missing required fields"));
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user || !bcrypt.compareSync(password, user.password!)) {
+      return next(new CredentialsError("Invalid credentials"));
+    }
+
+    await updateLastLogin(user.id);
+
+    return res.status(200).json({
+      accessToken: getAccessToken(user.id),
+      refreshToken: getRefreshToken(user.id),
+    });
   }
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  if (!user || !bcrypt.compareSync(password, user.password!)) {
-    throw new CredentialsError("Invalid credentials");
-  }
-
-  await updateLastLogin(user.id);
-
-  return res.status(200).json({
-    accessToken: getAccessToken(user.id),
-    refreshToken: getRefreshToken(user.id),
-  });
-});
+);
 
 type SignupPayload = yup.InferType<typeof SignupSchema>;
 
@@ -59,7 +62,7 @@ router.post(
     algorithms: ["HS256"],
     credentialsRequired: false,
   }),
-  async (req: AuthRequestWithPayload<SignupPayload>, res) => {
+  async (req: AuthRequestWithPayload<SignupPayload>, res, next) => {
     try {
       SignupSchema.validateSync(req.body);
     } catch (error) {
@@ -70,7 +73,7 @@ router.post(
       }
     }
 
-    const { password, email } = req.body;
+    const { password, email } = req.body as SignupPayload;
     const isAnonymous = !!req.auth?.uid;
 
     const alreadyExists = await prisma.user.count({
@@ -80,20 +83,21 @@ router.post(
     });
 
     if (alreadyExists) {
-      throw new CredentialsError("User already exists");
+      return next(new CredentialsError("User already exists"));
     }
 
     let user: Pick<User, "id">;
 
     if (isAnonymous) {
       console.log("Upgrading anonymous user to permanent user");
+
       user = await prisma.user.update({
         where: {
           id: req.auth?.uid,
         },
         data: {
           email,
-          password: password ? bcrypt.hashSync(password, 10) : undefined,
+          password: bcrypt.hashSync(password, 10),
         },
         select: {
           id: true,
@@ -103,7 +107,7 @@ router.post(
       user = await prisma.user.create({
         data: {
           email,
-          password: password ? bcrypt.hashSync(password, 10) : undefined,
+          password: bcrypt.hashSync(password, 10),
         },
         select: {
           id: true,
@@ -138,17 +142,19 @@ type RefreshPayload = {
 
 router.post(
   "/refresh",
-  async (req: RequestWithPayload<RefreshPayload>, res) => {
+  async (req: RequestWithPayload<RefreshPayload>, res, next) => {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
-      throw new BadRequestError("Missing required fields");
+      return next(new BadRequestError("Missing required fields"));
     }
 
     if (!validateRefreshToken(refreshToken)) {
-      throw new UnauthorizedError("invalid_token", {
-        message: "Invalid refresh token",
-      });
+      return next(
+        new UnauthorizedError("invalid_token", {
+          message: "Invalid refresh token",
+        })
+      );
     }
 
     const uid = getUidFromToken(refreshToken);

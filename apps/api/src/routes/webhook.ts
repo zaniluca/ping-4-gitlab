@@ -1,7 +1,7 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import type { Headers, PipelineStatus, WebhookPayload } from "../utils/types";
 import hash from "object-hash";
-import { prisma } from "../../prisma/client";
+import prisma from "../../prisma/client";
 import type { Notification, User } from "@prisma/client";
 import multer from "multer";
 import { Expo, ExpoPushMessage } from "expo-server-sdk";
@@ -12,6 +12,11 @@ const router = Router();
 
 // optionally providing an access token if you have enabled push security
 const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
+
+const removeFooterFromHtml = (html: string) => {
+  const FOOTER_REGEX = /<div\b[^>]*class="footer"[^>]*>([\s\S]*?)<\/div>/;
+  return html.replace(FOOTER_REGEX, "");
+};
 
 const isValidToken = (t: string) => {
   if (Expo.isExpoPushToken(t)) return t;
@@ -76,11 +81,11 @@ const sanitizeText = (text: string) => {
   return text.trimStart().split("--")[0];
 };
 
-router.post("/webhook", multer().none(), async (req: Request, res) => {
+router.post("/webhook", multer().none(), async (req, res, next) => {
   const { token } = req.query;
 
   if (!token || token !== process.env.WEBHOOK_SECRET) {
-    throw new ErrorWithStatus(403, "Unauthorized");
+    return next(new ErrorWithStatus(403, "Unauthorized"));
   }
 
   const body = req.body as WebhookPayload;
@@ -92,7 +97,13 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
     return;
   }
 
-  const { to, subject, text: rawText, html, headers: rawHeaders } = body!;
+  const {
+    to,
+    subject,
+    text: rawText,
+    html: rawHtml,
+    headers: rawHeaders,
+  } = body!;
 
   // Parsing headers string into object
   const headers = parseHeaders(rawHeaders);
@@ -102,6 +113,9 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
   // But also keeping original
   const text = sanitizeText(rawText);
   console.log("Sanitized text: ", text);
+
+  // Removing unwanted parts from html
+  const html = removeFooterFromHtml(rawHtml);
 
   const hashPayload = {
     subject,
@@ -121,8 +135,9 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
     });
   } catch (error) {
     console.warn(`User with hook ${hookId} doesn't exist`);
-    res.status(404).end();
-    return;
+    return next(
+      new ErrorWithStatus(400, `User with hook ${hookId} doesn't exist`)
+    );
   }
 
   let notification: Notification;
@@ -138,7 +153,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to create notification", error);
     res.status(400).end();
     return;
   }
@@ -147,7 +162,7 @@ router.post("/webhook", multer().none(), async (req: Request, res) => {
 
   if (pushTokens.length === 0) {
     console.warn("User doesn't have any valid token");
-    throw new ErrorWithStatus(400, "User doesn't have any valid token");
+    return next(new ErrorWithStatus(400, "User doesn't have any valid token"));
   }
 
   const notificationPayload: ExpoPushMessage = {

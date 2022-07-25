@@ -47,6 +47,10 @@ app.use(Sentry.Handlers.errorHandler());
 app.use(logError);
 app.use(handleError);
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+}
+
+export default app;
