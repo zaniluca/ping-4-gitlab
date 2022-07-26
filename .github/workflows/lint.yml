@@ -9,8 +9,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install dependecies
-        uses: ./.github/actions/pnpm-install
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Run Lint
-        run: pnpm lint
+        run: yarn lint
