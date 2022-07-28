@@ -9,6 +9,7 @@
     "dev": "ts-node-dev --no-notify --respawn src/index.ts",
     "build": "prisma generate && tsc",
     "start": "node dist/src/index.js",
+    "studio": "prisma studio --port 5556",
     "test": "jest -i",
     "test:watch": "jest -i --watch",
     "prepare": "husky install",
