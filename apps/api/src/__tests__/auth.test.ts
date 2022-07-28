@@ -14,6 +14,7 @@ const MOCK_USER: User = {
   expoPushTokens: [],
   hookId: "test",
   lastLogin: new Date(Date.now() - 1000),
+  onboardingCompleted: false,
 };
 
 const INVALID_REFRESH_TOKEN =
@@ -185,8 +186,10 @@ describe("POST /anonymous", () => {
         expect(res.body.refreshToken).toBeDefined();
       });
 
-    expect(prismaMock.user.create).toHaveBeenCalledWith({
-      data: {},
+    expect(prismaMock.user.create).toHaveBeenLastCalledWith({
+      data: {
+        hookId: "test",
+      },
       select: {
         id: true,
       },

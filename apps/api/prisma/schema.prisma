@@ -8,15 +8,16 @@ generator client {
 }
 
 model User {
-  id             String         @id @default(cuid())
-  email          String?        @unique
-  hookId         String?        @unique @map("hook_id")
-  password       String?
-  expoPushTokens String[]       @map("expo_push_tokens")
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @updatedAt @map("updated_at")
-  lastLogin      DateTime       @default(now()) @map("last_login")
-  notifications  Notification[]
+  id                  String         @id @default(cuid())
+  email               String?        @unique
+  hookId              String?        @unique @map("hook_id")
+  password            String?
+  expoPushTokens      String[]       @map("expo_push_tokens")
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @updatedAt @map("updated_at")
+  lastLogin           DateTime       @default(now()) @map("last_login")
+  onboardingCompleted Boolean        @default(false)
+  notifications       Notification[]
 
   @@map("users")
 }

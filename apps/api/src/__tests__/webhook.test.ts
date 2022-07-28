@@ -126,4 +126,5 @@ const MOCK_USER: User = {
   expoPushTokens: [],
   hookId: "test",
   lastLogin: new Date(Date.now() - 1000),
+  onboardingCompleted: false,
 };

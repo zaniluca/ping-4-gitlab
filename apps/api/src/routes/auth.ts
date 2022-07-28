@@ -17,6 +17,7 @@ import { SignupSchema } from "../utils/validation";
 import { BadRequestError, CredentialsError } from "../utils/errors";
 import { expressjwt, UnauthorizedError } from "express-jwt";
 import yup, { ValidationError } from "yup";
+import generateUniqueHook from "../utils/hook-generator";
 
 const router = Router();
 
@@ -108,6 +109,7 @@ router.post(
         data: {
           email,
           password: bcrypt.hashSync(password, 10),
+          hookId: generateUniqueHook(),
         },
         select: {
           id: true,
@@ -124,7 +126,9 @@ router.post(
 
 router.post("/anonymous", async (_req: Request, res) => {
   const user = await prisma.user.create({
-    data: {},
+    data: {
+      hookId: generateUniqueHook(),
+    },
     select: {
       id: true,
     },

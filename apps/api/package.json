@@ -50,6 +50,7 @@
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.5-lts.1",
     "object-hash": "^3.0.0",
+    "unique-names-generator": "^4.7.1",
     "yup": "^0.32.11"
   }
 }
