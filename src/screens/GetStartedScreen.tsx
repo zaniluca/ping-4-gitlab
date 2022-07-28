@@ -5,17 +5,18 @@ import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
-import { useAuth } from "../contexts/AuthContext";
-import { useData } from "../contexts/DataContext";
+import { useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
-  const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser, user } = useAuth();
+  // const { deleteUser, user } = useAuth();
+  const { data: user } = useUser({
+    refetchInterval: 5000,
+  });
 
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
@@ -23,7 +24,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       if (navigation.canGoBack()) navigation.goBack();
       else navigation.navigate("Inbox");
     }
-  }, [navigation, userData]);
+  }, [navigation, user]);
 
   // Disabling android hardware back buttons
   useLayoutEffect(() => {
@@ -35,17 +36,17 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       return;
     });
     return () => listener();
-  }, [navigation, userData]);
+  }, [navigation, user]);
 
   const handleGoBackToLanding = async () => {
-    if (user?.isAnonymous) {
-      // Only deleting anonymous users
-      await deleteUser();
-    }
+    // if (user?.isAnonymous) {
+    //   // Only deleting anonymous users
+    //   await deleteUser();
+    // }
     navigation.navigate("Landing");
   };
 
-  const hasCompletedOnboarding = !userData?.onboarding;
+  const hasCompletedOnboarding = user?.onboardingCompleted;
 
   return (
     <SafeAreaView
@@ -89,10 +90,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard
-            marginTop="m"
-            content={`${userData?.hook_id}@pfg.app`}
-          />
+          <CopyToCliboard marginTop="m" content={`${user?.hookId}@pfg.app`} />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>

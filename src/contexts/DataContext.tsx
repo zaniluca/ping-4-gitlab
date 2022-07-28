@@ -17,7 +17,6 @@ import {
   useState,
 } from "react";
 import { firestore } from "../utils/firebase";
-import generateUniqueHook from "../utils/hook-generator";
 import { Notification, UserData } from "../utils/types";
 import { useAuth } from "./AuthContext";
 
@@ -58,7 +57,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
 
     try {
       await setDoc(doc(firestore, `users/${user.uid}`), {
-        hook_id: generateUniqueHook(),
+        // hook_id: generateUniqueHook(),
         onboarding: true,
       });
     } catch (error) {

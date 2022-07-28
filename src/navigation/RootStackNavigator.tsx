@@ -12,15 +12,15 @@ import { useTheme } from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../contexts/AuthContext";
 import { sanitizeSubject } from "../utils/sanitize";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
+import { useUser } from "../hooks/user-hooks";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { user } = useAuth();
+  const { data: user } = useUser();
 
   return (
     <Stack.Navigator

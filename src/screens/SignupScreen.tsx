@@ -1,5 +1,5 @@
 import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import BackButton from "../components/BackButton";
@@ -10,10 +10,12 @@ import { SignupSchema } from "../utils/validation";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import Disclaimer from "../components/Disclaimer";
-import { useAuth } from "../contexts/AuthContext";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
+import { http } from "../utils/http";
+import { useMutation } from "@tanstack/react-query";
+import { APIError } from "../utils/types";
+import { useUser } from "../hooks/user-hooks";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -23,30 +25,29 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
+const signup = (payload: typeof INITIAL_VALUES) =>
+  http.post("signup", payload).then((res) => res.data);
+
 const PASSWORD_RULES_IOS =
   "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
-  const { signup, user } = useAuth();
+  const { data: user } = useUser();
   const { colors } = useTheme();
 
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
+  const { mutate, reset, error, isLoading } = useMutation(signup, {
+    onSuccess: () => {
+      // If the user wasn't anonymous before this process the navigation is automatically
+      if (user) navigation.navigate("Inbox");
+    },
+    onError: (err: APIError) => {
+      console.log("Error during /signup: ", err.message);
+    },
+  });
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
-
-    try {
-      await signup(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
+  const onSubmit = (values: typeof INITIAL_VALUES) => {
+    reset();
+    mutate(values);
   };
 
   return (
@@ -70,7 +71,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
           <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
+              onSubmit={onSubmit}
               validationSchema={SignupSchema}
               validateOnChange={false}
               validateOnBlur={false}
@@ -81,7 +82,6 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                 handleSubmit: submit,
                 values,
                 errors,
-                isSubmitting,
               }) => (
                 <>
                   <Input
@@ -144,16 +144,21 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                       </Text>
                     )}
                   </Box>
-                  {/* Firebase Error */}
-                  {firebaseError && (
+                  {/* API Error */}
+                  {error && (
                     <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
+                      <ErrorsList
+                        errors={{
+                          error:
+                            error.response?.data.message ?? "Unknown Error",
+                        }}
+                      />
                     </Box>
                   )}
                   {/* Signup CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isSubmitting ? (
+                      {isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Create an account"

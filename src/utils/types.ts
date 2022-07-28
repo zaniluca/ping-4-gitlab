@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { User as FirebaseUser } from "firebase/auth";
 import { Timestamp } from "firebase/firestore";
 
@@ -51,3 +52,12 @@ type PipelineHeaders = {
 };
 
 export type PipelineStatus = "success" | "failed";
+
+export type APIUser = {
+  onboardingCompleted: boolean;
+  hookId: string;
+};
+
+export type APIError = AxiosError<{
+  message: string;
+}>;

@@ -9,11 +9,12 @@ import { Formik } from "formik";
 import { RootStackScreenProps } from "../navigation/types";
 import { Box, Text } from "../components/restyle";
 import { LoginSchema } from "../utils/validation";
-import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
+import { useMutation } from "@tanstack/react-query";
+import { http } from "../utils/http";
+import { APIError } from "../utils/types";
+import { useUser } from "../hooks/user-hooks";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -22,26 +23,26 @@ const INITIAL_VALUES = {
   password: "",
 };
 
+const login = (payload: typeof INITIAL_VALUES) =>
+  http.post("login", payload).then((res) => res.data);
+
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { login, user } = useAuth();
+  const { data: user } = useUser();
   const { colors } = useTheme();
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
+  const { mutate, reset, error, isLoading } = useMutation(login, {
+    onSuccess: () => {
+      // If the user wasn't anonymous before this process the navigation is automatically
+      if (user) navigation.navigate("Inbox");
+    },
+    onError: (err: APIError) => {
+      console.log("Error during /login: ", err.response?.data.message);
+    },
+  });
 
-    try {
-      await login(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
+  const onSubmit = (values: typeof INITIAL_VALUES) => {
+    reset();
+    mutate(values);
   };
 
   return (
@@ -65,7 +66,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
+              onSubmit={onSubmit}
               validateOnChange={false}
               validateOnBlur={false}
               validationSchema={LoginSchema}
@@ -75,7 +76,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 handleBlur,
                 handleSubmit: submit,
                 values,
-                isSubmitting,
                 errors,
               }) => (
                 <>
@@ -116,16 +116,21 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                       <ErrorsList errors={errors} />
                     </Box>
                   )}
-                  {/* Firebase Error */}
-                  {firebaseError && (
+                  {/* API Error */}
+                  {error && (
                     <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
+                      <ErrorsList
+                        errors={{
+                          error:
+                            error.response?.data.message ?? "Unknown error",
+                        }}
+                      />
                     </Box>
                   )}
                   {/* Login CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isSubmitting ? (
+                      {isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Login"

@@ -9,12 +9,14 @@ import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 import InboxSkeleton from "../components/inbox/InboxSkeleton";
+import { useUser } from "../hooks/user-hooks";
 
 type Props = RootStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const { userData, hasLoadedFirstSnapshot } = useData();
+  const { hasLoadedFirstSnapshot } = useData();
+  const { data: user } = useUser();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -27,11 +29,11 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    if (!userData) return;
-    if (userData.onboarding) {
+    if (!user) return;
+    if (!user.onboardingCompleted) {
       navigation.navigate("GetStarted");
     }
-  }, [userData]);
+  }, [user]);
 
   return (
     <SafeAreaView
