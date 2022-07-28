@@ -16,7 +16,7 @@ model User {
   createdAt           DateTime       @default(now()) @map("created_at")
   updatedAt           DateTime       @updatedAt @map("updated_at")
   lastLogin           DateTime       @default(now()) @map("last_login")
-  onboardingCompleted Boolean        @default(false)
+  onboardingCompleted Boolean        @default(false) @map("onboarding_completed")
   notifications       Notification[]
 
   @@map("users")

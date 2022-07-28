@@ -6,6 +6,7 @@ export const USER_PUBLIC_FIELDS: Partial<Record<keyof User, boolean>> = {
   email: true,
   hookId: true,
   expoPushTokens: true,
+  onboardingCompleted: true,
 };
 
 export const NOTIFICATION_ESSENTIALS_FIELDS: Partial<
