@@ -23,7 +23,7 @@ import { useColorScheme } from "react-native";
 import "./src/utils/sentry";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "./src/utils/query-client";
-import { useOnlineManager } from "./src/hooks/useOnlineManager";
+import { useOnlineManager } from "./src/hooks/use-online-manager";
 import { useAppState } from "./src/hooks/refetch-hooks";
 
 // Workaround to disable firebase console spamming

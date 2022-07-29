@@ -16,7 +16,7 @@ type Props = RootStackScreenProps<"Inbox">;
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
   const { hasLoadedFirstSnapshot } = useData();
-  const { data: user } = useUser();
+  const user = useUser();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -29,11 +29,11 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    if (!user) return;
-    if (!user.onboardingCompleted) {
+    if (!user.data) return;
+    if (!user.data.onboardingCompleted) {
       navigation.navigate("GetStarted");
     }
-  }, [user]);
+  }, [user.data]);
 
   return (
     <SafeAreaView

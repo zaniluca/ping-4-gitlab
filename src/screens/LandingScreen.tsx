@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
+import { useSecureStore } from "../hooks/use-secure-store";
 import { RootStackScreenProps } from "../navigation/types";
 import { http } from "../utils/http";
 import { useTheme } from "../utils/theme";
@@ -16,21 +17,23 @@ type SignupResponse = {
   refreshToken: string;
 };
 
-const signInAnonymously = () => http.post("anonymous").then((res) => res.data);
+const performAnonymousSignIn = () =>
+  http.post("anonymous").then((res) => res.data);
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
+  const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation<SignupResponse>(signInAnonymously, {
-    onSuccess: () => {
-      queryClient.refetchQueries(["user"]);
-    },
-  });
-
-  const handleAnonymousSignIn = async () => {
-    const data = await mutateAsync();
-    console.log("data: ", data);
-  };
+  const signInAnonymously = useMutation<SignupResponse>(
+    performAnonymousSignIn,
+    {
+      onSuccess: async (data) => {
+        await setValueForKey("accessToken", data.accessToken);
+        await setValueForKey("refreshToken", data.refreshToken);
+        await queryClient.refetchQueries(["user"]);
+      },
+    }
+  );
 
   return (
     <SafeAreaView
@@ -41,7 +44,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
       }}
     >
       <Box paddingHorizontal="m" marginBottom="xxl">
-        <Button title="Let's get started!" onPress={handleAnonymousSignIn} />
+        <Button title="Let's get started!" onPress={signInAnonymously.mutate} />
         <Disclaimer />
         <Box
           justifyContent="center"

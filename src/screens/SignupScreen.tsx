@@ -14,8 +14,9 @@ import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
 import { http } from "../utils/http";
 import { useMutation } from "@tanstack/react-query";
-import { APIError } from "../utils/types";
+import { APIError, APIAuthResponse } from "../utils/types";
 import { useUser } from "../hooks/user-hooks";
+import { useSecureStore } from "../hooks/use-secure-store";
 
 type Props = RootStackScreenProps<"Signup">;
 
@@ -25,20 +26,23 @@ const INITIAL_VALUES = {
   confirmPassword: "",
 };
 
-const signup = (payload: typeof INITIAL_VALUES) =>
-  http.post("signup", payload).then((res) => res.data);
+const performSignup = (payload: typeof INITIAL_VALUES) =>
+  http.post("signup", payload).then((res) => res.data as APIAuthResponse);
 
 const PASSWORD_RULES_IOS =
   "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
-  const { data: user } = useUser();
+  const user = useUser();
+  const { setValueForKey } = useSecureStore();
   const { colors } = useTheme();
 
-  const { mutate, reset, error, isLoading } = useMutation(signup, {
-    onSuccess: () => {
+  const signup = useMutation(performSignup, {
+    onSuccess: async (data) => {
+      await setValueForKey("accessToken", data.accessToken);
+      await setValueForKey("refreshToken", data.refreshToken);
       // If the user wasn't anonymous before this process the navigation is automatically
-      if (user) navigation.navigate("Inbox");
+      if (user.data) navigation.navigate("Inbox");
     },
     onError: (err: APIError) => {
       console.log("Error during /signup: ", err.message);
@@ -46,8 +50,8 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   const onSubmit = (values: typeof INITIAL_VALUES) => {
-    reset();
-    mutate(values);
+    signup.reset();
+    signup.mutate(values);
   };
 
   return (
@@ -145,12 +149,13 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     )}
                   </Box>
                   {/* API Error */}
-                  {error && (
+                  {signup.error && (
                     <Box marginTop="s">
                       <ErrorsList
                         errors={{
                           error:
-                            error.response?.data.message ?? "Unknown Error",
+                            signup.error.response?.data.message ??
+                            "Unknown Error",
                         }}
                       />
                     </Box>
@@ -158,7 +163,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Signup CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isLoading ? (
+                      {signup.isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Create an account"

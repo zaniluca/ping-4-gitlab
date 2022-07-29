@@ -18,6 +18,8 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     refetchInterval: 5000,
   });
 
+  const hasCompletedOnboarding = user?.onboardingCompleted;
+
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
@@ -45,8 +47,6 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     // }
     navigation.navigate("Landing");
   };
-
-  const hasCompletedOnboarding = user?.onboardingCompleted;
 
   return (
     <SafeAreaView

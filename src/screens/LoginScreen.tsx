@@ -13,8 +13,9 @@ import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
 import { useMutation } from "@tanstack/react-query";
 import { http } from "../utils/http";
-import { APIError } from "../utils/types";
+import { APIError, APIAuthResponse } from "../utils/types";
 import { useUser } from "../hooks/user-hooks";
+import { useSecureStore } from "../hooks/use-secure-store";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -23,17 +24,20 @@ const INITIAL_VALUES = {
   password: "",
 };
 
-const login = (payload: typeof INITIAL_VALUES) =>
-  http.post("login", payload).then((res) => res.data);
+const performLogin = (payload: typeof INITIAL_VALUES) =>
+  http.post("login", payload).then((res) => res.data as APIAuthResponse);
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { data: user } = useUser();
+  const user = useUser();
+  const { setValueForKey } = useSecureStore();
   const { colors } = useTheme();
 
-  const { mutate, reset, error, isLoading } = useMutation(login, {
-    onSuccess: () => {
+  const login = useMutation(performLogin, {
+    onSuccess: async (data) => {
+      await setValueForKey("accessToken", data.accessToken);
+      await setValueForKey("refreshToken", data.refreshToken);
       // If the user wasn't anonymous before this process the navigation is automatically
-      if (user) navigation.navigate("Inbox");
+      if (user.data) navigation.navigate("Inbox");
     },
     onError: (err: APIError) => {
       console.log("Error during /login: ", err.response?.data.message);
@@ -41,8 +45,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   const onSubmit = (values: typeof INITIAL_VALUES) => {
-    reset();
-    mutate(values);
+    login.reset();
+    login.mutate(values);
   };
 
   return (
@@ -117,12 +121,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     </Box>
                   )}
                   {/* API Error */}
-                  {error && (
+                  {login.error && (
                     <Box marginTop="s">
                       <ErrorsList
                         errors={{
                           error:
-                            error.response?.data.message ?? "Unknown error",
+                            login.error.response?.data.message ??
+                            "Unknown error",
                         }}
                       />
                     </Box>
@@ -130,7 +135,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                   {/* Login CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isLoading ? (
+                      {login.isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Login"

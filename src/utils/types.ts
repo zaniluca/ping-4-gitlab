@@ -61,3 +61,8 @@ export type APIUser = {
 export type APIError = AxiosError<{
   message: string;
 }>;
+
+export type APIAuthResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
