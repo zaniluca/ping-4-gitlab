@@ -1,20 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./types";
 import NotificationDetail from "../screens/NotificationDetail";
-import LoginScreen from "../screens/LoginScreen";
-import SettingsScreen from "../screens/settings/SettingsScreen";
 import SignupScreen from "../screens/SignupScreen";
+import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 import InboxScreen from "../screens/InboxScreen";
 import { useTheme } from "../utils/theme";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import LandingScreen from "../screens/LandingScreen";
-import { useNavigation } from "@react-navigation/native";
 import { sanitizeSubject } from "../utils/sanitize";
-import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 import { useUser } from "../hooks/user-hooks";
+import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

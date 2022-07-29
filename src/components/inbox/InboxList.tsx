@@ -1,12 +1,13 @@
-import { FlatList, ListRenderItem } from "react-native";
-import InboxItem from "./InboxItem";
-import { Divider } from "../ListSeparator";
-import { Notification } from "../../utils/types";
-import { useData } from "../../contexts/DataContext";
 import { useCallback } from "react";
-import { Box, Text } from "../restyle";
+import { FlatList, ListRenderItem } from "react-native";
 import { RefreshCw } from "react-native-feather";
+
+import { useData } from "../../contexts/DataContext";
 import { useTheme } from "../../utils/theme";
+import { Notification } from "../../utils/types";
+import { Divider } from "../ListSeparator";
+import { Box, Text } from "../restyle";
+import InboxItem from "./InboxItem";
 
 const renderListRow: ListRenderItem<Notification> = ({ item }) => (
   <InboxItem notification={item} />

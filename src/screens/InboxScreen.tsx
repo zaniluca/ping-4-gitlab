@@ -1,14 +1,14 @@
-import React, { useLayoutEffect } from "react";
-import { useEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { ScrollView } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
+import InboxSkeleton from "../components/inbox/InboxSkeleton";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
-import InboxSkeleton from "../components/inbox/InboxSkeleton";
 import { useUser } from "../hooks/user-hooks";
 
 type Props = RootStackScreenProps<"Inbox">;

@@ -16,6 +16,7 @@ import {
   useEffect,
   useState,
 } from "react";
+
 import { firestore } from "../utils/firebase";
 import { Notification, UserData } from "../utils/types";
 import { useAuth } from "./AuthContext";
@@ -138,7 +139,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
         updateUserData({ onboarding: false });
       }
 
-      let docs: Notification[] = [];
+      const docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
         const noti = doc.data() as Notification;
         // Setting document id as notification id

@@ -3,7 +3,7 @@
     "name": "Ping",
     "owner": "zaniluca",
     "slug": "ping4gitlab",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
@@ -23,7 +23,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "18",
+      "buildNumber": "20",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -35,7 +35,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 15
+      "versionCode": 16
     },
     "plugins": [
       "sentry-expo",

@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
@@ -35,7 +36,6 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       if (user.hasCompletedOnboarding) {
         e.preventDefault();
       }
-      return;
     });
     return () => listener();
   }, [navigation, user]);

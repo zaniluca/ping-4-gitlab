@@ -1,14 +1,15 @@
 import { BackgroundColorProps } from "@shopify/restyle";
+import { Dimensions, TouchableOpacity } from "react-native";
+import { CheckCircle, Info, CloudLightning } from "react-native-feather";
+import { SvgProps } from "react-native-svg";
 import Toast, {
   BaseToastProps,
   ToastConfig,
   ToastConfigParams,
 } from "react-native-toast-message";
+
 import { Theme } from "../utils/theme";
 import { Box, Text } from "./restyle";
-import { CheckCircle, Info, CloudLightning } from "react-native-feather";
-import { SvgProps } from "react-native-svg";
-import { Dimensions, TouchableOpacity } from "react-native";
 
 type CustomToastParams = {
   Icon?: (props: SvgProps) => JSX.Element;

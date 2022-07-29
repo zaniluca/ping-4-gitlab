@@ -1,12 +1,13 @@
-import React from "react";
-import { Box, Text } from "./restyle";
+import { SpacingProps } from "@shopify/restyle";
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
+import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Copy } from "react-native-feather";
-import { Theme, useTheme } from "../utils/theme";
-import { SpacingProps } from "@shopify/restyle";
 import Toast from "react-native-toast-message";
+
+import { Theme, useTheme } from "../utils/theme";
+import { Box, Text } from "./restyle";
 
 type Props = SpacingProps<Theme> & {
   content: string;

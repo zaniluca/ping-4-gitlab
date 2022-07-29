@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ListRenderItem,
   Platform,
@@ -6,16 +7,16 @@ import {
   Switch,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
 import { BellOff, ChevronRight, LogOut, User } from "react-native-feather";
-import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
-import SettingsListFooter from "./SettingsListFooter";
-import { Box, Text } from "../restyle";
-import { useData } from "../../contexts/DataContext";
 import Toast from "react-native-toast-message";
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+
+import { useData } from "../../contexts/DataContext";
 import { useNotifications } from "../../contexts/NotificationsContext";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useTheme } from "../../utils/theme";
+import { Box, Text } from "../restyle";
+import SettingsListFooter from "./SettingsListFooter";
 import { useLogout } from "../../hooks/auth-hooks";
 import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 

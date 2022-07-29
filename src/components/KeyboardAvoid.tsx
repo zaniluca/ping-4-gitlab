@@ -1,5 +1,5 @@
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import React from "react";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 const KeyboardAvoid: React.FC = ({ children }) => {
   return (

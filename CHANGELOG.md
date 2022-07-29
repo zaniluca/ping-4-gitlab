@@ -6,11 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
-## [1.2.0] - 2022-07-04
+## [1.2.0] - 2022-07-06
 
 ### Added
 
 - Pause notifications from app settings
+- App code is now open source!
 
 ## [1.1.1] - 2022-06-15
 

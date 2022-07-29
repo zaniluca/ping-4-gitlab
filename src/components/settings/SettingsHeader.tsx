@@ -1,10 +1,11 @@
-import { TouchableOpacity } from "react-native";
 import React from "react";
-import { useTheme } from "../../utils/theme";
+import { TouchableOpacity } from "react-native";
 import { ArrowRight } from "react-native-feather";
-import { Box, Text } from "../restyle";
+
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useUser } from "../../hooks/user-hooks";
+import { useTheme } from "../../utils/theme";
+import { Box, Text } from "../restyle";
 
 export const SettingsHeader = () => {
   const navigation = useRootStackNavigation();

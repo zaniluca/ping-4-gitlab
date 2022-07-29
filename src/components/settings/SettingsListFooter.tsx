@@ -1,8 +1,9 @@
-import React from "react";
-import { Box, Text } from "../restyle";
 import Constants from "expo-constants";
-import { openUrl } from "../../utils/open-url";
+import React from "react";
 import { Platform } from "react-native";
+
+import { openUrl } from "../../utils/open-url";
+import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
   return (
@@ -14,15 +15,15 @@ const SettingsListFooter = () => {
           : Constants.manifest?.android?.versionCode}
         )
       </Text>
-      {/* <Text marginTop="s" variant="caption" color="secondary">
-        This app is code is Open Source, check it out on{" "}
+      <Text marginTop="s" variant="caption" color="secondary">
+        This app is open sourced on{" "}
         <Text
           color="blue"
           onPress={() => openUrl("https://github.com/zaniluca/ping-4-gitlab")}
         >
-          Github
+          GitHub
         </Text>
-      </Text> */}
+      </Text>
     </Box>
   );
 };
