@@ -12,11 +12,12 @@ import { useTheme } from "../../utils/theme";
 import { SvgProps } from "react-native-svg";
 import SettingsListFooter from "./SettingsListFooter";
 import { Box, Text } from "../restyle";
-import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 import Toast from "react-native-toast-message";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useNotifications } from "../../contexts/NotificationsContext";
+import { useLogout } from "../../hooks/auth-hooks";
+import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 
 type SectionItem = {
   name: string;
@@ -69,16 +70,15 @@ const PauseNotificationsSwitch = () => {
 
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
-  const { logout, user } = useAuth();
-  const { updateUserData, userData } = useData();
   const { pushToken } = useNotifications();
   const navigation = useRootStackNavigation();
+  const updateUser = useUpdateUser();
+  const user = useUser();
+  const logout = useLogout();
 
   const handleLogout = async () => {
-    await updateUserData({
-      expo_push_tokens: userData?.expo_push_tokens?.filter(
-        (t) => t !== pushToken
-      ),
+    await updateUser.mutateAsync({
+      expoPushTokens: user.data?.expoPushTokens?.filter((t) => t !== pushToken),
     });
     await logout();
   };
@@ -87,7 +87,7 @@ const SettingsList = () => {
     {
       title: "General",
       data: [
-        ...(!user?.isAnonymous
+        ...(!user.isAnonymous
           ? [
               {
                 name: "Pause Notifications",
@@ -104,7 +104,7 @@ const SettingsList = () => {
         },
       ],
     },
-    ...(!user?.isAnonymous
+    ...(!user.isAnonymous
       ? [
           {
             title: "",

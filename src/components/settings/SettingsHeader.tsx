@@ -3,26 +3,25 @@ import React from "react";
 import { useTheme } from "../../utils/theme";
 import { ArrowRight } from "react-native-feather";
 import { Box, Text } from "../restyle";
-import { useAuth } from "../../contexts/AuthContext";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useUser } from "../../hooks/user-hooks";
 
 export const SettingsHeader = () => {
   const navigation = useRootStackNavigation();
   const theme = useTheme();
-  const { user } = useAuth();
-  const isAnonymous = user?.isAnonymous;
+  const user = useUser();
 
   return (
     <Box alignItems="center" paddingVertical="xxl">
       <Text variant="headline">
-        {isAnonymous ? "Anonymous User" : "You're logged in"}
+        {user.isAnonymous ? "Anonymous User" : "You're logged in"}
       </Text>
       <Text variant="callout" color="secondary" paddingTop="xxs">
-        {isAnonymous
+        {user.isAnonymous
           ? "Signup to save data between devices"
-          : `with ${user?.email}`}
+          : `with ${user.data?.email}`}
       </Text>
-      {isAnonymous && (
+      {user.isAnonymous && (
         <Box paddingTop="m">
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Box

@@ -29,11 +29,10 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    if (!user.data) return;
-    if (!user.data.onboardingCompleted) {
+    if (!user.hasCompletedOnboarding) {
       navigation.navigate("GetStarted");
     }
-  }, [user.data]);
+  }, [user.hasCompletedOnboarding]);
 
   return (
     <SafeAreaView

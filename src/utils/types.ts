@@ -56,6 +56,9 @@ export type PipelineStatus = "success" | "failed";
 export type APIUser = {
   onboardingCompleted: boolean;
   hookId: string;
+  id: string;
+  email?: string;
+  expoPushTokens: string[];
 };
 
 export type APIError = AxiosError<{

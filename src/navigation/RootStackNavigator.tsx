@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { data: user } = useUser();
+  const user = useUser();
 
   return (
     <Stack.Navigator
@@ -40,7 +40,7 @@ const RootStackNavigator = () => {
         },
       }}
     >
-      {user ? (
+      {user.data ? (
         <>
           <Stack.Screen
             name="Inbox"
@@ -85,6 +85,14 @@ const RootStackNavigator = () => {
               title: "Account",
             }}
           />
+          <Stack.Screen
+            name="Landing"
+            component={LandingScreen}
+            navigationKey="AuthenticatedLanding"
+            options={{
+              headerShown: false,
+            }}
+          />
           {/* Modals */}
           <Stack.Screen
             name="GetStarted"
@@ -104,6 +112,7 @@ const RootStackNavigator = () => {
           <Stack.Screen
             name="Landing"
             component={LandingScreen}
+            navigationKey="UnauthenticatedLogin"
             options={{
               headerShown: false,
             }}

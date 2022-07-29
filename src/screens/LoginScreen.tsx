@@ -11,11 +11,7 @@ import { Box, Text } from "../components/restyle";
 import { LoginSchema } from "../utils/validation";
 import { useTheme } from "../utils/theme";
 import ErrorsList from "../components/ErrorsList";
-import { useMutation } from "@tanstack/react-query";
-import { http } from "../utils/http";
-import { APIError, APIAuthResponse } from "../utils/types";
-import { useUser } from "../hooks/user-hooks";
-import { useSecureStore } from "../hooks/use-secure-store";
+import { useLogin } from "../hooks/auth-hooks";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -24,25 +20,10 @@ const INITIAL_VALUES = {
   password: "",
 };
 
-const performLogin = (payload: typeof INITIAL_VALUES) =>
-  http.post("login", payload).then((res) => res.data as APIAuthResponse);
-
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const user = useUser();
-  const { setValueForKey } = useSecureStore();
   const { colors } = useTheme();
 
-  const login = useMutation(performLogin, {
-    onSuccess: async (data) => {
-      await setValueForKey("accessToken", data.accessToken);
-      await setValueForKey("refreshToken", data.refreshToken);
-      // If the user wasn't anonymous before this process the navigation is automatically
-      if (user.data) navigation.navigate("Inbox");
-    },
-    onError: (err: APIError) => {
-      console.log("Error during /login: ", err.response?.data.message);
-    },
-  });
+  const login = useLogin();
 
   const onSubmit = (values: typeof INITIAL_VALUES) => {
     login.reset();

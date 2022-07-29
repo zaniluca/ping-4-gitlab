@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
-import { useUser } from "../hooks/user-hooks";
+import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -13,15 +13,15 @@ type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
-  // const { deleteUser, user } = useAuth();
-  const { data: user } = useUser({
+
+  const user = useUser({
     refetchInterval: 5000,
   });
 
-  const hasCompletedOnboarding = user?.onboardingCompleted;
+  const deleteUser = useDeleteUser();
 
   useLayoutEffect(() => {
-    if (hasCompletedOnboarding) {
+    if (user.hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
       if (navigation.canGoBack()) navigation.goBack();
       else navigation.navigate("Inbox");
@@ -32,7 +32,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   useLayoutEffect(() => {
     const listener = navigation.addListener("beforeRemove", (e) => {
       // When user has finished onboarding re-enable back button
-      if (hasCompletedOnboarding) {
+      if (user.hasCompletedOnboarding) {
         e.preventDefault();
       }
       return;
@@ -41,10 +41,10 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation, user]);
 
   const handleGoBackToLanding = async () => {
-    // if (user?.isAnonymous) {
-    //   // Only deleting anonymous users
-    //   await deleteUser();
-    // }
+    if (user.isAnonymous) {
+      // Only deleting anonymous users
+      await deleteUser.mutateAsync();
+    }
     navigation.navigate("Landing");
   };
 
@@ -90,7 +90,10 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard marginTop="m" content={`${user?.hookId}@pfg.app`} />
+          <CopyToCliboard
+            marginTop="m"
+            content={`${user.data?.hookId}@pfg.app`}
+          />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>
