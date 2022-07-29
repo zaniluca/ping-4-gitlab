@@ -2,7 +2,6 @@ import { Router } from "express";
 import prisma from "../../prisma/client";
 import type { Request as ExpressJwtRequest } from "express-jwt";
 import type { Notification } from "@prisma/client";
-import { NOTIFICATION_ESSENTIALS_FIELDS } from "../utils/constants";
 import type { AuthRequestWithPayload } from "../utils/types";
 
 const router = Router();
@@ -21,6 +20,16 @@ router.get("/list", async (req: ExpressJwtRequest, res) => {
   return res.json(notifications);
 });
 
+router.get("/:id", async (req: ExpressJwtRequest, res) => {
+  const notification = await prisma.notification.findUnique({
+    where: {
+      id: req.params.id,
+    },
+  });
+
+  return res.json(notification);
+});
+
 router.put("/:id", async (req: AuthRequestWithPayload<Notification>, res) => {
   const { headers, ...rest } = req.body;
 
@@ -31,7 +40,6 @@ router.put("/:id", async (req: AuthRequestWithPayload<Notification>, res) => {
     data: {
       ...rest,
     },
-    select: NOTIFICATION_ESSENTIALS_FIELDS,
   });
 
   return res.json(notification);
