@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import InboxSkeleton from "../components/inbox/InboxSkeleton";
-import { useData } from "../contexts/DataContext";
+import { useNotificationsList } from "../hooks/notifications-hooks";
 import { useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
@@ -15,7 +15,7 @@ type Props = RootStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const { hasLoadedFirstSnapshot } = useData();
+  const notifications = useNotificationsList();
   const user = useUser();
 
   useLayoutEffect(() => {
@@ -39,7 +39,7 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
       style={{ flex: 1, backgroundColor: theme.colors.primaryBackground }}
       edges={["right", "left"]}
     >
-      {hasLoadedFirstSnapshot ? (
+      {notifications.isFetched ? (
         <InboxList />
       ) : (
         <ScrollView

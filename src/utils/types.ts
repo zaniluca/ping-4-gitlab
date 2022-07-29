@@ -69,3 +69,19 @@ export type APIAuthResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type APINotification = {
+  id: string;
+  subject: string;
+  html: string;
+  text?: string;
+  headers: Headers;
+  recived: string;
+  viewed: boolean;
+  contentHash: string;
+  userId: string;
+};
+
+export type WithId = {
+  id: string;
+};

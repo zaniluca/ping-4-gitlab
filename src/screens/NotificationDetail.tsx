@@ -1,19 +1,23 @@
 import React, { useEffect } from "react";
 import { WebView } from "react-native-webview";
 
-import { useData } from "../contexts/DataContext";
+import { useUpdateNotification } from "../hooks/notifications-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 
 type Props = RootStackScreenProps<"NotificationDetail">;
 
 const NotificationDetail: React.FC<Props> = ({ route }) => {
-  const { updateNotification } = useData();
+  const updateNotification = useUpdateNotification();
 
   const notification = route.params;
 
   useEffect(() => {
     if (notification.viewed) return;
-    updateNotification(notification.id, { viewed: true });
+
+    updateNotification.mutate({
+      id: notification.id,
+      data: { viewed: true },
+    });
   }, []);
 
   return (

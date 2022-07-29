@@ -13,7 +13,6 @@ import NotificationDetail from "../screens/NotificationDetail";
 import SignupScreen from "../screens/SignupScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
-import { sanitizeSubject } from "../utils/sanitize";
 import { useTheme } from "../utils/theme";
 import { RootStackParamList } from "./types";
 
@@ -75,7 +74,7 @@ const RootStackNavigator = () => {
             name="NotificationDetail"
             component={NotificationDetail}
             options={({ route }) => ({
-              title: sanitizeSubject(route.params),
+              title: route.params.subject,
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
