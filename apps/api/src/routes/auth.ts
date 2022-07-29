@@ -167,6 +167,7 @@ router.post(
 
     return res.status(200).json({
       accessToken: getAccessToken(uid),
+      refreshToken: getRefreshToken(uid),
     });
   }
 );

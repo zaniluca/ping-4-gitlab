@@ -251,6 +251,7 @@ describe("POST /refresh", () => {
       .expect((res) => {
         expect(res.status).toBe(200);
         expect(res.body.accessToken).toBeDefined();
+        expect(res.body.refreshToken).toBeDefined();
       });
   });
 });
