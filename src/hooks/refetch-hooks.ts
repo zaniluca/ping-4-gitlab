@@ -1,7 +1,7 @@
+import { useFocusEffect } from "@react-navigation/native";
+import { focusManager } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
-import { focusManager } from "@tanstack/react-query";
-import { useFocusEffect } from "@react-navigation/native";
 
 const onAppStateChange = (status: AppStateStatus) => {
   if (Platform.OS !== "web") {

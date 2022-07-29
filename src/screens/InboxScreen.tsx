@@ -7,9 +7,9 @@ import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import InboxSkeleton from "../components/inbox/InboxSkeleton";
 import { useData } from "../contexts/DataContext";
+import { useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
-import { useUser } from "../hooks/user-hooks";
 
 type Props = RootStackScreenProps<"Inbox">;
 

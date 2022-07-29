@@ -10,6 +10,7 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "no-unused-vars": "warn",
   },
   settings: {
     "import/ignore": ["react-native"],

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Platform } from "react-native";
+
 import { getAccessTokenFromSecureStore } from "./jwt";
 
 // 10.0.2.2 is the special host for accessing localhost via android emulator

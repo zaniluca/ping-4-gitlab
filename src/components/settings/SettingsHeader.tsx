@@ -2,8 +2,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { ArrowRight } from "react-native-feather";
 
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useUser } from "../../hooks/user-hooks";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 

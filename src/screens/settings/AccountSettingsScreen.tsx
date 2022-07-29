@@ -6,8 +6,8 @@ import { Box, Text } from "../../components/restyle";
 import SettingsSectionedList, {
   SettingsSettingsSections,
 } from "../../components/settings/SettingsSectionedList";
-import { useDeleteUser } from "../../hooks/user-hooks";
 import { useLogout } from "../../hooks/auth-hooks";
+import { useDeleteUser } from "../../hooks/user-hooks";
 import { RootStackScreenProps } from "../../navigation/types";
 
 const DeleteAccount = () => {

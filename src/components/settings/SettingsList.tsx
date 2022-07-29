@@ -13,12 +13,12 @@ import Toast from "react-native-toast-message";
 
 import { useData } from "../../contexts/DataContext";
 import { useNotifications } from "../../contexts/NotificationsContext";
+import { useLogout } from "../../hooks/auth-hooks";
+import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 import SettingsListFooter from "./SettingsListFooter";
-import { useLogout } from "../../hooks/auth-hooks";
-import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 
 type SectionItem = {
   name: string;

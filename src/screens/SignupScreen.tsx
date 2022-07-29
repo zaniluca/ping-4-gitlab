@@ -10,9 +10,9 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useTheme } from "../utils/theme";
 import { useSignup } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
+import { useTheme } from "../utils/theme";
 import { SignupSchema } from "../utils/validation";
 
 type Props = RootStackScreenProps<"Signup">;

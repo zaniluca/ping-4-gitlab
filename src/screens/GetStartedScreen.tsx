@@ -4,8 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
-import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
+import { Box, Text } from "../components/restyle";
 import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";

@@ -9,9 +9,9 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
+import { useLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
-import { useLogin } from "../hooks/auth-hooks";
 import { LoginSchema } from "../utils/validation";
 
 type Props = RootStackScreenProps<"Login">;

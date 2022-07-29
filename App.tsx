@@ -8,6 +8,7 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
+import { QueryClientProvider } from "@tanstack/react-query";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
@@ -18,14 +19,12 @@ import Toaster from "./src/components/Toaster";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
-import RootStackNavigator from "./src/navigation/RootStackNavigator";
-import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
-
-import "./src/utils/sentry";
-import { QueryClientProvider } from "@tanstack/react-query";
-import queryClient from "./src/utils/query-client";
-import { useOnlineManager } from "./src/hooks/use-online-manager";
 import { useAppState } from "./src/hooks/refetch-hooks";
+import { useOnlineManager } from "./src/hooks/use-online-manager";
+import RootStackNavigator from "./src/navigation/RootStackNavigator";
+import queryClient from "./src/utils/query-client";
+import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
+import "./src/utils/sentry";
 
 // Workaround to disable firebase console spamming
 // https://stackoverflow.com/a/64832663/12661017
