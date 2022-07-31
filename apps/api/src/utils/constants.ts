@@ -7,4 +7,5 @@ export const USER_PUBLIC_FIELDS: Partial<Record<keyof User, boolean>> = {
   hookId: true,
   expoPushTokens: true,
   onboardingCompleted: true,
+  mutedUntil: true,
 };

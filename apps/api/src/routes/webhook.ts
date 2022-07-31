@@ -158,6 +158,11 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     return;
   }
 
+  if (user.mutedUntil && user.mutedUntil > new Date()) {
+    console.log("User is muted until", user.mutedUntil);
+    return res.status(200).end();
+  }
+
   const pushTokens = user.expoPushTokens.filter(isValidToken);
 
   if (pushTokens.length === 0) {

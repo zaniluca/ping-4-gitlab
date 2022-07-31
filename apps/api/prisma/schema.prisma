@@ -17,6 +17,7 @@ model User {
   updatedAt           DateTime       @updatedAt @map("updated_at")
   lastLogin           DateTime       @default(now()) @map("last_login")
   onboardingCompleted Boolean        @default(false) @map("onboarding_completed")
+  mutedUntil          DateTime?      @map("muted_until")
   notifications       Notification[]
 
   @@map("users")
