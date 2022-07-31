@@ -4,6 +4,8 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 
+import Logo from "../components/Logo";
+import Skeleton from "../components/Skeleton";
 import { useUser } from "../hooks/user-hooks";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import InboxScreen from "../screens/InboxScreen";
@@ -21,6 +23,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStackNavigator = () => {
   const theme = useTheme();
   const user = useUser();
+
+  if (!user.isFetched) {
+    return (
+      <Skeleton flex={1} alignItems="center" justifyContent="center">
+        <Logo fill={theme.colors.red} width={77} height={77} />
+      </Skeleton>
+    );
+  }
 
   return (
     <Stack.Navigator
