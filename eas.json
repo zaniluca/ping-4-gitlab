@@ -33,11 +33,17 @@
       "ios": {
         "simulator": false,
         "buildConfiguration": "Debug"
+      },
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-staging.up.railway.app/"
       }
     },
     "production": {
       "channel": "production",
-      "extends": "base"
+      "extends": "base",
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-production.up.railway.app/"
+      }
     }
   },
   "submit": {

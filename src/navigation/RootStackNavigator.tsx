@@ -24,7 +24,7 @@ const RootStackNavigator = () => {
   const theme = useTheme();
   const user = useUser();
 
-  if (!user.isFetched) {
+  if (!user.isLoading) {
     return (
       <Skeleton flex={1} alignItems="center" justifyContent="center">
         <Logo fill={theme.colors.red} width={77} height={77} />

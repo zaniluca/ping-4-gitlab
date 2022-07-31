@@ -11,10 +11,10 @@ const host =
     : // Getting the IP address of the device we're developing on to make work with Expo GO
       Constants.manifest?.debuggerHost!.split(":").shift();
 
-const BACKEND_URL = __DEV__ ? `http://${host}:8080` : "https://api.example.com";
+const API_URL = process.env.API_URL ?? `http://${host}:8080`;
 
 export const http = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: API_URL,
 });
 
 http.interceptors.request.use(async (config) => {

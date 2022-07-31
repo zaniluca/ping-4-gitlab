@@ -16,12 +16,14 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "20",
+      "buildNumber": "25",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -33,14 +35,16 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 16
+      "versionCode": 18
     },
     "plugins": [
       "sentry-expo",
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/notification.wav"],
+          "sounds": [
+            "./assets/notification.wav"
+          ],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
           "androidMode": "collapse",
