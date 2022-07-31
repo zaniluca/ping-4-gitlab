@@ -11,7 +11,6 @@ import { BellOff, ChevronRight, LogOut, User } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import Toast from "react-native-toast-message";
 
-import { useData } from "../../contexts/DataContext";
 import { usePushNotificationsContext } from "../../contexts/PushNotificationsContext";
 import { useLogout } from "../../hooks/auth-hooks";
 import { useUpdateUser, useUser } from "../../hooks/user-hooks";
@@ -37,13 +36,20 @@ type SectionHeaderProps = {
 };
 
 const PauseNotificationsSwitch = () => {
-  const { userData, updateUserData } = useData();
   const { colors } = useTheme();
+  const updateUser = useUpdateUser();
+  const user = useUser();
 
   const togglePauseNotifications = async () => {
-    const newValue = !userData?.hasDisabledNotifications;
-    await updateUserData({
-      hasDisabledNotifications: newValue,
+    const oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+    const newValue = user.data?.mutedUntil
+      ? null
+      : oneYearFromNow.toISOString();
+
+    await updateUser.mutateAsync({
+      mutedUntil: newValue,
     });
 
     Toast.show({
@@ -58,13 +64,13 @@ const PauseNotificationsSwitch = () => {
       }}
       thumbColor={
         Platform.OS === "android"
-          ? userData?.hasDisabledNotifications
+          ? user.data?.mutedUntil
             ? colors.orange
             : colors.primary
           : undefined
       }
       onChange={togglePauseNotifications}
-      value={userData?.hasDisabledNotifications}
+      value={!!user.data?.mutedUntil}
     />
   );
 };
