@@ -1,29 +1,6 @@
 import { AxiosError } from "axios";
-import { User as FirebaseUser } from "firebase/auth";
-import { Timestamp } from "firebase/firestore";
 
 export type NotificationType = "issue" | "merge" | "general";
-
-export type UserData = {
-  expo_push_tokens?: string[];
-  onboarding?: boolean;
-  hook_id?: string;
-  hasDisabledNotifications?: boolean;
-};
-
-export type User = FirebaseUser | null;
-
-export type Notification = {
-  id: string;
-  subject: string;
-  text: string;
-  raw_text: string;
-  headers: Headers;
-  raw_headers: string;
-  recived: Timestamp;
-  viewed: boolean;
-  html: string;
-};
 
 export type Headers = ProjectHeaders &
   IssueHeaders &
@@ -81,8 +58,4 @@ export type APINotification = {
   viewed: boolean;
   contentHash: string;
   userId: string;
-};
-
-export type WithId = {
-  id: string;
 };

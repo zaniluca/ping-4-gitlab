@@ -16,8 +16,6 @@ import { LogBox, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import Toaster from "./src/components/Toaster";
-import { AuthProvider } from "./src/contexts/AuthContext";
-import { DataProvider } from "./src/contexts/DataContext";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
@@ -49,31 +47,27 @@ export default function App() {
   return (
     <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <DataProvider>
-            <NavigationContainer
-              theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
-            >
-              <NotificationsProvider>
-                {/*  
+        <NavigationContainer
+          theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+        >
+          <NotificationsProvider>
+            {/*  
                   Workaround to fix React navigation background on navigation beeing white even on darkmode 
                   https://stackoverflow.com/a/67606259/12661017
                 */}
-                <SafeAreaProvider
-                  style={
-                    colorScheme === "dark" && {
-                      backgroundColor: darkTheme.colors.primaryBackground,
-                    }
-                  }
-                >
-                  <RootStackNavigator />
-                </SafeAreaProvider>
-                <Toaster />
-              </NotificationsProvider>
-            </NavigationContainer>
-            <StatusBar />
-          </DataProvider>
-        </AuthProvider>
+            <SafeAreaProvider
+              style={
+                colorScheme === "dark" && {
+                  backgroundColor: darkTheme.colors.primaryBackground,
+                }
+              }
+            >
+              <RootStackNavigator />
+            </SafeAreaProvider>
+            <Toaster />
+          </NotificationsProvider>
+        </NavigationContainer>
+        <StatusBar />
       </QueryClientProvider>
     </ThemeProvider>
   );
