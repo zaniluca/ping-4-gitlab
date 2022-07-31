@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn src/index.ts",
-    "build": "prisma generate && tsc",
+    "build": "prisma migrate deploy && tsc",
     "start": "node dist/src/index.js",
     "studio": "prisma studio --port 5556",
     "test": "jest -i",
