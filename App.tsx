@@ -18,7 +18,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toaster from "./src/components/Toaster";
 import { AuthProvider } from "./src/contexts/AuthContext";
 import { DataProvider } from "./src/contexts/DataContext";
-import { NotificationsProvider } from "./src/contexts/NotificationsContext";
+import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";

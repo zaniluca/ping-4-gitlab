@@ -1,4 +1,9 @@
-import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 
 import { http } from "../utils/http";
 import { APIUser, APIError } from "../utils/types";
@@ -17,7 +22,7 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
       console.log("User data", data);
     },
     onError: (err) => {
-      console.log("Error during GET /user: ", err.response?.data.message);
+      console.error("Error during GET /user: ", err.response?.data.message);
     },
     ...options,
   });
@@ -38,20 +43,23 @@ export const useDeleteUser = () => {
       console.log("User deleted");
     },
     onError: (err: APIError) => {
-      console.log("Error during DELETE /user: ", err.response?.data.message);
+      console.error("Error during DELETE /user: ", err.response?.data.message);
     },
   });
 };
 
-export const useUpdateUser = () =>
-  useMutation(updateUser, {
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateUser, {
     onMutate: (data) => {
       console.log("Updating user with: ", data);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       console.log("User updated successfully");
+      await queryClient.invalidateQueries(["user"]);
     },
     onError: (err: APIError) => {
-      console.log("Error during PUT /user: ", err.response?.data.message);
+      console.error("Error during PUT /user: ", err.response?.data.message);
     },
   });
+};

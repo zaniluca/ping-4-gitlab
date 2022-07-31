@@ -12,7 +12,7 @@ import { SvgProps } from "react-native-svg";
 import Toast from "react-native-toast-message";
 
 import { useData } from "../../contexts/DataContext";
-import { useNotifications } from "../../contexts/NotificationsContext";
+import { usePushNotificationsContext } from "../../contexts/PushNotificationsContext";
 import { useLogout } from "../../hooks/auth-hooks";
 import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
@@ -71,7 +71,7 @@ const PauseNotificationsSwitch = () => {
 
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
-  const { pushToken } = useNotifications();
+  const { pushToken } = usePushNotificationsContext();
   const navigation = useRootStackNavigation();
   const updateUser = useUpdateUser();
   const user = useUser();

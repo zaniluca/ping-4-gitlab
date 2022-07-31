@@ -17,6 +17,9 @@ const login = (payload: AuthPayload) =>
 const signup = (payload: AuthPayload) =>
   http.post("signup", payload).then((res) => res.data as APIAuthResponse);
 
+const anonymousLogin = () =>
+  http.post("anonymous").then((res) => res.data as APIAuthResponse);
+
 export const useSignup = () => {
   const user = useUser();
   const navigation = useRootStackNavigation();
@@ -32,7 +35,7 @@ export const useSignup = () => {
       await queryClient.refetchQueries(["user"]);
     },
     onError: (err: APIError) => {
-      console.log("Error during POST /signup: ", err.message);
+      console.error("Error during POST /signup: ", err.message);
     },
   });
 };
@@ -52,7 +55,26 @@ export const useLogin = () => {
       await queryClient.refetchQueries(["user"]);
     },
     onError: (err: APIError) => {
-      console.log("Error during POST /login: ", err.response?.data.message);
+      console.error("Error during POST /login: ", err.response?.data.message);
+    },
+  });
+};
+
+export const useAnonymousLogin = () => {
+  const { setValueForKey } = useSecureStore();
+  const queryClient = useQueryClient();
+
+  return useMutation(anonymousLogin, {
+    onSuccess: async (data) => {
+      await setValueForKey("accessToken", data.accessToken);
+      await setValueForKey("refreshToken", data.refreshToken);
+      await queryClient.refetchQueries(["user"]);
+    },
+    onError: (err: APIError) => {
+      console.error(
+        "Error signing in POST /anonymous",
+        err.response?.data.message
+      );
     },
   });
 };
@@ -71,7 +93,7 @@ export const useLogout = () => {
 
       console.log("User logged out");
     } catch (err) {
-      console.log("Error during logout: ", err.message);
+      console.error("Error during logout: ", err.message);
     }
   };
 };

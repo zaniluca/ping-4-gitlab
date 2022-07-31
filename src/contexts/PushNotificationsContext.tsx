@@ -8,13 +8,13 @@ import {
 } from "react";
 import Toast from "react-native-toast-message";
 
+import { useNotification } from "../hooks/notifications-hooks";
+import { useUpdateUser, useUser } from "../hooks/user-hooks";
 import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 import {
   registerForPushNotificationsAsync,
   resetAppBadge,
 } from "../utils/notifications";
-import { useAuth } from "./AuthContext";
-import { useData } from "./DataContext";
 
 type NotificationsContextValues = {
   pushToken?: string;
@@ -59,35 +59,27 @@ Notifications.addNotificationResponseReceivedListener((notification) =>
 export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   children,
 }) => {
-  const { user } = useAuth();
+  const user = useUser();
   const [pushToken, setPushToken] = useState<string | undefined>();
-  const { updateUserData, userData, getNotificationById } = useData();
   const navigation = useRootStackNavigation();
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
+  const updateUser = useUpdateUser();
 
-  useEffect(() => {
-    if (!lastNotificationResponse) return;
-
-    console.log("lastNotificationResponse: ", lastNotificationResponse);
-    const nid = lastNotificationResponse.notification.request.content.data
-      .nid as string | undefined;
-    if (!nid) {
-      console.error("Notification id not present in notification data");
-      return;
+  useNotification(
+    lastNotificationResponse?.notification.request.content.data.nid as string,
+    {
+      enabled: !!user.data && !!lastNotificationResponse,
+      onSuccess: (data) => {
+        navigation.navigate("NotificationDetail", data);
+      },
+      onError: (error) => {
+        console.error("Notification not recived", error);
+      },
     }
-
-    getNotificationById(nid).then((notification) => {
-      if (!notification) {
-        console.error("Notification not found with id: ", nid);
-        return;
-      }
-
-      navigation.navigate("NotificationDetail", notification);
-    });
-  }, [lastNotificationResponse]);
+  );
 
   useEffect(() => {
-    if (!userData || !user) return;
+    if (!user.data) return;
 
     registerForPushNotificationsAsync().then((res) => {
       const { token, status } = res;
@@ -101,21 +93,21 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
         });
         return;
       }
-      const tokens = userData.expo_push_tokens ?? [];
+      const tokens = user.data.expoPushTokens;
       console.log("ExpoPushToken: ", token);
       // We are on emulator or the user has not allowed notifications
       if (!token) return;
       // Token already present in firebase
       if (tokens.includes(token)) return;
 
-      updateUserData({
-        expo_push_tokens: [...tokens, token],
+      updateUser.mutate({
+        expoPushTokens: [...tokens, token],
       });
     });
     // Here we put userData.onboarding to avoid re-adding the expo_push_token when the user logs out
     // If the user logs out and so removes the expo_push_token, we MUST NOT re-execute this effect
     // see: https://github.com/zaniluca/ping-4-gitlab/issues/86
-  }, [userData?.onboarding, user]);
+  }, [user.data?.onboardingCompleted]);
 
   useEffect(() => {
     resetAppBadge();
@@ -128,4 +120,5 @@ export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
   );
 };
 
-export const useNotifications = () => useContext(NotificationsContext);
+export const usePushNotificationsContext = () =>
+  useContext(NotificationsContext);

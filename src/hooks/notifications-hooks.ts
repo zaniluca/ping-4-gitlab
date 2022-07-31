@@ -1,11 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 
 import { http } from "../utils/http";
-import { APIError, APINotification, WithId } from "../utils/types";
+import { APIError, APINotification } from "../utils/types";
 import { useUser } from "./user-hooks";
 
-const fetchNotifications = () =>
-  http.get("notification/list").then((res) => res.data as APINotification[]);
+const fetchNotificationsList = () =>
+  http.get("notification/list").then((res) => res.data);
+
+const fetchNotification = (id: string) =>
+  http.get(`notification/${id}`).then((res) => res.data);
 
 type NotificationUpdateRequest = {
   id: string;
@@ -13,7 +21,9 @@ type NotificationUpdateRequest = {
 };
 
 const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
-  http.put(`notification/${id}`, data).then((res) => res.data as WithId);
+  http
+    .put(`notification/${id}`, data)
+    .then((res) => res.data as APINotification);
 
 export const useNotificationsList = () => {
   const user = useUser();
@@ -21,9 +31,9 @@ export const useNotificationsList = () => {
 
   return useQuery<APINotification[], APIError>(
     ["notifications"],
-    fetchNotifications,
+    fetchNotificationsList,
     {
-      enabled: !!user.data,
+      enabled: !!user.hasCompletedOnboarding,
       refetchInterval: 1000 * 20,
       onSuccess: () => {
         // This should be done to load the notifications into the cache individually
@@ -42,6 +52,28 @@ export const useNotificationsList = () => {
   );
 };
 
+export const useNotification = (
+  id: string,
+  options?: UseQueryOptions<APINotification, APIError>
+) => {
+  const user = useUser();
+
+  return useQuery<APINotification, APIError>(
+    ["notifications", id],
+    () => fetchNotification(id),
+    {
+      enabled: !!user.data,
+      onError: (err) => {
+        console.log(
+          `Error fetching notification ${id}`,
+          err.response?.data.message
+        );
+      },
+      ...options,
+    }
+  );
+};
+
 export const useUpdateNotification = () => {
   const queryClient = useQueryClient();
 
@@ -49,7 +81,7 @@ export const useUpdateNotification = () => {
     onMutate: (req) => {
       console.log(`Updating notification ${req.id}:`, req.data);
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       console.log("Successfully updated notification");
 
       await queryClient.invalidateQueries(["notifications"]);
