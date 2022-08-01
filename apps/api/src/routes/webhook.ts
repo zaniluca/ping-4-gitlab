@@ -158,6 +158,21 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     return;
   }
 
+  const notificationsCount = await prisma.notification.count();
+
+  if (notificationsCount === 1) {
+    console.log("First notification created, Onboarding completed");
+
+    user = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        onboardingCompleted: true,
+      },
+    });
+  }
+
   if (user.mutedUntil && user.mutedUntil > new Date()) {
     console.log("User is muted until", user.mutedUntil);
     return res.status(200).end();
