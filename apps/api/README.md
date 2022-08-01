@@ -1,6 +1,8 @@
-# api-ping-4-gitlab
+# Ping for Gitlab API
 
 > Backend for the Ping for Gitlab app made in nodejs, typescript, express, prisma and Postgresql
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/VBTK_N?referralCode=ntz0Ea)
 
 ## How to run
 
@@ -13,4 +15,4 @@ JWT_REFRESH_SECRET=<your-secret-here>
 WEBHOOK_SECRET=<your-secret-here>
 ```
 
-Now simply run `pnpm install` and `pnpm start` to start the server
+Now simply run `pnpm install` and `pnpm dev` to start the server
