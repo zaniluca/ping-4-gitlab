@@ -20,7 +20,7 @@ Sentry.init({
       app,
     }),
   ],
-  tracesSampleRate: 0.75,
+  tracesSampleRate: 0.11,
 });
 
 // Middlewares
@@ -44,7 +44,11 @@ app.use("/", webhook);
 app.get("/health", (_req, res) => res.send("OK"));
 
 // Error handling
-app.use(Sentry.Handlers.errorHandler());
+app.use(
+  Sentry.Handlers.errorHandler({
+    shouldHandleError: (error) => error.status === 500,
+  })
+);
 app.use(logError);
 app.use(handleError);
 
