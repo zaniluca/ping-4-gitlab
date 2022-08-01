@@ -49,9 +49,10 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const hookEmail =
-    user.data?.hookId + process.env.EAS_BUILD_PROFILE === "preview"
+    user.data?.hookId +
+    (process.env.EAS_BUILD_PROFILE === "staging"
       ? "@staging.pfg.app"
-      : "@pfg.app";
+      : "@pfg.app");
 
   return (
     <SafeAreaView

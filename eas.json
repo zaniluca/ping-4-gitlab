@@ -38,6 +38,13 @@
         "API_URL": "https://api-ping-4-gitlab-staging.up.railway.app/"
       }
     },
+    "staging": {
+      "channel": "master",
+      "extends": "base",
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-staging.up.railway.app/"
+      }
+    },
     "production": {
       "channel": "production",
       "extends": "base",
