@@ -48,6 +48,11 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate("Landing");
   };
 
+  const hookEmail =
+    user.data?.hookId + process.env.EAS_BUILD_PROFILE === "preview"
+      ? "@staging.pfg.app"
+      : "@pfg.app";
+
   return (
     <SafeAreaView
       style={{
@@ -90,10 +95,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard
-            marginTop="m"
-            content={`${user.data?.hookId}@pfg.app`}
-          />
+          <CopyToCliboard marginTop="m" content={hookEmail} />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>
