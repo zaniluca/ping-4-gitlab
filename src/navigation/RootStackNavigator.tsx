@@ -3,6 +3,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import { useRef } from "react";
 
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
@@ -22,9 +23,18 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const user = useUser();
+  const firstTimeAuth = useRef(true);
 
-  if (!user.isLoading) {
+  const user = useUser({
+    onSettled: () => {
+      if (firstTimeAuth.current) {
+        firstTimeAuth.current = false;
+      }
+    },
+    retry: false,
+  });
+
+  if (user.isLoading && firstTimeAuth.current) {
     return (
       <Skeleton flex={1} alignItems="center" justifyContent="center">
         <Logo fill={theme.colors.red} width={77} height={77} />

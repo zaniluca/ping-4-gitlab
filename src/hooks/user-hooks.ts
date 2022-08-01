@@ -35,11 +35,15 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
 };
 
 export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
   const { deleteValueForKey } = useSecureStore();
+
   return useMutation(deleteUser, {
     onSuccess: async () => {
       await deleteValueForKey("accessToken");
       await deleteValueForKey("refreshToken");
+
+      await queryClient.resetQueries(["user"]);
       console.log("User deleted");
     },
     onError: (err: APIError) => {
