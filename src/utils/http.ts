@@ -5,7 +5,7 @@ import { Platform } from "react-native";
 import { getAccessTokenFromSecureStore } from "./jwt";
 
 const host =
-  Platform.OS === "android"
+  Platform.OS === "android" && __DEV__
     ? // 10.0.2.2 is the special host for accessing localhost via android emulator
       "10.0.2.2"
     : // Getting the IP address of the device we're developing on to make work with Expo GO
