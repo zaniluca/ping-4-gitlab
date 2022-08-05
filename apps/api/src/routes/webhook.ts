@@ -89,7 +89,6 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   }
 
   const body = req.body as WebhookPayload;
-  console.log("Body parsed", body);
 
   if (!body) {
     console.error("Failed to parse body", body);
@@ -107,12 +106,10 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   // Parsing headers string into object
   const headers = parseHeaders(rawHeaders);
-  console.log("Parsed Headers: ", headers);
 
   // Removing unwanted parts from text
   // But also keeping original
   const text = sanitizeText(rawText);
-  console.log("Sanitized text: ", text);
 
   // Removing unwanted parts from html
   const html = removeFooterFromHtml(rawHtml);
@@ -192,14 +189,17 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     data: { nid: notification.id },
   };
 
-  console.log("Notification payload:", notificationPayload);
+  if (notificationsCount === 1) {
+    notificationPayload.title = "Welcome to Ping for Gitlab!";
+    notificationPayload.body =
+      "You succesfully connected to Gitlab! come back to the app to complete the onboarding process";
+  }
 
   const chunks = expo.chunkPushNotifications([notificationPayload]);
 
   for (const chunk of chunks) {
     try {
       let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-      console.info(ticketChunk);
       // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
     } catch (error) {
       console.error(error);
