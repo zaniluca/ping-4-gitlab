@@ -5,14 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
-  const { signInAnonymously } = useAuth();
   const { colors } = useTheme();
 
   return (
@@ -24,7 +22,10 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
       }}
     >
       <Box paddingHorizontal="m" marginBottom="xxl">
-        <Button title="Let's get started!" onPress={signInAnonymously} />
+        <Button
+          title="Let's get started!"
+          onPress={() => navigation.navigate("Signup")}
+        />
         <Disclaimer />
         <Box
           justifyContent="center"
