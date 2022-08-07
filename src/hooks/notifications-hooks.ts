@@ -35,18 +35,11 @@ export const useNotificationsList = () => {
     {
       enabled: !!user.hasCompletedOnboarding,
       refetchInterval: 1000 * 20,
-      onSuccess: () => {
-        // This should be done to load the notifications into the cache individually
-        // So that we can invalidate the single notification when it is updated
-        // data.forEach((notification) =>
-        //   queryClient.setQueryData(
-        //     ["notifications", notification.id],
-        //     notification
-        //   )
-        // );
-      },
       onError: (err: APIError) => {
-        console.log("Error fetching notifications", err.response?.data.message);
+        console.log(
+          "Error fetching notifications",
+          err.response?.data?.message
+        );
       },
     }
   );
@@ -66,7 +59,7 @@ export const useNotification = (
       onError: (err) => {
         console.log(
           `Error fetching notification ${id}`,
-          err.response?.data.message
+          err.response?.data?.message
         );
       },
       ...options,
@@ -78,18 +71,38 @@ export const useUpdateNotification = () => {
   const queryClient = useQueryClient();
 
   return useMutation(updateNotification, {
-    onMutate: (req) => {
-      console.log(`Updating notification ${req.id}:`, req.data);
+    onMutate: async ({ id, data }) => {
+      console.log(`Optimistically updating notification ${id}:`, data);
+      await queryClient.cancelQueries(["notifications"]);
+      const previousData = queryClient.getQueryData([
+        "notifications",
+      ]) as APINotification[];
+
+      const updatedNotification = {
+        ...previousData.find((n) => n.id === id)!,
+        ...data,
+      };
+
+      // Optimistically update the notifications
+      queryClient.setQueryData(
+        ["notifications"],
+        [...previousData.filter((n) => n.id !== id), updatedNotification]
+      );
+      // Return a context object with the snapshotted value
+      return previousData;
     },
     onSuccess: async () => {
       console.log("Successfully updated notification");
-
-      await queryClient.invalidateQueries(["notifications"]);
-      // Invalidate specific notification
-      // await queryClient.invalidateQueries(["notifications", data.id]);
     },
-    onError: (err: APIError) => {
-      console.log("Error updating notification", err.response?.data.message);
+    onError: (err: APIError, _data, previousData) => {
+      console.log("Error updating notification", err.response?.data?.message);
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(["notifications"], previousData);
+    },
+    onSettled: () => {
+      // Always refetch after error or success
+      setTimeout(() => {}, 5000);
+      queryClient.invalidateQueries(["notifications"]);
     },
   });
 };

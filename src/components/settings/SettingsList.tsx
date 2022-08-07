@@ -94,15 +94,11 @@ const SettingsList = () => {
     {
       title: "General",
       data: [
-        ...(!user.isAnonymous
-          ? [
-              {
-                name: "Pause Notifications",
-                icon: (props: SvgProps) => <BellOff {...props} />,
-                right: <PauseNotificationsSwitch />,
-              },
-            ]
-          : []),
+        {
+          name: "Pause Notifications",
+          icon: (props: SvgProps) => <BellOff {...props} />,
+          right: <PauseNotificationsSwitch />,
+        },
         {
           name: "Account",
           icon: (props: SvgProps) => <User {...props} />,
