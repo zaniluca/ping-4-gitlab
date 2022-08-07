@@ -39,4 +39,4 @@ CREATE UNIQUE INDEX "users_hook_id_key" ON "users"("hook_id");
 CREATE UNIQUE INDEX "notifications_content_hash_key" ON "notifications"("content_hash");
 
 -- AddForeignKey
-ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
