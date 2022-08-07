@@ -19,6 +19,7 @@
     "@react-navigation/native-stack": "^6.5.2",
     "@sentry/react-native": "^3.4.1",
     "@shopify/restyle": "^2.0.0",
+    "axios": "^0.27.2",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "dotenv": "^16.0.0",
     "expo": "~44.0.0",
