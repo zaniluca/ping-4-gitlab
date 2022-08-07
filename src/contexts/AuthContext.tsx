@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import {
   createContext,
   ReactNode,
@@ -17,9 +18,10 @@ import {
 
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
-import { auth } from "../utils/firebase";
+import { auth, firestore } from "../utils/firebase";
+import { http } from "../utils/http";
 import { useTheme } from "../utils/theme";
-import { User } from "../utils/types";
+import { User, UserData } from "../utils/types";
 
 type AuthContextValues = {
   user: User;
@@ -57,6 +59,27 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  const migrateAccount = async (
+    uid: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      const docSnap = await getDoc(doc(firestore, `users/${uid}`));
+      if (!docSnap.exists) throw new Error("User document does not exist");
+
+      const data = docSnap.data() as UserData;
+
+      await http.post("/signup", {
+        email,
+        password,
+        hookId: data.hook_id,
+      });
+    } catch (error) {
+      console.warn("Could not signup in new Backend: ", error);
+    }
+  };
+
   const deleteUser = async () => {
     try {
       await user?.delete();
@@ -84,15 +107,20 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
       const credential = EmailAuthProvider.credential(e, p);
       const result = await linkWithCredential(user, credential);
       console.log("Anonymous user upgraded to permanent: ", result.user.uid);
+
+      await migrateAccount(result.user.uid, e, p);
     } else {
       // New user
       const result = await createUserWithEmailAndPassword(auth, e, p);
       console.log("Signed up with uid: ", result.user.uid);
+
+      await migrateAccount(result.user.uid, e, p);
     }
   };
 
   const login = async (e: string, p: string) => {
     const result = await signInWithEmailAndPassword(auth, e, p);
+    await migrateAccount(result.user.uid, e, p);
     console.log("Logged in with uid: ", result.user.uid);
   };
 
