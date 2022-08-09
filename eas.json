@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 0.49.0"
+    "version": ">= 0.50.0"
   },
   "build": {
     "base": {
@@ -8,8 +8,7 @@
         "autoIncrement": true
       },
       "ios": {
-        "autoIncrement": true,
-        "cocoapods": "1.11.2"
+        "autoIncrement": true
       }
     },
     "development": {
