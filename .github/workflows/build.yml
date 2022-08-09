@@ -9,6 +9,7 @@ on:
       - ready_for_review
 jobs:
   build:
+    name: Build
     strategy:
       fail-fast: true
       matrix:
