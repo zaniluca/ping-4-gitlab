@@ -1,39 +1,26 @@
-name: Build and Test
+name: Build
 on:
   workflow_dispatch:
-    # inputs:
-    #   os:
-    #     type: choice
-    #     description: OS to build on. Ubuntu is faster, MacOS supports iOS builds, Windows is unsupported
-    #     options:
-    #       - macos-latest
-    #       - ubuntu-latest
-    #   platform:
-    #     type: choice
-    #     description: Platform to build for
-    #     options:
-    #       - android
-    #       - ios
-    #   profile:
-    #     type: choice
-    #     description: Build profile to use
-    #     options:
-    #       - development
-    #       - preview
-    #       - production
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 jobs:
-  build-and-test:
-    continue-on-error: true
+  build:
+    name: Build
     strategy:
       fail-fast: true
       matrix:
         include:
           - platform: "ios"
-            os: "macos-latest"
+            os: "macos-12"
           - platform: "android"
             os: "ubuntu-latest"
 
     runs-on: ${{ matrix.os }}
+    if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -61,21 +48,21 @@ jobs:
       - name: Setup EAS local builds
         run: yarn global add eas-cli-local-build-plugin
 
-      # - name: Test
-      #   run: yarn test
-
+      # Eas local doesn't support environment variables
+      # so we have to pass them via the shell
       - name: Build
         run: |
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
+          GOOGLE_SERVICES_IOS_BASE64=${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} \
           eas build --local \
             --non-interactive \
             --output=./out \
             --platform=${{ matrix.platform }} \
             --profile=production
-        env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
