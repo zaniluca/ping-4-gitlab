@@ -74,7 +74,7 @@ jobs:
 
       - name: Get versionCode from manifest
         if: ${{ matrix.platform == 'android' }}
-        id: buildNumber
+        id: versionCode
         uses: notiz-dev/github-action-json-property@release
         with:
           path: "app.json"
@@ -83,5 +83,5 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ping-4-gitlab-${{ matrix.platform }}-${{ steps.buildNumber.outputs.prop }}
+          name: ping-4-gitlab-${{ matrix.platform }}-${{ matrix.platform == 'ios' && steps.buildNumber.outputs.prop || steps.versionCode.outputs.prop }}
           path: out
