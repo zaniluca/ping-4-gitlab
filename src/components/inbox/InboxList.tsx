@@ -41,14 +41,14 @@ const InboxList = () => {
   return (
     <FlatList
       contentInsetAdjustmentBehavior="automatic"
-      data={[]}
+      data={notifications}
       renderItem={renderItem}
       ItemSeparatorComponent={Divider}
       keyExtractor={(item) => item.id}
       removeClippedSubviews
-      // ListFooterComponent={
-      //   notifications.length >= 50 ? ListFooterComponent : null
-      // }
+      ListFooterComponent={
+        notifications.length >= 50 ? ListFooterComponent : null
+      }
       ListEmptyComponent={InboxEmpty}
     />
   );

@@ -1,10 +1,16 @@
 import React from "react";
+import { TouchableOpacity } from "react-native";
 
+import { useData } from "../../contexts/DataContext";
+import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import RandomIcon from "../RandomIcon";
 import Skeleton from "../Skeleton";
 import { Box, Text } from "../restyle";
 
 const InboxEmpty = () => {
+  const { userData } = useData();
+  const navigation = useRootStackNavigation();
+
   return (
     <Box marginTop="xxl" flexDirection="column" alignItems="center">
       <Box flexDirection="row" padding="m" justifyContent="center">
@@ -56,6 +62,15 @@ const InboxEmpty = () => {
           Once you receive a notification{"\n"}you'll see that here
         </Text>
       </Box>
+      {userData?.onboarding && (
+        <Box marginTop="l">
+          <TouchableOpacity onPress={() => navigation.push("GetStarted")}>
+            <Text variant="headline" color="accent" textAlign="center">
+              Go back to setup screen
+            </Text>
+          </TouchableOpacity>
+        </Box>
+      )}
     </Box>
   );
 };
