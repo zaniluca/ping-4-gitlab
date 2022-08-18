@@ -15,9 +15,11 @@ import {
   useEffect,
   useState,
 } from "react";
+import * as Sentry from "sentry-expo";
 
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
+import { useSecureStore } from "../hooks/use-secure-store";
 import { auth, firestore } from "../utils/firebase";
 import { http } from "../utils/http";
 import { useTheme } from "../utils/theme";
@@ -49,6 +51,8 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User>(auth.currentUser);
   const { colors } = useTheme();
+  const { setValueForKey, getValueForKey, deleteValueForKey } =
+    useSecureStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -64,25 +68,36 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     email: string,
     password: string
   ) => {
+    const docSnap = await getDoc(doc(firestore, `users/${uid}`));
+    if (!docSnap.exists) throw new Error("User document does not exist");
+
+    const data = docSnap.data() as UserData;
+
+    console.log("Migrating account...");
+    const hasMigrated = await getValueForKey("hasMigrated");
     try {
-      const docSnap = await getDoc(doc(firestore, `users/${uid}`));
-      if (!docSnap.exists) throw new Error("User document does not exist");
-
-      const data = docSnap.data() as UserData;
-
-      await http.post("/signup", {
-        email,
-        password,
-        hookId: data.hook_id,
-      });
+      if (!hasMigrated && data) {
+        await http.post("/signup", {
+          email,
+          password,
+          hookId: data.hook_id,
+          onboardingCompleted: !data.onboarding,
+        });
+        console.log("Account migration completed");
+        await setValueForKey("hasMigrated", "true");
+      } else {
+        console.log("Account migration not necessary");
+      }
     } catch (error) {
       console.warn("Could not signup in new Backend: ", error);
+      Sentry.Native.captureException(error);
     }
   };
 
   const deleteUser = async () => {
     try {
       await user?.delete();
+      await deleteValueForKey("hasMigrated");
       console.log("Deleted user with id: ", user?.uid);
     } catch (error) {
       console.error("Error deleting user: ", error);
@@ -127,6 +142,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      await deleteValueForKey("hasMigrated");
     } catch (error) {
       console.error("Error during logout: ", error);
     }
