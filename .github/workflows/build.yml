@@ -25,7 +25,7 @@ jobs:
       - name: Check for EXPO_TOKEN
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
             exit 1
           fi
 
@@ -64,8 +64,24 @@ jobs:
             --platform=${{ matrix.platform }} \
             --profile=production
 
+      - name: Get buildNumber from manifest
+        if: ${{ matrix.platform }} == 'ios' }}
+        id: buildNumber
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "app.json"
+          prop_path: "expo.ios.buildNumber"
+
+      - name: Get versionCode from manifest
+        if: ${{ matrix.platform }} == 'android' }}
+        id: buildNumber
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "app.json"
+          prop_path: "expo.android.versionCode"
+
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ping-4-gitlab-${{ matrix.platform }}
+          name: ping-4-gitlab-${{ matrix.platform }}-${{steps.buildNumber.outputs.prop}}
           path: out
