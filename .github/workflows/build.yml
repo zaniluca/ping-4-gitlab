@@ -65,7 +65,7 @@ jobs:
             --profile=production
 
       - name: Get buildNumber from manifest
-        if: ${{ matrix.platform }} == 'ios' }}
+        if: ${{ matrix.platform == 'ios' }}
         id: buildNumber
         uses: notiz-dev/github-action-json-property@release
         with:
@@ -73,7 +73,7 @@ jobs:
           prop_path: "expo.ios.buildNumber"
 
       - name: Get versionCode from manifest
-        if: ${{ matrix.platform }} == 'android' }}
+        if: ${{ matrix.platform == 'android' }}
         id: buildNumber
         uses: notiz-dev/github-action-json-property@release
         with:
@@ -83,5 +83,5 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ping-4-gitlab-${{ matrix.platform }}-${{steps.buildNumber.outputs.prop}}
+          name: ping-4-gitlab-${{ matrix.platform }}-${{ steps.buildNumber.outputs.prop }}
           path: out
