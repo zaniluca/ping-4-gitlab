@@ -9,6 +9,9 @@
       },
       "ios": {
         "autoIncrement": true
+      },
+      "cache": {
+        "key": "expo45"
       }
     },
     "development": {
