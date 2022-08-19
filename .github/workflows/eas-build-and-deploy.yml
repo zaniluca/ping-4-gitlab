@@ -2,6 +2,26 @@ name: Build and deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        required: true
+        type: choice
+        description: Platform to build for
+        options:
+          - all
+          - android
+          - ios
+      profile:
+        required: true
+        type: choice
+        description: Build profile to use
+        options:
+          - staging
+          - production
+      deploy:
+        required: true
+        description: Deploy to testflight or playstore
+        type: boolean
 
 jobs:
   build:
@@ -11,7 +31,7 @@ jobs:
       - name: Check for EXPO_TOKEN
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets.
             exit 1
           fi
 
@@ -32,7 +52,20 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
-        run: npx eas-cli build --platform all --non-interactive
+        run: |
+          eas build \
+            --non-interactive \
+            --platform=${{ inputs.platform }} \
+            --profile=${{ inputs.profile }}
+
+  tag:
+    name: Tag release
+    if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Get version from manifest
         id: version
@@ -61,26 +94,23 @@ jobs:
 
   deploy:
     name: Deploy
+    if: ${{ inputs.deploy }}
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Check for EXPO_TOKEN
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
             exit 1
           fi
 
-      - name: Check for EXPO_APPLE_APP_SPECIFIC_PASSWORD
+      - name: Check for Apple Credentials
+        if: ${{ inputs.platform == 'ios' || inputs.platform == 'all' }}
         run: |
-          if [ -z "${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}" ]; then
-            echo "You must provide an EXPO_APPLE_APP_SPECIFIC_PASSWORD to deploy to testflight"
-          fi
-
-      - name: Check for EXPO_APPLE_ID
-        run: |
-          if [ -z "${{ secrets.EXPO_APPLE_ID }}" ]; then
-            echo "You must provide an EXPO_APPLE_ID to deploy to testflight"
+          if [ -z "${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}" ] || [ -z "${{ secrets.EXPO_APPLE_ID }}" ]; then
+            echo "You must provide an EXPO_APPLE_APP_SPECIFIC_PASSWORD and EXPO_APPLE_ID to deploy to testflight"
+            exit 1
           fi
 
       - name: Checkout repository
@@ -97,7 +127,19 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Submit to testflight
-        run: EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} npx eas-cli submit -p ios --latest --non-interactive
+        if: ${{ inputs.platform == 'ios' || inputs.platform == 'all' }}
+        run: |
+          EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} \
+          EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} \
+          eas submit \
+            --latest \
+            --non-interactive \
+            --p ios
 
       - name: Submit to playstore
-        run: npx eas-cli submit -p android --latest --non-interactive
+        if: ${{ inputs.platform == 'android' || inputs.platform == 'all' }}
+        run: |
+          eas submit \
+            --latest \
+            --non-interactive \
+            --p android
