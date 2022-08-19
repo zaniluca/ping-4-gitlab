@@ -10,24 +10,27 @@ import {
   getRefreshToken,
   getUidFromToken,
   updateLastLogin,
-  validateRefreshToken,
 } from "../utils/common";
 import type { User } from "@prisma/client";
-import { SignupSchema } from "../utils/validation";
+import {
+  LoginBodySchema,
+  RefreshBodySchema,
+  SignupBodySchema,
+} from "../utils/validation";
 import { BadRequestError, CredentialsError } from "../utils/errors";
-import { expressjwt, UnauthorizedError } from "express-jwt";
-import yup, { ValidationError } from "yup";
+import { expressjwt } from "express-jwt";
+import type yup from "yup";
 import generateUniqueHook from "../utils/hook-generator";
+import { validate } from "../middlewares";
+import type { InferType } from "yup";
 
 const router = Router();
 
-type LoginPayload = {
-  email: string;
-  password: string;
-};
+type LoginPayload = InferType<typeof LoginBodySchema>;
 
 router.post(
   "/login",
+  validate({ bodySchema: LoginBodySchema }),
   async (req: RequestWithPayload<LoginPayload>, res, next) => {
     const { email, password } = req.body;
 
@@ -54,7 +57,7 @@ router.post(
   }
 );
 
-type SignupPayload = yup.InferType<typeof SignupSchema>;
+type SignupPayload = InferType<typeof SignupBodySchema>;
 
 router.post(
   "/signup",
@@ -63,18 +66,9 @@ router.post(
     algorithms: ["HS256"],
     credentialsRequired: false,
   }),
+  validate({ bodySchema: SignupBodySchema }),
   async (req: AuthRequestWithPayload<SignupPayload>, res, next) => {
-    try {
-      SignupSchema.validateSync(req.body);
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        return res.status(400).json({
-          message: error.errors[0],
-        });
-      }
-    }
-
-    const { password, email } = req.body as SignupPayload;
+    const { password, email } = req.body;
     const isAnonymous = !!req.auth?.uid;
 
     const alreadyExists = await prisma.user.count({
@@ -140,26 +134,13 @@ router.post("/anonymous", async (_req: Request, res) => {
   });
 });
 
-type RefreshPayload = {
-  refreshToken: string;
-};
+type RefreshPayload = InferType<typeof RefreshBodySchema>;
 
 router.post(
   "/refresh",
-  async (req: RequestWithPayload<RefreshPayload>, res, next) => {
+  validate({ bodySchema: RefreshBodySchema }),
+  async (req: RequestWithPayload<RefreshPayload>, res) => {
     const { refreshToken } = req.body;
-
-    if (!refreshToken) {
-      return next(new BadRequestError("Missing required fields"));
-    }
-
-    if (!validateRefreshToken(refreshToken)) {
-      return next(
-        new UnauthorizedError("invalid_token", {
-          message: "Invalid refresh token",
-        })
-      );
-    }
 
     const uid = getUidFromToken(refreshToken);
 

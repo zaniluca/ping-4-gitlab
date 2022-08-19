@@ -7,12 +7,12 @@ export type CustomJWTClaims = JwtPayload & {
 };
 
 export interface RequestWithPayload<T> extends Request {
-  body: Partial<T>;
+  body: T;
 }
 
 export interface AuthRequestWithPayload<T>
   extends ExpressJwtRequest<CustomJWTClaims> {
-  body: Partial<T>;
+  body: T;
 }
 
 export type WebhookPayload = {
