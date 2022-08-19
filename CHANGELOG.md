@@ -6,15 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
-## Added
+### Added
 
 - Keychain support for password autofill (iOS)
 - Added image to the landing page
 
-## Changes
+### Changes
 
 - Ping for Gitlab is evolving, with this release we allow users to migrate their anonymous and permanent accounts to the new infrastructure, which will be introduced in the next major release
-
+- Links in notifications now open on external browser
 ## [1.2.0] - 2022-07-06
 
 ### Added
