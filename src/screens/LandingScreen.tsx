@@ -1,6 +1,5 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, TouchableOpacity, useColorScheme } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
@@ -15,10 +14,10 @@ type Props = RootStackScreenProps<"Landing">;
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { signInAnonymously } = useAuth();
   const { colors } = useTheme();
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   // "transparent" doesn't work properly on iOS so we have to use this workaround
-  const transparent = colorScheme === "light" ? "#FFFFFF00" : "#1F1F1F00";
+  // const transparent = colorScheme === "light" ? "#FFFFFF00" : "#1F1F1F00";
 
   return (
     <SafeAreaView
@@ -38,14 +37,17 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
-          <LinearGradient
+          {/* For some reasons expo-linear-gradient doesn't work with SDK45 */}
+          {/* <LinearGradient
             colors={[transparent, colors.primaryBackground]}
             style={{
               flex: 1,
             }}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 0, y: 0.92 }}
-          >
+          > */}
+          {/* TODO: Remove this Box once Linear gradients work */}
+          <Box flex={1}>
             <Image
               source={require("../../assets/landing-screen-1.png")}
               style={{
@@ -56,7 +58,8 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
                 zIndex: -1,
               }}
             />
-          </LinearGradient>
+          </Box>
+          {/* </LinearGradient> */}
         </Box>
         <Box flexShrink={1}>
           <Button title="Let's get started!" onPress={signInAnonymously} />
