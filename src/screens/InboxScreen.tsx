@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useLayoutEffect, useCallback } from "react";
 import { ScrollView } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,11 +29,17 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    if (!user.hasCompletedOnboarding) {
-      navigation.navigate("GetStarted");
-    }
-  }, [user.hasCompletedOnboarding]);
+  useFocusEffect(
+    useCallback(() => {
+      // For some reason after upgrading to SDK46 and React 18
+      // This would not get calld on first render along with every useEffect
+      setTimeout(() => {
+        if (!user.hasCompletedOnboarding) {
+          navigation.navigate("GetStarted");
+        }
+      }, 0);
+    }, [user.hasCompletedOnboarding])
+  );
 
   return (
     <SafeAreaView

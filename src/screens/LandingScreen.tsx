@@ -59,7 +59,10 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
           </LinearGradient>
         </Box>
         <Box flexShrink={1}>
-          <Button title="Let's get started!" onPress={signInAnonymously} />
+          <Button
+            title="Let's get started!"
+            onPress={signInAnonymously.mutate}
+          />
           <Disclaimer />
           <Box
             justifyContent="center"

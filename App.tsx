@@ -9,9 +9,10 @@ import {
 } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
 import { QueryClientProvider } from "@tanstack/react-query";
-import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { useCallback } from "react";
 import { LogBox, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -28,6 +29,9 @@ import "./src/utils/sentry";
 // https://stackoverflow.com/a/64832663/12661017
 LogBox.ignoreLogs(["Setting a timer"]);
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
   const colorScheme = useColorScheme();
 
@@ -40,8 +44,14 @@ export default function App() {
     SourceSansPro_600SemiBold,
   });
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
@@ -49,6 +59,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <NavigationContainer
           theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
+          onReady={onLayoutRootView}
         >
           <NotificationsProvider>
             {/*  
