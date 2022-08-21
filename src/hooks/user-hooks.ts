@@ -1,6 +1,5 @@
 import {
   useMutation,
-  UseMutationOptions,
   useQuery,
   useQueryClient,
   UseQueryOptions,
@@ -58,9 +57,7 @@ export const useDeleteUser = () => {
   });
 };
 
-export const useUpdateUser = (
-  options?: UseMutationOptions<APIUser, APIError, Partial<APIUser>>
-) => {
+export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation(updateUser, {
@@ -87,6 +84,5 @@ export const useUpdateUser = (
       // Always refetch after error or success
       queryClient.invalidateQueries(["user"]);
     },
-    ...options,
   });
 };
