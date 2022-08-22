@@ -38,6 +38,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
+          {/* For some reasons expo-linear-gradient doesn't work with SDK45 */}
           <LinearGradient
             colors={[transparent, colors.primaryBackground]}
             style={{
