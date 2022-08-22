@@ -134,7 +134,7 @@ jobs:
           eas submit \
             --latest \
             --non-interactive \
-            --p ios
+            -p ios
 
       - name: Submit to playstore
         if: ${{ inputs.platform == 'android' || inputs.platform == 'all' }}
@@ -142,4 +142,4 @@ jobs:
           eas submit \
             --latest \
             --non-interactive \
-            --p android
+            -p android
