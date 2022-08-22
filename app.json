@@ -14,16 +14,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "runtimeVersion": "exposdk:44.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "20",
+      "buildNumber": "23",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -36,7 +40,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 16,
+      "versionCode": 17,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
     },
     "plugins": [
@@ -44,7 +48,9 @@
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/notification.wav"],
+          "sounds": [
+            "./assets/notification.wav"
+          ],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
           "androidMode": "collapse",
