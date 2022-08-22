@@ -17,6 +17,7 @@ export default ({ config }) => {
       ],
     },
     extra: {
+      // Needed for the Local CI Build to work
       eas: {
         projectId: "bdcab203-d9ce-48aa-95db-938dbfe1be17",
       },
