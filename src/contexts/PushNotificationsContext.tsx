@@ -8,9 +8,9 @@ import {
 } from "react";
 import Toast from "react-native-toast-message";
 
+import { useRootStackNavigation } from "../hooks/navigation-hooks";
 import { useNotification } from "../hooks/notifications-hooks";
 import { useUpdateUser, useUser } from "../hooks/user-hooks";
-import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 import {
   registerForPushNotificationsAsync,
   resetAppBadge,

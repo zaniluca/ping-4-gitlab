@@ -13,8 +13,8 @@ import Toast from "react-native-toast-message";
 
 import { usePushNotificationsContext } from "../../contexts/PushNotificationsContext";
 import { useLogout } from "../../hooks/auth-hooks";
+import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import { useUpdateUser, useUser } from "../../hooks/user-hooks";
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 import SettingsListFooter from "./SettingsListFooter";

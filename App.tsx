@@ -63,9 +63,9 @@ export default function App() {
         >
           <NotificationsProvider>
             {/*  
-                  Workaround to fix React navigation background on navigation beeing white even on darkmode 
-                  https://stackoverflow.com/a/67606259/12661017
-                */}
+              Workaround to fix React navigation background on navigation beeing white even on darkmode 
+              https://stackoverflow.com/a/67606259/12661017
+            */}
             <SafeAreaProvider
               style={
                 colorScheme === "dark" && {

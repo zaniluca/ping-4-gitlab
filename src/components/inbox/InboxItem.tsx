@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import timeElapsed from "../../utils/time-elapsed";
 import { APINotification } from "../../utils/types";
 import { Box, Text } from "../restyle";

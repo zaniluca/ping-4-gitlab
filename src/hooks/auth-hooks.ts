@@ -1,8 +1,8 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 import { http } from "../utils/http";
 import { APIAuthResponse, APIError } from "../utils/types";
+import { useRootStackNavigation } from "./navigation-hooks";
 import { useSecureStore } from "./use-secure-store";
 import { useUser } from "./user-hooks";
 
@@ -92,7 +92,7 @@ export const useLogout = () => {
       await queryClient.resetQueries(["notifications"]);
 
       console.log("User logged out");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error during logout: ", err.message);
     }
   };

@@ -1,8 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useRef } from "react";
 
 import Logo from "../components/Logo";
@@ -158,8 +154,5 @@ const RootStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-
-export const useRootStackNavigation = () =>
-  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 export default RootStackNavigator;

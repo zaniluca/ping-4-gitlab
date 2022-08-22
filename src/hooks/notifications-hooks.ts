@@ -27,7 +27,6 @@ const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
 
 export const useNotificationsList = () => {
   const user = useUser();
-  // const queryClient = useQueryClient();
 
   return useQuery<APINotification[], APIError>(
     ["notifications"],
@@ -101,7 +100,6 @@ export const useUpdateNotification = () => {
     },
     onSettled: () => {
       // Always refetch after error or success
-      setTimeout(() => {}, 5000);
       queryClient.invalidateQueries(["notifications"]);
     },
   });
