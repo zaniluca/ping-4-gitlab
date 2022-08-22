@@ -3,12 +3,15 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import { useEffect } from "react";
 
 import { useAuth } from "../contexts/AuthContext";
+import { useSecureStore } from "../hooks/use-secure-store";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import InboxScreen from "../screens/InboxScreen";
 import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
+import MajorChangesScreen from "../screens/MajorChangesScreen";
 import NotificationDetail from "../screens/NotificationDetail";
 import SignupScreen from "../screens/SignupScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
@@ -21,7 +24,17 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const { getValueForKey } = useSecureStore();
+
+  useEffect(() => {
+    getValueForKey("hasMigrated").then((value) => {
+      if (!value && !user?.isAnonymous) {
+        logout();
+      }
+    });
+  }, []);
 
   return (
     <Stack.Navigator
@@ -93,6 +106,19 @@ const RootStackNavigator = () => {
             options={{
               presentation: "modal",
               title: "Get Started",
+              gestureEnabled: false,
+              headerLargeTitle: true,
+              // Hiding the back button on android
+              headerLeft: () => <></>,
+            }}
+          />
+          {/* TODO: remove */}
+          <Stack.Screen
+            name="MajorChanges"
+            component={MajorChangesScreen}
+            options={{
+              presentation: "modal",
+              title: "Major Changes",
               gestureEnabled: false,
               headerLargeTitle: true,
               // Hiding the back button on android
