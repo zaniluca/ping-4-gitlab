@@ -11,7 +11,6 @@ export type RootStackParamList = {
   Login: undefined;
   Landing: undefined;
   Signup: undefined;
-  MajorChanges: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
