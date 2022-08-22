@@ -16,5 +16,10 @@ export default ({ config }) => {
         },
       ],
     },
+    extra: {
+      eas: {
+        projectId: "bdcab203-d9ce-48aa-95db-938dbfe1be17",
+      },
+    },
   };
 };
