@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 import { useTheme } from "../utils/theme";
 import { Text } from "./restyle";
 
-type Props = {
+type Props = PropsWithChildren & {
   onPress: () => void;
   title?: string;
   style?: StyleProp<ViewStyle>;

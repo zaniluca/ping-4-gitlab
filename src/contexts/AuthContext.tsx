@@ -10,7 +10,7 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import {
   createContext,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useState,
@@ -43,11 +43,7 @@ export const AuthContext = createContext<AuthContextValues>({
   deleteUser: async () => {},
 });
 
-type AuthContextProps = {
-  children: ReactNode;
-};
-
-export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
+export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User>(auth.currentUser);
   const { colors } = useTheme();

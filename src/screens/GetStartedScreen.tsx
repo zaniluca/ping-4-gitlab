@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { PropsWithChildren, useLayoutEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -132,7 +132,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const BulletPointListItem: React.FC = ({ children }) => {
+const BulletPointListItem: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box flexDirection="row" marginTop="s">
       <Text variant="body">{"\u2022"}</Text>
