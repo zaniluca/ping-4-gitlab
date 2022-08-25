@@ -1,7 +1,7 @@
+import React, { PropsWithChildren } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import React from "react";
 
-const KeyboardAvoid: React.FC = ({ children }) => {
+const KeyboardAvoid: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}

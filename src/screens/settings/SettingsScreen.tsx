@@ -1,8 +1,9 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackScreenProps } from "../../navigation/types";
-import SettingsList from "../../components/settings/SettingsList";
+
 import SettingsHeader from "../../components/settings/SettingsHeader";
+import SettingsList from "../../components/settings/SettingsList";
+import { RootStackScreenProps } from "../../navigation/types";
 import { useTheme } from "../../utils/theme";
 
 type Props = RootStackScreenProps<"Settings">;

@@ -1,19 +1,19 @@
-import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import KeyboardAvoid from "../components/KeyboardAvoid";
-import BackButton from "../components/BackButton";
-import Input from "../components/Input";
-import Button from "../components/Button";
 import { Formik } from "formik";
-import { RootStackScreenProps } from "../navigation/types";
+import React, { useState } from "react";
+import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import BackButton from "../components/BackButton";
+import Button from "../components/Button";
+import ErrorsList from "../components/ErrorsList";
+import Input from "../components/Input";
+import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { LoginSchema } from "../utils/validation";
 import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
+import { RootStackScreenProps } from "../navigation/types";
 import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
-import ErrorsList from "../components/ErrorsList";
+import { LoginSchema } from "../utils/validation";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -86,7 +86,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.email}
                     error={errors.email}
                     label="email"
-                    autoCompleteType="email"
+                    autoComplete="email"
                     spellCheck={false}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -103,7 +103,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.password}
                     error={errors.password}
                     label="password"
-                    autoCompleteType="password"
+                    autoComplete="password"
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="done"

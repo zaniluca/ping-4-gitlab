@@ -1,7 +1,7 @@
 import * as FirebaseCore from "expo-firebase-core";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 if (!FirebaseCore.DEFAULT_APP_OPTIONS)
   throw new Error(

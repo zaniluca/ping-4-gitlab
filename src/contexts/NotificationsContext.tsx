@@ -1,19 +1,20 @@
+import * as Notifications from "expo-notifications";
 import {
   createContext,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useState,
 } from "react";
 import Toast from "react-native-toast-message";
+
+import { useRootStackNavigation } from "../navigation/RootStackNavigator";
 import {
   registerForPushNotificationsAsync,
   resetAppBadge,
 } from "../utils/notifications";
-import { useData } from "./DataContext";
-import * as Notifications from "expo-notifications";
 import { useAuth } from "./AuthContext";
-import { useRootStackNavigation } from "../navigation/RootStackNavigator";
+import { useData } from "./DataContext";
 
 type NotificationsContextValues = {
   pushToken?: string;
@@ -22,10 +23,6 @@ type NotificationsContextValues = {
 export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
 );
-
-type NotificationsContextProps = {
-  children: ReactNode;
-};
 
 // Handler for foreground notifications
 Notifications.setNotificationHandler({
@@ -55,7 +52,7 @@ Notifications.addNotificationResponseReceivedListener((notification) =>
   console.log("Notification recived", notification)
 );
 
-export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
+export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const { user } = useAuth();

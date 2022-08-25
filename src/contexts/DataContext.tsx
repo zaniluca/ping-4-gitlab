@@ -11,11 +11,12 @@ import {
 } from "firebase/firestore";
 import {
   createContext,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useState,
 } from "react";
+
 import { firestore } from "../utils/firebase";
 import generateUniqueHook from "../utils/hook-generator";
 import { Notification, UserData } from "../utils/types";
@@ -41,11 +42,7 @@ export const DataContext = createContext<DataContextValues>({
   getNotificationById: async (id: string) => Promise.resolve(undefined),
 });
 
-type DataContextProps = {
-  children: ReactNode;
-};
-
-export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
+export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [hasLoadedFirstSnapshot, setHasLoadedFirstSnapshot] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userData, setUserData] = useState<UserData>();
@@ -139,7 +136,7 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
         updateUserData({ onboarding: false });
       }
 
-      let docs: Notification[] = [];
+      const docs: Notification[] = [];
       querySnapshot.forEach((doc) => {
         const noti = doc.data() as Notification;
         // Setting document id as notification id

@@ -1,10 +1,11 @@
-import { useLayoutEffect } from "react";
+import { PropsWithChildren, useLayoutEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
-import { Box, Text } from "../components/restyle";
 import Toaster from "../components/Toaster";
+import { Box, Text } from "../components/restyle";
 import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
 import { RootStackScreenProps } from "../navigation/types";
@@ -15,7 +16,7 @@ type Props = RootStackScreenProps<"GetStarted">;
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser, user } = useAuth();
+  const { deleteUser, user, logout } = useAuth();
 
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
@@ -32,7 +33,6 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       if (hasCompletedOnboarding) {
         e.preventDefault();
       }
-      return;
     });
     return () => listener();
   }, [navigation, userData]);
@@ -41,8 +41,9 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     if (user?.isAnonymous) {
       // Only deleting anonymous users
       await deleteUser();
+    } else {
+      await logout();
     }
-    navigation.navigate("Landing");
   };
 
   const hasCompletedOnboarding = !userData?.onboarding;
@@ -131,7 +132,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const BulletPointListItem: React.FC = ({ children }) => {
+const BulletPointListItem: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box flexDirection="row" marginTop="s">
       <Text variant="body">{"\u2022"}</Text>

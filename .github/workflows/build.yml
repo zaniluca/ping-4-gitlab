@@ -1,0 +1,87 @@
+name: Build
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+jobs:
+  build:
+    name: Build
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: "ios"
+            os: "macos-12"
+          - platform: "android"
+            os: "ubuntu-latest"
+
+    runs-on: ${{ matrix.os }}
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Copy Google Services files from secrets
+        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json && echo ${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} | base64 --decode > ./GoogleService-Info.plist
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Setup EAS local builds
+        run: yarn global add eas-cli-local-build-plugin
+
+      # Eas local doesn't support environment variables
+      # so we have to pass them via the shell
+      - name: Build
+        run: |
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
+          GOOGLE_SERVICES_IOS_BASE64=${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} \
+          eas build --local \
+            --non-interactive \
+            --output=./out \
+            --platform=${{ matrix.platform }} \
+            --profile=production
+
+      - name: Get buildNumber from manifest
+        if: ${{ matrix.platform == 'ios' }}
+        id: buildNumber
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "app.json"
+          prop_path: "expo.ios.buildNumber"
+
+      - name: Get versionCode from manifest
+        if: ${{ matrix.platform == 'android' }}
+        id: versionCode
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "app.json"
+          prop_path: "expo.android.versionCode"
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ping-4-gitlab-${{ matrix.platform }}-${{ matrix.platform == 'ios' && steps.buildNumber.outputs.prop || steps.versionCode.outputs.prop }}
+          path: out

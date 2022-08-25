@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 import { Notification } from "../utils/types";
 
 export type RootStackParamList = {
@@ -10,6 +11,7 @@ export type RootStackParamList = {
   Login: undefined;
   Landing: undefined;
   Signup: undefined;
+  MajorChanges: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

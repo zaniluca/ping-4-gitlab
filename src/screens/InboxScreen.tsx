@@ -1,20 +1,24 @@
-import React, { useLayoutEffect } from "react";
-import { useEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { ScrollView } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
+import InboxSkeleton from "../components/inbox/InboxSkeleton";
+import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
+import { useSecureStore } from "../hooks/use-secure-store";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
-import InboxSkeleton from "../components/inbox/InboxSkeleton";
 
 type Props = RootStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
   const { userData, hasLoadedFirstSnapshot } = useData();
+  const { user } = useAuth();
+  const { getValueForKey } = useSecureStore();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,6 +36,17 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
       navigation.navigate("GetStarted");
     }
   }, [userData]);
+
+  // TODO: remove
+  useEffect(() => {
+    if (!user?.isAnonymous) return;
+
+    getValueForKey("hasMigrated").then((value) => {
+      if (!value) {
+        navigation.navigate("MajorChanges");
+      }
+    });
+  }, [user]);
 
   return (
     <SafeAreaView
