@@ -83,7 +83,8 @@ router.post(
     });
 
     if (alreadyExists) {
-      return next(new CredentialsError("User already exists"));
+      // TODO: REMOVE AND TURN to 409 error
+      return res.sendStatus(200);
     }
 
     let user: Pick<User, "id">;
