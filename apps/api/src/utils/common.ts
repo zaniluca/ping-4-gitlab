@@ -34,16 +34,6 @@ export const getUidFromToken = (token: string) => {
   }
 };
 
-export const validateRefreshToken = (token: string) => {
-  try {
-    jwt.decode(token);
-    return jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
-  } catch (e) {
-    console.error("Could not decode refresh token: ", e);
-    return false;
-  }
-};
-
 export const parseHeaders = (headers: string) => {
   let json: Record<string, string> = {};
   const sanitized = headers.trimEnd().replace(/[']+/g, "").split("\n");
