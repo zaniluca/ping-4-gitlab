@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://user-images.githubusercontent.com/59318963/167304601-eb5b48fa-f914-4fa7-ab3e-137b05827299.png" alt="Ping for Gitlab" width="84" height="84"> 
+ <img src="https://user-images.githubusercontent.com/59318963/187087277-524b1e3b-b7cf-406c-8ed9-500a18c23867.png" alt="Ping for Gitlab" width="84" height="84"> 
 </p>
 
 # Ping for Gitlab
