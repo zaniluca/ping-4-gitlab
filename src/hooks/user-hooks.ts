@@ -22,12 +22,20 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
 
   const userQuery = useQuery<APIUser, APIError>(["user"], fetchUser, {
     onSuccess: async (data) => {
-      console.log("User data", data);
       // If no data is returned from the API, it means the user has been deleted
       if (!data) await logout();
     },
     onError: (err) => {
-      console.error("Error during GET /user: ", err.response?.data?.message);
+      if (err.response?.status !== 403) {
+        console.error("Error during GET /user: ", err.response?.data?.message);
+      }
+    },
+    retry: (failureCount, err) => {
+      if (err.response?.status === 403) {
+        return false;
+      }
+      // For non auth error retry 3 times
+      return failureCount <= 3;
     },
     ...options,
   });

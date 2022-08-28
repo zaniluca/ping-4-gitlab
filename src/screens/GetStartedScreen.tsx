@@ -6,10 +6,10 @@ import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import Toaster from "../components/Toaster";
 import { Box, Text } from "../components/restyle";
+import { useLogout } from "../hooks/auth-hooks";
 import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
-import { useLogout } from "../hooks/auth-hooks";
 
 type Props = RootStackScreenProps<"GetStarted">;
 

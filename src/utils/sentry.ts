@@ -7,6 +7,6 @@ Sentry.init({
   debug: process.env.NODE_ENV === "development",
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
-  tracesSampleRate: 0.75,
+  tracesSampleRate: 0.55,
   release: Constants.manifest?.revisionId,
 });
