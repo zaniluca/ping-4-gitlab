@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { PropsWithChildren, useLayoutEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,11 +9,13 @@ import { Box, Text } from "../components/restyle";
 import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
+import { useLogout } from "../hooks/auth-hooks";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
+  const logout = useLogout();
 
   const user = useUser({
     refetchInterval: 5000,
@@ -44,8 +46,10 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     if (user.isAnonymous) {
       // Only deleting anonymous users
       await deleteUser.mutateAsync();
+    } else {
+      // Logging out authenticated users
+      await logout();
     }
-    navigation.navigate("Landing");
   };
 
   const hookEmail =
@@ -135,7 +139,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const BulletPointListItem: React.FC = ({ children }) => {
+const BulletPointListItem: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box flexDirection="row" marginTop="s">
       <Text variant="body">{"\u2022"}</Text>

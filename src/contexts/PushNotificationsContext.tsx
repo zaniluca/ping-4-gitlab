@@ -1,7 +1,7 @@
 import * as Notifications from "expo-notifications";
 import {
   createContext,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useState,
@@ -23,10 +23,6 @@ type NotificationsContextValues = {
 export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
 );
-
-type NotificationsContextProps = {
-  children: ReactNode;
-};
 
 // Handler for foreground notifications
 Notifications.setNotificationHandler({
@@ -56,7 +52,7 @@ Notifications.addNotificationResponseReceivedListener((notification) =>
   console.log("Notification recived", notification)
 );
 
-export const NotificationsProvider: React.FC<NotificationsContextProps> = ({
+export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const user = useUser();
