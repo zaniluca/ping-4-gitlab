@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useLayoutEffect, PropsWithChildren } from "react";
 import { BackHandler, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,7 +17,7 @@ type Props = RootStackScreenProps<"GetStarted">;
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser, user } = useAuth();
+  const { deleteUser, user, logout } = useAuth();
 
   const hasCompletedOnboarding = !userData?.onboarding;
 
@@ -46,8 +46,9 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     if (user?.isAnonymous) {
       // Only deleting anonymous users
       await deleteUser();
+    } else {
+      await logout();
     }
-    navigation.navigate("Landing");
   };
 
   return (
@@ -134,7 +135,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const BulletPointListItem: React.FC = ({ children }) => {
+const BulletPointListItem: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box flexDirection="row" marginTop="s">
       <Text variant="body">{"\u2022"}</Text>

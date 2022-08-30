@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import {
   createContext,
-  ReactNode,
+  PropsWithChildren,
   useContext,
   useEffect,
   useState,
@@ -42,11 +42,7 @@ export const DataContext = createContext<DataContextValues>({
   getNotificationById: async (id: string) => Promise.resolve(undefined),
 });
 
-type DataContextProps = {
-  children: ReactNode;
-};
-
-export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
+export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [hasLoadedFirstSnapshot, setHasLoadedFirstSnapshot] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userData, setUserData] = useState<UserData>();

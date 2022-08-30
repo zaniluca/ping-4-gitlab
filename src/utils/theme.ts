@@ -50,6 +50,11 @@ export const lightTheme = createTheme({
     tablet: 768,
   },
   textVariants: {
+    // defaults: {
+    //   fontFamily: font.regular,
+    //   fontSize: 17,
+    //   color: "primary",
+    // },
     largeTitle: {
       fontFamily: font.bold,
       fontSize: 34,

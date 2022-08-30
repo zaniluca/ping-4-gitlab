@@ -92,7 +92,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.email}
                     error={errors.email}
                     label="email"
-                    autoCompleteType="email"
+                    autoComplete="email"
                     spellCheck={false}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -109,7 +109,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.password}
                     error={errors.password}
                     label="password"
-                    autoCompleteType="password"
+                    autoComplete="password"
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="next"
@@ -125,7 +125,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.confirmPassword}
                     error={errors.confirmPassword}
                     label="confirm"
-                    autoCompleteType="password"
+                    autoComplete="password"
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="done"

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { TouchableOpacity } from "react-native";
 
 import { Box } from "./restyle";
 
-type Props = {
+type Props = PropsWithChildren & {
   onPress: () => void;
 };
 

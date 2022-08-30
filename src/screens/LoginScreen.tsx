@@ -86,7 +86,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.email}
                     error={errors.email}
                     label="email"
-                    autoCompleteType="email"
+                    autoComplete="email"
                     spellCheck={false}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -103,7 +103,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     value={values.password}
                     error={errors.password}
                     label="password"
-                    autoCompleteType="password"
+                    autoComplete="password"
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="done"
