@@ -1,5 +1,6 @@
-import { PropsWithChildren, useLayoutEffect } from "react";
-import { ScrollView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useLayoutEffect, PropsWithChildren } from "react";
+import { BackHandler, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
@@ -18,6 +19,8 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
   const { deleteUser, user, logout } = useAuth();
 
+  const hasCompletedOnboarding = !userData?.onboarding;
+
   useLayoutEffect(() => {
     if (hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
@@ -26,16 +29,18 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, [navigation, userData]);
 
-  // Disabling android hardware back buttons
-  useLayoutEffect(() => {
-    const listener = navigation.addListener("beforeRemove", (e) => {
-      // When user has finished onboarding re-enable back button
-      if (hasCompletedOnboarding) {
-        e.preventDefault();
-      }
-    });
-    return () => listener();
-  }, [navigation, userData]);
+  // https://reactnavigation.org/docs/custom-android-back-button-handling/
+  useFocusEffect(
+    useCallback(() => {
+      // Returning true from onBackPress denotes that we have handled the event
+      const onBackPress = () => true;
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [hasCompletedOnboarding])
+  );
 
   const handleGoBackToLanding = async () => {
     if (user?.isAnonymous) {
@@ -45,8 +50,6 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       await logout();
     }
   };
-
-  const hasCompletedOnboarding = !userData?.onboarding;
 
   return (
     <SafeAreaView
