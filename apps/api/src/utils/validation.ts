@@ -45,5 +45,5 @@ export const UserUpdateBodySchema = Yup.object<Shape<User>>({
   email: Yup.string().email(),
   password: PasswordSchema,
   expoPushTokens: Yup.array().of(Yup.string()),
-  mutedUntil: Yup.date().min(new Date()),
+  mutedUntil: Yup.date().min(new Date()).nullable(),
 });

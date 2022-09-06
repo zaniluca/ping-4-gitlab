@@ -38,8 +38,6 @@ export const parseHeaders = (headers: string) => {
   let json: Record<string, string> = {};
   const sanitized = headers.trimEnd().replace(/[']+/g, "").split("\n");
 
-  console.log("Sanitized headers:", sanitized);
-
   sanitized.map((e) => {
     let elements = e.split(": ");
     if (elements.length > 2) return;
