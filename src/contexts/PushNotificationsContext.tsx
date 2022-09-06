@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import * as Notifications from "expo-notifications";
 import {
   createContext,
@@ -24,30 +25,6 @@ export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
 );
 
-// Handler for foreground notifications
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: false,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-  handleSuccess: async (nid) => {
-    console.log("Recived push notification in foreground with id: ", nid);
-
-    Toast.show({
-      type: "info",
-      text1: "New notification recived!",
-      text2: "Take a look at your inbox",
-    });
-  },
-  handleError: async (nid, error) =>
-    console.error(
-      "Error when reciving push notification in foreground with id: ",
-      nid,
-      error
-    ),
-});
-
 Notifications.addNotificationResponseReceivedListener((notification) =>
   console.log("Notification recived", notification)
 );
@@ -58,8 +35,10 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   const user = useUser();
   const [pushToken, setPushToken] = useState<string | undefined>();
   const navigation = useRootStackNavigation();
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
   const updateUser = useUpdateUser();
+  const queryClient = useQueryClient();
+
+  let lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useNotification(
     lastNotificationResponse?.notification.request.content.data.nid as string,
@@ -67,9 +46,11 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
       enabled: !!user.data && !!lastNotificationResponse,
       onSuccess: (data) => {
         navigation.navigate("NotificationDetail", data);
+        lastNotificationResponse = null;
       },
       onError: (error) => {
         console.error("Notification not recived", error);
+        lastNotificationResponse = null;
       },
     }
   );
@@ -108,6 +89,31 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   useEffect(() => {
     resetAppBadge();
   }, []);
+
+  // Handler for foreground notifications
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: false,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+    handleSuccess: async (nid) => {
+      console.log("Recived push notification in foreground with id: ", nid);
+      queryClient.invalidateQueries(["notifications"]);
+
+      Toast.show({
+        type: "info",
+        text1: "New notification recived!",
+        text2: "Take a look at your inbox",
+      });
+    },
+    handleError: async (nid, error) =>
+      console.error(
+        "Error when reciving push notification in foreground with id: ",
+        nid,
+        error
+      ),
+  });
 
   return (
     <NotificationsContext.Provider value={{ pushToken }}>

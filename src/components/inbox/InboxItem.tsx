@@ -16,10 +16,10 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
 
   const headers = notification.headers;
   const iid =
-    headers["x-gitlab-issue-iid"] ?? headers["x-gitlab-mergerequest-iid"];
+    headers?.["x-gitlab-issue-iid"] ?? headers?.["x-gitlab-mergerequest-iid"];
 
   const projectPath =
-    headers["x-gitlab-project-path"] ?? headers["x-gitlab-project"];
+    headers?.["x-gitlab-project-path"] ?? headers?.["x-gitlab-project"];
 
   return (
     <TouchableOpacity
