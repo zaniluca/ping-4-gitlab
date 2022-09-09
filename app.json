@@ -25,7 +25,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "30",
+      "buildNumber": "31",
       "config": {
         "usesNonExemptEncryption": false
       },
