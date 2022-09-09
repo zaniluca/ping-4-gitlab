@@ -1,8 +1,18 @@
 import "dotenv/config";
 
+const getIconFromEnv = () => {
+  switch (process.env.EAS_BUILD_PROFILE) {
+    case ("development", "staging", "preview"):
+      return `./assets/icon-${process.env.EAS_BUILD_PROFILE}.png`;
+    default:
+      return "./assets/icon.png";
+  }
+};
+
 export default ({ config }) => {
   return {
     ...config,
+    icon: getIconFromEnv(),
     hooks: {
       postPublish: [
         {
