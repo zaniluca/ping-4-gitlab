@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import * as Sentry from "@sentry/node";
 import type { CustomJWTClaims, Headers } from "./types";
 import prisma from "../../prisma/client";
 
@@ -48,12 +49,17 @@ export const parseHeaders = (headers: string) => {
 };
 
 export const updateLastLogin = async (id: string) => {
-  await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      lastLogin: new Date(),
-    },
-  });
+  try {
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        lastLogin: new Date(),
+      },
+    });
+  } catch (error) {
+    Sentry.captureException(error);
+    console.error(error);
+  }
 };
