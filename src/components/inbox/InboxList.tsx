@@ -7,6 +7,7 @@ import { useTheme } from "../../utils/theme";
 import { APINotification } from "../../utils/types";
 import { Divider } from "../ListSeparator";
 import { Box, Text } from "../restyle";
+import InboxEmpty from "./InboxEmpty";
 import InboxItem from "./InboxItem";
 
 const renderListRow: ListRenderItem<APINotification> = ({ item }) => (
@@ -48,6 +49,7 @@ const InboxList = () => {
       ListFooterComponent={
         (notifications?.length ?? 0) >= 50 ? ListFooterComponent : null
       }
+      ListEmptyComponent={InboxEmpty}
     />
   );
 };
