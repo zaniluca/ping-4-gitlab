@@ -1,14 +1,14 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
-import { useData } from "../../contexts/DataContext";
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import { useRootStackNavigation } from "../../hooks/navigation-hooks";
+import { useUser } from "../../hooks/user-hooks";
 import RandomIcon from "../RandomIcon";
 import Skeleton from "../Skeleton";
 import { Box, Text } from "../restyle";
 
 const InboxEmpty = () => {
-  const { userData } = useData();
+  const user = useUser();
   const navigation = useRootStackNavigation();
 
   return (
@@ -62,7 +62,7 @@ const InboxEmpty = () => {
           Once you receive a notification{"\n"}you'll see that here
         </Text>
       </Box>
-      {userData?.onboarding && (
+      {!user.hasCompletedOnboarding && (
         <Box marginTop="l">
           <TouchableOpacity onPress={() => navigation.push("GetStarted")}>
             <Text variant="headline" color="accent" textAlign="center">

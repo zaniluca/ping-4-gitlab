@@ -4,7 +4,8 @@
     "owner": "zaniluca",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "1.2.1",
+    "version": "2.0.0",
+    "privacy": "public",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/zaniluca/ping-4-gitlab",
@@ -20,14 +21,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "26",
+      "buildNumber": "32",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -35,6 +34,7 @@
     },
     "android": {
       "googleServicesFile": "./google-services.json",
+      "icon": "./assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -48,9 +48,7 @@
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/notification.wav"
-          ],
+          "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
           "androidMode": "collapse",

@@ -16,7 +16,7 @@ const SettingsListFooter = () => {
         )
       </Text>
       <Text marginTop="s" variant="caption" color="secondary">
-        This app is open sourced on{" "}
+        This app's code is available on{" "}
         <Text
           color="blue"
           onPress={() => openUrl("https://github.com/zaniluca/ping-4-gitlab")}

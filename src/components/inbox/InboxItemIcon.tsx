@@ -12,7 +12,7 @@ import { useTheme } from "../../utils/theme";
 import { Headers } from "../../utils/types";
 
 type Props = SvgProps & {
-  headers: Headers;
+  headers: Partial<Headers>;
 };
 
 const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {

@@ -7,27 +7,30 @@ import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import Toaster from "../components/Toaster";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
-import { useData } from "../contexts/DataContext";
+import { useLogout } from "../hooks/auth-hooks";
+import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
-  const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser, user, logout } = useAuth();
+  const logout = useLogout();
 
-  const hasCompletedOnboarding = !userData?.onboarding;
+  const user = useUser({
+    refetchInterval: 5000,
+  });
+
+  const deleteUser = useDeleteUser();
 
   useLayoutEffect(() => {
-    if (hasCompletedOnboarding) {
+    if (user.hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
       if (navigation.canGoBack()) navigation.goBack();
       else navigation.navigate("Inbox");
     }
-  }, [navigation, userData]);
+  }, [navigation, user]);
 
   // https://reactnavigation.org/docs/custom-android-back-button-handling/
   useFocusEffect(
@@ -39,17 +42,24 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
 
       return () =>
         BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [hasCompletedOnboarding])
+    }, [user.hasCompletedOnboarding])
   );
 
   const handleGoBackToLanding = async () => {
-    if (user?.isAnonymous) {
+    if (user.isAnonymous) {
       // Only deleting anonymous users
-      await deleteUser();
+      await deleteUser.mutateAsync();
     } else {
+      // Logging out authenticated users
       await logout();
     }
   };
+
+  const hookEmail =
+    user.data?.hookId +
+    (process.env.EAS_BUILD_PROFILE === "staging"
+      ? "@staging.pfg.app"
+      : "@pfg.app");
 
   return (
     <SafeAreaView
@@ -93,10 +103,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard
-            marginTop="m"
-            content={`${userData?.hook_id}@pfg.app`}
-          />
+          <CopyToCliboard marginTop="m" content={hookEmail} />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>

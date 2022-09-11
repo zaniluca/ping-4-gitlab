@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,9 +10,8 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useSignup } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import { SignupSchema } from "../utils/validation";
 
@@ -28,26 +27,13 @@ const PASSWORD_RULES_IOS =
   "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
-  const { signup, user } = useAuth();
   const { colors } = useTheme();
 
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
+  const signup = useSignup();
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
-
-    try {
-      await signup(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
+  const onSubmit = (values: typeof INITIAL_VALUES) => {
+    signup.reset();
+    signup.mutate(values);
   };
 
   return (
@@ -71,7 +57,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
           <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
+              onSubmit={onSubmit}
               validationSchema={SignupSchema}
               validateOnChange={false}
               validateOnBlur={false}
@@ -82,7 +68,6 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                 handleSubmit: submit,
                 values,
                 errors,
-                isSubmitting,
               }) => (
                 <>
                   <Input
@@ -145,16 +130,22 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                       </Text>
                     )}
                   </Box>
-                  {/* Firebase Error */}
-                  {firebaseError && (
+                  {/* API Error */}
+                  {signup.error && (
                     <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
+                      <ErrorsList
+                        errors={{
+                          error:
+                            signup.error.response?.data.message ??
+                            "Unknown Error",
+                        }}
+                      />
                     </Box>
                   )}
                   {/* Signup CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isSubmitting ? (
+                      {signup.isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Create an account"

@@ -35,19 +35,38 @@
       "ios": {
         "simulator": false,
         "buildConfiguration": "Debug"
+      },
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-staging.up.railway.app/"
+      }
+    },
+    "staging": {
+      "channel": "master",
+      "extends": "base",
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-staging.up.railway.app/"
       }
     },
     "production": {
       "channel": "production",
-      "extends": "base"
+      "extends": "base",
+      "env": {
+        "API_URL": "https://api-ping-4-gitlab-production.up.railway.app/"
+      }
     }
   },
   "submit": {
-    "production": {
+    "base": {
       "ios": {
         "ascAppId": "1620904531",
         "appleTeamId": "R263JVGPBB"
       }
+    },
+    "production": {
+      "extends": "base"
+    },
+    "staging": {
+      "extends": "base"
     }
   }
 }

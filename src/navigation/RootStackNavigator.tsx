@@ -1,10 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useRef } from "react";
 
-import { useAuth } from "../contexts/AuthContext";
+import Logo from "../components/Logo";
+import Skeleton from "../components/Skeleton";
+import { useUser } from "../hooks/user-hooks";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import InboxScreen from "../screens/InboxScreen";
 import LandingScreen from "../screens/LandingScreen";
@@ -13,7 +12,6 @@ import NotificationDetail from "../screens/NotificationDetail";
 import SignupScreen from "../screens/SignupScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
-import { sanitizeSubject } from "../utils/sanitize";
 import { useTheme } from "../utils/theme";
 import { RootStackParamList } from "./types";
 
@@ -21,7 +19,24 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStackNavigator = () => {
   const theme = useTheme();
-  const { user } = useAuth();
+  const firstTimeAuth = useRef(true);
+
+  const user = useUser({
+    onSettled: () => {
+      if (firstTimeAuth.current) {
+        firstTimeAuth.current = false;
+      }
+    },
+    retry: false,
+  });
+
+  if (user.isLoading && firstTimeAuth.current) {
+    return (
+      <Skeleton flex={1} alignItems="center" justifyContent="center">
+        <Logo fill={theme.colors.red} width={77} height={77} />
+      </Skeleton>
+    );
+  }
 
   return (
     <Stack.Navigator
@@ -41,7 +56,7 @@ const RootStackNavigator = () => {
         },
       }}
     >
-      {user ? (
+      {user.data ? (
         <>
           <Stack.Screen
             name="Inbox"
@@ -75,7 +90,7 @@ const RootStackNavigator = () => {
             name="NotificationDetail"
             component={NotificationDetail}
             options={({ route }) => ({
-              title: sanitizeSubject(route.params),
+              title: route.params.subject,
             })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
@@ -84,6 +99,14 @@ const RootStackNavigator = () => {
             component={AccountSettingsScreen}
             options={{
               title: "Account",
+            }}
+          />
+          <Stack.Screen
+            name="Landing"
+            component={LandingScreen}
+            navigationKey="AuthenticatedLanding"
+            options={{
+              headerShown: false,
             }}
           />
           {/* Modals */}
@@ -105,6 +128,7 @@ const RootStackNavigator = () => {
           <Stack.Screen
             name="Landing"
             component={LandingScreen}
+            navigationKey="UnauthenticatedLogin"
             options={{
               headerShown: false,
             }}
@@ -130,8 +154,5 @@ const RootStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-
-export const useRootStackNavigation = () =>
-  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 export default RootStackNavigator;

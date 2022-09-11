@@ -6,15 +6,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useAnonymousLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
-  const { signInAnonymously } = useAuth();
   const { colors } = useTheme();
+  const signInAnonymously = useAnonymousLogin();
   const colorScheme = useColorScheme();
 
   // "transparent" doesn't work properly on iOS so we have to use this workaround
@@ -60,7 +60,10 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
           </LinearGradient>
         </Box>
         <Box flexShrink={1}>
-          <Button title="Let's get started!" onPress={signInAnonymously} />
+          <Button
+            title="Let's get started!"
+            onPress={signInAnonymously.mutate}
+          />
           <Disclaimer />
           <Box
             justifyContent="center"
