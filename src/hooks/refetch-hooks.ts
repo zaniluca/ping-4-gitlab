@@ -16,7 +16,7 @@ export const useAppState = () => {
   }, []);
 };
 
-export function useRefreshOnFocus<T>(refetch: () => Promise<T>) {
+export function useRefetchOnFocus<T>(refetch: () => Promise<T>) {
   const firstTimeRef = useRef(true);
 
   useFocusEffect(

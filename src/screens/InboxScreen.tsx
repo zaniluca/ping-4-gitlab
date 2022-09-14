@@ -8,6 +8,7 @@ import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import InboxSkeleton from "../components/inbox/InboxSkeleton";
 import { useNotificationsList } from "../hooks/notifications-hooks";
+import { useRefetchOnFocus } from "../hooks/refetch-hooks";
 import { useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
@@ -18,6 +19,8 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
   const notifications = useNotificationsList();
   const user = useUser();
+
+  useRefetchOnFocus(notifications.refetch);
 
   useLayoutEffect(() => {
     navigation.setOptions({

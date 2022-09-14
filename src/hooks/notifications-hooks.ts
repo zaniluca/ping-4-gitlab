@@ -33,7 +33,7 @@ export const useNotificationsList = () => {
     fetchNotificationsList,
     {
       enabled: !!user.hasCompletedOnboarding,
-      refetchInterval: 1000 * 20,
+      refetchInterval: 1000 * 60,
       onError: (err: APIError) => {
         console.log(
           "Error fetching notifications",
