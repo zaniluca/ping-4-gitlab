@@ -3,6 +3,7 @@ import { useRef } from "react";
 
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
+import { useUpdates } from "../hooks/use-updates";
 import { useUser } from "../hooks/user-hooks";
 import GetStartedScreen from "../screens/GetStartedScreen";
 import InboxScreen from "../screens/InboxScreen";
@@ -20,6 +21,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStackNavigator = () => {
   const theme = useTheme();
   const firstTimeAuth = useRef(true);
+  const { isCheckingForUpdate } = useUpdates();
 
   const user = useUser({
     onSettled: () => {
@@ -30,7 +32,7 @@ const RootStackNavigator = () => {
     retry: false,
   });
 
-  if (user.isLoading && firstTimeAuth.current) {
+  if ((user.isLoading && firstTimeAuth.current) || isCheckingForUpdate) {
     return (
       <Skeleton flex={1} alignItems="center" justifyContent="center">
         <Logo fill={theme.colors.red} width={77} height={77} />
