@@ -4755,10 +4755,10 @@ expo-file-system@~14.1.0:
     "@expo/config-plugins" "~5.0.0"
     uuid "^3.4.0"
 
-expo-firebase-core@~5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/expo-firebase-core/-/expo-firebase-core-5.1.1.tgz#28a7c602c355b7c688d50422db800c5210d03ac2"
-  integrity sha512-SS55Z7jKDFEQ+Tch+YFDMfGUTLvd5ZSOtMDQUNpavTBRc9TK+iRu+Ac5PMzh2VvPU0vBLrT8P1vfZmSkScKMoQ==
+expo-firebase-core@~5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/expo-firebase-core/-/expo-firebase-core-5.2.0.tgz#1b9f8ecfde8782d8a36ecfddecca46cfd07320cf"
+  integrity sha512-SYr1nS/nHEyi3rrrl9OPaucp3nqoaWVzd/HN8WFnbcyksfJRiemviIcRMoLUxJ9YAm3gTdDL2W79JEUQRiJQ7w==
   dependencies:
     expo-constants "~13.2.0"
 
