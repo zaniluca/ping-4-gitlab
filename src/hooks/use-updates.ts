@@ -8,6 +8,14 @@ export const useUpdates = () => {
 
   const handleCheckForUpdate = async () => {
     console.log("Checking for updates...");
+
+    Sentry.Native.addBreadcrumb({
+      event_id: "check-for-update",
+      category: "updates",
+      message: "Checking for updates",
+      level: "info",
+    });
+
     try {
       setIsCheckingForUpdate(true);
       const update = await Updates.checkForUpdateAsync();
@@ -20,7 +28,17 @@ export const useUpdates = () => {
           text2: "Please wait while we download it.",
         });
 
-        await Updates.fetchUpdateAsync();
+        const result = await Updates.fetchUpdateAsync();
+
+        console.log(result);
+
+        Sentry.Native.addBreadcrumb({
+          event_id: "fetch-update",
+          category: "updates",
+          message: "Update fetched",
+          level: "info",
+        });
+
         setIsCheckingForUpdate(false);
         await Updates.reloadAsync();
       } else {
@@ -37,29 +55,6 @@ export const useUpdates = () => {
     // Or the app will crash
     if (__DEV__) return;
     handleCheckForUpdate();
-
-    // console.log("Checking for updates...");
-    // setIsCheckingForUpdate(true);
-
-    // Updates.checkForUpdateAsync().then((update) => {
-    //   if (update.isAvailable) {
-    //     console.log("New update available! Fetching...");
-    //     Toast.show({
-    //       type: "info",
-    //       text1: "A new update is available!",
-    //       text2: "Please wait while we download it.",
-    //     });
-
-    //     Updates.fetchUpdateAsync().then(() => {
-    //       setIsCheckingForUpdate(false);
-
-    //       Updates.reloadAsync();
-    //     });
-    //   } else {
-    //     console.log("No updates available.");
-    //     setIsCheckingForUpdate(false);
-    //   }
-    // });
   }, []);
 
   return {
