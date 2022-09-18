@@ -1,6 +1,7 @@
 import axios from "axios";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
+import * as Updates from "expo-updates";
 import decodeJwt, { JwtPayload } from "jwt-decode";
 import { Platform } from "react-native";
 
@@ -17,9 +18,14 @@ const getDevelopmentApiUrl = () => {
   return `http://${host}:8080`;
 };
 
+const getReleaseApiUrl = () =>
+  process.env.API_URL ?? Updates.channel === "production"
+    ? "https://api-ping-4-gitlab-production.up.railway.app/"
+    : "https://api-ping-4-gitlab-staging.up.railway.app/";
+
 const API_URL =
   process.env.NODE_ENV === "production"
-    ? process.env.API_URL
+    ? getReleaseApiUrl()
     : getDevelopmentApiUrl();
 
 export const http = axios.create({
