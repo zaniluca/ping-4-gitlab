@@ -1,6 +1,5 @@
-import Constants from "expo-constants";
+import Application from "expo-application";
 import React from "react";
-import { Platform } from "react-native";
 
 import { openUrl } from "../../utils/open-url";
 import { Box, Text } from "../restyle";
@@ -9,11 +8,8 @@ const SettingsListFooter = () => {
   return (
     <Box flex={1} alignItems="center" paddingTop="l">
       <Text variant="caption" color="secondary">
-        {Constants.manifest?.name} {Constants.manifest?.version} (
-        {Platform.OS === "ios"
-          ? Constants.manifest?.ios?.buildNumber
-          : Constants.manifest?.android?.versionCode}
-        )
+        {Application.applicationName} {Application.nativeApplicationVersion} (
+        {Application.nativeBuildVersion})
       </Text>
       <Text marginTop="s" variant="caption" color="secondary">
         This app's code is available on{" "}

@@ -55,6 +55,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
+  // TODO: Fix for EAS Update
   const hookEmail =
     user.data?.hookId +
     (process.env.EAS_BUILD_PROFILE === "staging"

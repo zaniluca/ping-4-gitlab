@@ -19,6 +19,8 @@ const getDevelopmentApiUrl = () => {
 };
 
 const getReleaseApiUrl = () =>
+  // When the build is directly from EAS we can use the API_URL provided in the eas.json file
+  // Otherwise if the build comes from EAS Update we need to provide the api url manually based on the release channel
   process.env.API_URL ?? Updates.channel === "production"
     ? "https://api-ping-4-gitlab-production.up.railway.app/"
     : "https://api-ping-4-gitlab-staging.up.railway.app/";
