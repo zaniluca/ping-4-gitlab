@@ -1,15 +1,13 @@
 import { Linking } from "react-native";
+import * as Sentry from "sentry-expo";
 
-export const openUrl = (url: string) => {
-  Linking.canOpenURL(url)
-    .then((supported) => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        console.log("Don't know how to open URI: " + url);
-      }
-    })
-    .catch((reason) => {
-      console.error("Can't open url", reason);
-    });
+export const openURL = async (url: string) => {
+  const isSupported = await Linking.canOpenURL(url);
+
+  if (isSupported) {
+    await Linking.openURL(url);
+  } else {
+    Sentry.Native.captureMessage(`Don't know how to open this URL: ${url}`);
+    console.log(`Don't know how to open this URL: ${url}`);
+  }
 };

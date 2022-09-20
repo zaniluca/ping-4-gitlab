@@ -1,7 +1,7 @@
 import * as Application from "expo-application";
 import React from "react";
 
-import { openUrl } from "../../utils/open-url";
+import { openURL } from "../../utils/open-url";
 import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
@@ -21,7 +21,7 @@ const SettingsListFooter = () => {
         This app's code is available on{" "}
         <Text
           color="blue"
-          onPress={() => openUrl("https://github.com/zaniluca/ping-4-gitlab")}
+          onPress={() => openURL("https://github.com/zaniluca/ping-4-gitlab")}
         >
           GitHub
         </Text>

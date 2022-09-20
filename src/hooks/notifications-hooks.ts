@@ -71,14 +71,25 @@ export const useUpdateNotification = () => {
 
   return useMutation(updateNotification, {
     onMutate: async ({ id, data }) => {
-      console.log(`Optimistically updating notification ${id}:`, data);
       await queryClient.cancelQueries(["notifications"]);
+
       const previousData = queryClient.getQueryData([
         "notifications",
       ]) as APINotification[];
 
+      const previousNotificationData = previousData.find((n) => n.id === id);
+
+      if (!previousNotificationData) {
+        console.log(
+          "Notification not found in cache, skipping optimistic update"
+        );
+        return;
+      }
+
+      console.log(`Optimistically updating notification ${id}:`, data);
+
       const updatedNotification = {
-        ...previousData.find((n) => n.id === id)!,
+        ...previousNotificationData,
         ...data,
       };
 

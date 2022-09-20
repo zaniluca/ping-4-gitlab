@@ -39,6 +39,12 @@ export const useUpdates = () => {
           level: "info",
         });
 
+        Toast.show({
+          type: "success",
+          text1: "New update downloaded!",
+          text2: "It will be installed on the next app launch.",
+        });
+
         setIsCheckingForUpdate(false);
         await Updates.reloadAsync();
       } else {

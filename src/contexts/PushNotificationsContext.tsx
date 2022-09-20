@@ -37,23 +37,32 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   const navigation = useRootStackNavigation();
   const updateUser = useUpdateUser();
   const queryClient = useQueryClient();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+  const [notificationId, setNotificationId] = useState<string | null>(null);
 
-  let lastNotificationResponse = Notifications.useLastNotificationResponse();
+  useNotification(notificationId!, {
+    enabled: !!user.data && !!notificationId,
+    onSuccess: (data) => {
+      navigation.navigate("NotificationDetail", data);
+    },
+    onError: (error) => {
+      console.error("Notification not recived", error);
+    },
+    onSettled: () => {
+      setNotificationId(null);
+    },
+  });
 
-  useNotification(
-    lastNotificationResponse?.notification.request.content.data.nid as string,
-    {
-      enabled: !!user.data && !!lastNotificationResponse,
-      onSuccess: (data) => {
-        navigation.navigate("NotificationDetail", data);
-        lastNotificationResponse = null;
-      },
-      onError: (error) => {
-        console.error("Notification not recived", error);
-        lastNotificationResponse = null;
-      },
+  useEffect(() => {
+    if (
+      lastNotificationResponse &&
+      lastNotificationResponse.notification.request.content.data.nid
+    ) {
+      setNotificationId(
+        lastNotificationResponse.notification.request.content.data.nid as string
+      );
     }
-  );
+  }, [lastNotificationResponse]);
 
   useEffect(() => {
     if (!user.data) return;
@@ -105,6 +114,9 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
         type: "info",
         text1: "New notification recived!",
         text2: "Take a look at your inbox",
+        onPress() {
+          navigation.navigate("Inbox");
+        },
       });
     },
     handleError: async (nid, error) =>
