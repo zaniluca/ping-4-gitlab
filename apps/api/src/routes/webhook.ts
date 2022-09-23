@@ -70,7 +70,7 @@ const composeNotificationContent = (n: NotificationWithHeaders) => {
   const body = n.text?.split("\n")[0].trim();
   return {
     title,
-    body,
+    body: body ?? "You have a new notification!",
   };
 };
 
@@ -118,6 +118,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     subject,
     text,
     html,
+    to,
   };
 
   const hookId = to.split("@")[0];
@@ -157,8 +158,8 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   const notificationsCount = await prisma.notification.count();
 
-  if (notificationsCount === 1) {
-    console.log("First notification created, Onboarding completed");
+  if (!user.onboardingCompleted && !!notificationsCount) {
+    console.log("First notification recived, Onboarding completed");
 
     user = await prisma.user.update({
       where: {
