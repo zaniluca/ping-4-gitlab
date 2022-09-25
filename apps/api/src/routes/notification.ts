@@ -22,7 +22,7 @@ router.get("/list", async (req: ExpressJwtRequest, res) => {
 
   const notifications = await prisma.notification.findMany({
     where: {
-      id: req.auth?.uid,
+      userId: req.auth?.uid,
     },
     orderBy: {
       recived: "desc",
