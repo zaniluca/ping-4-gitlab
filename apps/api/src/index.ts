@@ -37,6 +37,13 @@ app.use(
     algorithms: ["HS256"],
   })
 );
+app.use(
+  "/notification",
+  expressjwt({
+    secret: process.env.JWT_ACCESS_SECRET!,
+    algorithms: ["HS256"],
+  })
+);
 
 // Routes
 app.use("/user", user);
