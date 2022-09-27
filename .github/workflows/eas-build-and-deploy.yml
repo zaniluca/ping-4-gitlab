@@ -66,25 +66,26 @@ jobs:
           path: "app.json"
           prop_path: "expo.version"
 
-      - name: Bump build and tag on master
-        if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
-        uses: stefanzweifel/git-auto-commit-action@v4
-        id: auto_commit
-        with:
-          branch: master
-          commit_message: "chore: bumped build numbers"
-          commit_options: "--no-verify"
-          tagging_message: "v${{steps.version.outputs.prop}}"
-
-      - name: Bump build on production
+      - name: Config Github Bot for tagging
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
+
+      - name: Tag on master
+        if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
+        run: |
+          git checkout master
+          git tag "v${{steps.version.outputs.prop}}"
+          git push origin --tags
+
+      - name: Tag on production
+        if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
+        run: |
           git checkout production
-          git cherry-pick ${{ steps.auto_commit.outputs.commit_hash }}
-          git push --set-upstream origin production
+          git tag "v${{steps.version.outputs.prop}}"
+          git push origin --tags
 
   deploy:
     name: Deploy
