@@ -62,10 +62,7 @@ const composeNotificationContent = (n: NotificationWithHeaders) => {
     return composePipelineNotification(n);
   }
 
-  const title = n.subject
-    // Removing "Re: 'project-name'" used normally for emails
-    .replace(`Re: ${n.headers["x-gitlab-project"]} | `, "")
-    .trimStart();
+  const title = sanitizeSubject(n.subject, n.headers["x-gitlab-project"]);
 
   const body = n.text?.split("\n")[0].trim();
   return {
@@ -79,6 +76,15 @@ const sanitizeText = (text: string) => {
   //https://stackoverflow.com/a/56391193/12661017
   // return text.trimStart().replace(/-- .*/g, "$'");
   return text.trimStart().split("--")[0];
+};
+
+const sanitizeSubject = (subject: string, project?: string) => {
+  // Removing "Re: 'project-name'" used normally for emails
+  if (project) {
+    return subject.replace(`Re: ${project} | `, "").trimStart();
+  }
+
+  return subject;
 };
 
 router.post("/webhook", multer().none(), async (req, res, next) => {
@@ -98,7 +104,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   const {
     to,
-    subject,
+    subject: rawSubject,
     text: rawText,
     html: rawHtml,
     headers: rawHeaders,
@@ -113,6 +119,9 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   // Removing unwanted parts from html
   const html = removeFooterFromHtml(rawHtml);
+
+  // Removing unwanted parts from subject
+  const subject = sanitizeSubject(rawSubject, headers["x-gitlab-project"]);
 
   const hashPayload = {
     subject,
