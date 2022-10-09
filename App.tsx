@@ -25,10 +25,6 @@ import queryClient from "./src/utils/query-client";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
 import "./src/utils/sentry";
 
-// Workaround to disable firebase console spamming
-// https://stackoverflow.com/a/64832663/12661017
-LogBox.ignoreLogs(["Setting a timer"]);
-
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
