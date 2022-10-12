@@ -28,12 +28,6 @@ type NotificationWithHeaders = Notification & {
   headers: Headers;
 };
 
-const composeGenericNotification = (n: NotificationWithHeaders) => ({
-  title: n.subject
-    .replace(`Re: ${n.headers["x-gitlab-project"]} | `, "")
-    .trimStart(),
-});
-
 const composePipelineNotification = (n: NotificationWithHeaders) => {
   const status = n.headers["x-gitlab-pipeline-status"];
   const STATUS_TITLE: Record<PipelineStatus, string> = {
@@ -43,26 +37,19 @@ const composePipelineNotification = (n: NotificationWithHeaders) => {
 
   return {
     title: status ? STATUS_TITLE[status] : "Pipeline",
-    body: n.subject
-      .replace(`${n.headers["x-gitlab-project"]} | `, "")
-      .trimStart(),
+    body: sanitizeSubject(n.subject),
   };
 };
 
 const composeNotificationContent = (n: NotificationWithHeaders) => {
   // We treat a notification as generic if it doesn't have a project associated
-  const isGeneric = !n.headers["x-gitlab-project"];
   const isPipeline = !!n.headers["x-gitlab-pipeline-id"];
-
-  if (isGeneric) {
-    return composeGenericNotification(n);
-  }
 
   if (isPipeline) {
     return composePipelineNotification(n);
   }
 
-  const title = sanitizeSubject(n.subject, n.headers["x-gitlab-project"]);
+  const title = sanitizeSubject(n.subject);
 
   const body = n.text?.split("\n")[0].trim();
   return {
@@ -78,13 +65,11 @@ const sanitizeText = (text: string) => {
   return text.trimStart().split("--")[0];
 };
 
-const sanitizeSubject = (subject: string, project?: string) => {
-  // Removing "Re: 'project-name'" used normally for emails
-  if (project) {
-    return subject.replace(`Re: ${project} | `, "").trimStart();
-  }
+const sanitizeSubject = (subject: string) => {
+  // Remove everything before the first |
+  const STRING_BEFORE_FIRST_PIPE_REGEX = /^([^\|]*)\|*/;
 
-  return subject;
+  return subject.replace(STRING_BEFORE_FIRST_PIPE_REGEX, "").trimStart();
 };
 
 router.post("/webhook", multer().none(), async (req, res, next) => {
@@ -121,7 +106,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   const html = removeFooterFromHtml(rawHtml);
 
   // Removing unwanted parts from subject
-  const subject = sanitizeSubject(rawSubject, headers["x-gitlab-project"]);
+  const subject = sanitizeSubject(rawSubject);
 
   const hashPayload = {
     subject,
