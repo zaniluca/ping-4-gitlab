@@ -67,7 +67,7 @@ const sanitizeText = (text: string) => {
 
 const sanitizeSubject = (subject: string) => {
   // Remove everything before the first |
-  const STRING_BEFORE_FIRST_PIPE_REGEX = /^([^\|]*)\|*/;
+  const STRING_BEFORE_FIRST_PIPE_REGEX = /^[^\|]*\|/;
 
   return subject.replace(STRING_BEFORE_FIRST_PIPE_REGEX, "").trimStart();
 };
