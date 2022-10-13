@@ -37,7 +37,7 @@ const composePipelineNotification = (n: NotificationWithHeaders) => {
 
   return {
     title: status ? STATUS_TITLE[status] : "Pipeline",
-    body: sanitizeSubject(n.subject),
+    body: n.subject,
   };
 };
 
