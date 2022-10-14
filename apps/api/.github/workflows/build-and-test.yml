@@ -36,6 +36,7 @@ jobs:
         with:
           environment: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
           sourcemaps: "./dist"
+          ignore_empty: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
