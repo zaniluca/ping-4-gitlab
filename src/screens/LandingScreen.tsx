@@ -1,4 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import { Image, TouchableOpacity, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +10,7 @@ import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
 import { useAnonymousLogin } from "../hooks/auth-hooks";
+import { useSecureStore } from "../hooks/use-secure-store";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -16,9 +20,28 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
   const signInAnonymously = useAnonymousLogin();
   const colorScheme = useColorScheme();
+  const { setValueForKey } = useSecureStore();
 
   // "transparent" doesn't work properly on iOS so we have to use this workaround
   const transparent = colorScheme === "light" ? "#FFFFFF00" : "#1F1F1F00";
+
+  const queryClient = useQueryClient();
+  const signInGitlab = async () => {
+    const res = await WebBrowser.openAuthSessionAsync(
+      "http://localhost:8080/oauth/gitlab/authorize",
+      "/login/gitlab"
+    );
+    const result = Linking.parse((res as any).url);
+    const accessToken = result.queryParams?.accessToken;
+    const refreshToken = result.queryParams?.refreshToken;
+
+    console.log(accessToken, refreshToken);
+
+    await setValueForKey("accessToken", accessToken as string);
+    await setValueForKey("refreshToken", refreshToken as string);
+
+    await queryClient.refetchQueries(["user"]);
+  };
 
   return (
     <SafeAreaView
@@ -64,6 +87,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
             title="Let's get started!"
             onPress={signInAnonymously.mutate}
           />
+          <Button title="Gitlab" onPress={signInGitlab} />
           <Disclaimer />
           <Box
             justifyContent="center"
