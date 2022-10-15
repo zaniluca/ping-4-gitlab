@@ -32,8 +32,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Copy Google Services files from secrets
-        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json && echo ${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} | base64 --decode > ./GoogleService-Info.plist
+      - name: Copy Google Services file from secrets
+        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
 
       - name: Yarn install
         uses: ./.github/actions/yarn-install
@@ -57,7 +57,6 @@ jobs:
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
-          GOOGLE_SERVICES_IOS_BASE64=${{ secrets.GOOGLE_SERVICES_IOS_BASE64 }} \
           eas build --local \
             --non-interactive \
             --output=./out \
