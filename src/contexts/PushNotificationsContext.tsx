@@ -83,7 +83,7 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
       console.log("ExpoPushToken: ", token);
       // We are on emulator or the user has not allowed notifications
       if (!token) return;
-      // Token already present in firebase
+      // Token already present
       if (tokens.includes(token)) return;
 
       updateUser.mutate({

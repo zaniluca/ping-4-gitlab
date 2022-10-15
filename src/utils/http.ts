@@ -1,5 +1,6 @@
 import axios from "axios";
 import Constants from "expo-constants";
+import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
 import * as Updates from "expo-updates";
 import decodeJwt, { JwtPayload } from "jwt-decode";
@@ -7,15 +8,15 @@ import { Platform } from "react-native";
 
 import { APIAuthResponse } from "./types";
 
-const getDevelopmentApiUrl = () => {
-  const host =
-    Platform.OS === "android"
-      ? // 10.0.2.2 is the special host for accessing localhost via android emulator
-        "10.0.2.2"
-      : // Getting the IP address of the device we're developing on to make work with Expo GO
-        Constants.manifest?.debuggerHost?.split(":").shift();
+const getDevelopmentHost = () => {
+  // 10.0.2.2 is the special host for accessing localhost via android emulator
+  if (Platform.OS === "android") return "10.0.2.2";
+  // Getting the IP address of the device we're developing on to make work with Expo GO
+  if (Device.isDevice)
+    return Constants.manifest?.debuggerHost?.split(":").shift();
 
-  return `http://${host}:8080`;
+  // If we're in iOS simulator we can use localhost
+  return "localhost";
 };
 
 const getReleaseApiUrl = () =>
@@ -25,10 +26,10 @@ const getReleaseApiUrl = () =>
     ? "https://api-ping-4-gitlab-production.up.railway.app/"
     : "https://api-ping-4-gitlab-staging.up.railway.app/";
 
-const API_URL =
+export const API_URL =
   process.env.NODE_ENV === "production"
     ? getReleaseApiUrl()
-    : getDevelopmentApiUrl();
+    : `http://${getDevelopmentHost()}:8080`;
 
 export const http = axios.create({
   baseURL: API_URL,
