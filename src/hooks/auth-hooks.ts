@@ -1,6 +1,9 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
+import { WebBrowserRedirectResult } from "expo-web-browser";
 
-import { http } from "../utils/http";
+import { API_URL, http } from "../utils/http";
 import { APIAuthResponse, APIError } from "../utils/types";
 import { useRootStackNavigation } from "./navigation-hooks";
 import { useSecureStore } from "./use-secure-store";
@@ -94,6 +97,47 @@ export const useLogout = () => {
       console.log("User logged out");
     } catch (err: any) {
       console.error("Error during logout: ", err.message);
+    }
+  };
+};
+
+export const useGitlabLogin = () => {
+  const { setValueForKey } = useSecureStore();
+  const queryClient = useQueryClient();
+
+  return async () => {
+    try {
+      const res = (await WebBrowser.openAuthSessionAsync(
+        `${API_URL}/oauth/gitlab/authorize`,
+        "/login/gitlab"
+      )) as WebBrowserRedirectResult;
+
+      if (res.type !== "success") {
+        console.error("Error during Gitlab login: ", res);
+        return;
+      }
+
+      const parsedResponse = Linking.parse(res.url);
+
+      const accessToken = parsedResponse.queryParams?.accessToken;
+      const refreshToken = parsedResponse.queryParams?.refreshToken;
+
+      if (!accessToken || !refreshToken) {
+        console.error(
+          "Token not provided in Gitlab OAuth response: ",
+          parsedResponse
+        );
+        return;
+      }
+
+      await setValueForKey("accessToken", accessToken as string);
+      await setValueForKey("refreshToken", refreshToken as string);
+
+      await queryClient.refetchQueries(["user"]);
+
+      console.log("Succesfull Gitlab login");
+    } catch (err: any) {
+      console.error("Error during Gitlab login: ", err.message);
     }
   };
 };
