@@ -37,6 +37,7 @@ export type APIUser = {
   email: string | null;
   expoPushTokens: string[];
   mutedUntil: string | null;
+  gitlabId: number | null;
 };
 
 export type APIError = AxiosError<{
