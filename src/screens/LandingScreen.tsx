@@ -39,7 +39,6 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
-          {/* For some reasons expo-linear-gradient doesn't work with SDK45 */}
           <LinearGradient
             colors={[transparent, colors.primaryBackground]}
             style={{
@@ -62,10 +61,15 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         </Box>
         <Box flexShrink={1}>
           <Button
-            title="Let's get started!"
+            label="Let's get started!"
             onPress={signInAnonymously.mutate}
           />
-          <Button title="Gitlab" onPress={loginWithGitlab} />
+          <Button
+            marginTop="m"
+            label="Gitlab"
+            variant="outline"
+            onPress={loginWithGitlab}
+          />
           <Disclaimer />
           <Box
             justifyContent="center"
