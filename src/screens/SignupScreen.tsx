@@ -48,7 +48,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
-          <Text variant="largeTitle" marginTop="l">
+          <Text variant="largeTitle" marginTop="xl">
             Sign Up
           </Text>
           <Text variant="body" marginTop="s">
@@ -143,7 +143,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     </Box>
                   )}
                   {/* Signup CTA */}
-                  <Box marginTop="xl">
+                  <Box marginTop="3xl">
                     <Button onPress={submit}>
                       {signup.isLoading ? (
                         <ActivityIndicator color="white" />
@@ -160,8 +160,8 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
             <Box
               justifyContent="center"
               flexDirection="row"
-              marginTop="m"
-              paddingBottom="xl"
+              marginTop="l"
+              paddingBottom="3xl"
             >
               <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
