@@ -26,7 +26,6 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "32",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -40,7 +39,6 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 19,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
     },
     "plugins": [
