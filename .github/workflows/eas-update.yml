@@ -30,4 +30,9 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish update
-        run: eas update --auto
+        run: |
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          eas update --auto

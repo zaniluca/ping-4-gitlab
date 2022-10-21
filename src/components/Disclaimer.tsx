@@ -1,6 +1,6 @@
 import React from "react";
 
-import { openUrl } from "../utils/open-url";
+import { openURL } from "../utils/open-url";
 import { Text } from "./restyle";
 
 const Disclaimer = () => {
@@ -14,7 +14,7 @@ const Disclaimer = () => {
       <Text
         color="accent"
         onPress={() =>
-          openUrl(
+          openURL(
             "https://www.privacypolicies.com/live/91cf1154-e54c-45d8-90e9-fe94a46013f6"
           )
         }

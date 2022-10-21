@@ -1,15 +1,14 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
-import { sanitizeSubject } from "../../utils/sanitize";
+import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import timeElapsed from "../../utils/time-elapsed";
-import { Notification } from "../../utils/types";
+import { APINotification } from "../../utils/types";
 import { Box, Text } from "../restyle";
 import InboxItemIcon from "./InboxItemIcon";
 
 type Props = {
-  notification: Notification;
+  notification: APINotification;
 };
 
 const InboxItem: React.FC<Props> = ({ notification }) => {
@@ -17,10 +16,10 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
 
   const headers = notification.headers;
   const iid =
-    headers["x-gitlab-issue-iid"] ?? headers["x-gitlab-mergerequest-iid"];
+    headers?.["x-gitlab-issue-iid"] ?? headers?.["x-gitlab-mergerequest-iid"];
 
   const projectPath =
-    headers["x-gitlab-project-path"] ?? headers["x-gitlab-project"];
+    headers?.["x-gitlab-project-path"] ?? headers?.["x-gitlab-project"];
 
   return (
     <TouchableOpacity
@@ -54,11 +53,11 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
                 </Text>
               )}
               <Text numberOfLines={2} ellipsizeMode="tail" variant="body">
-                {sanitizeSubject(notification)}
+                {notification.subject}
               </Text>
             </Box>
             <Text variant="callout" color="secondary">
-              {timeElapsed(notification.recived.toDate())}
+              {timeElapsed(new Date(notification.recived))}
             </Text>
           </Box>
           <Text

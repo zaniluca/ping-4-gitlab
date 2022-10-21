@@ -1,25 +1,30 @@
 import React, { useEffect, useRef } from "react";
 import { WebView } from "react-native-webview";
 
-import { useData } from "../contexts/DataContext";
+import { useUpdateNotification } from "../hooks/notifications-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { openUrl } from "../utils/open-url";
+import { openURL } from "../utils/open-url";
 
 type Props = RootStackScreenProps<"NotificationDetail">;
 
 const NotificationDetail: React.FC<Props> = ({ route }) => {
-  const { updateNotification } = useData();
+  const updateNotification = useUpdateNotification();
   const webview = useRef<WebView | null>(null);
 
   const notification = route.params;
 
   useEffect(() => {
     if (notification.viewed) return;
-    updateNotification(notification.id, { viewed: true });
+
+    updateNotification.mutate({
+      id: notification.id,
+      data: { viewed: true },
+    });
   }, []);
 
   return (
     <WebView
+      startInLoadingState
       ref={webview}
       source={{
         html: notification.html ?? "",
@@ -28,7 +33,7 @@ const NotificationDetail: React.FC<Props> = ({ route }) => {
       onNavigationStateChange={(e) => {
         if (e.url && e.url.startsWith("http")) {
           webview.current?.goBack();
-          openUrl(e.url);
+          openURL(e.url);
         }
       }}
     />

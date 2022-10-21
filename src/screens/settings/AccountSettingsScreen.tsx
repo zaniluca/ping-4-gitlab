@@ -6,11 +6,13 @@ import { Box, Text } from "../../components/restyle";
 import SettingsSectionedList, {
   SettingsSettingsSections,
 } from "../../components/settings/SettingsSectionedList";
-import { useAuth } from "../../contexts/AuthContext";
+import { useLogout } from "../../hooks/auth-hooks";
+import { useDeleteUser } from "../../hooks/user-hooks";
 import { RootStackScreenProps } from "../../navigation/types";
 
 const DeleteAccount = () => {
-  const { logout, deleteUser } = useAuth();
+  const deleteUser = useDeleteUser();
+  const logout = useLogout();
 
   const handlePress = () => {
     Alert.alert(
@@ -25,8 +27,8 @@ const DeleteAccount = () => {
           text: "Proceed",
           style: "destructive",
           onPress: async () => {
+            await deleteUser.mutateAsync();
             await logout();
-            await deleteUser();
           },
         },
       ]

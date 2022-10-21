@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,9 +9,8 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import { LoginSchema } from "../utils/validation";
 
@@ -23,25 +22,13 @@ const INITIAL_VALUES = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { login, user } = useAuth();
   const { colors } = useTheme();
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
+  const login = useLogin();
 
-    try {
-      await login(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
+  const onSubmit = (values: typeof INITIAL_VALUES) => {
+    login.reset();
+    login.mutate(values);
   };
 
   return (
@@ -65,7 +52,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           <Box style={{ marginTop: 24 }}>
             <Formik
               initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
+              onSubmit={onSubmit}
               validateOnChange={false}
               validateOnBlur={false}
               validationSchema={LoginSchema}
@@ -75,7 +62,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 handleBlur,
                 handleSubmit: submit,
                 values,
-                isSubmitting,
                 errors,
               }) => (
                 <>
@@ -116,16 +102,22 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                       <ErrorsList errors={errors} />
                     </Box>
                   )}
-                  {/* Firebase Error */}
-                  {firebaseError && (
+                  {/* API Error */}
+                  {login.error && (
                     <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
+                      <ErrorsList
+                        errors={{
+                          error:
+                            login.error.response?.data.message ??
+                            "Unknown error",
+                        }}
+                      />
                     </Box>
                   )}
                   {/* Login CTA */}
                   <Box marginTop="xl">
                     <Button onPress={submit}>
-                      {isSubmitting ? (
+                      {login.isLoading ? (
                         <ActivityIndicator color="white" />
                       ) : (
                         "Login"
