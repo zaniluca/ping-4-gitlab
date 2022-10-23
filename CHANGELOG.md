@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
-### Changed
+## [2.0.0] - 2022-10-23
 
-- Ping for Gitlab now runs on a compleatly new infrastructure allowing for more reliability and better performance
+### Changes
+
+- Ping for Gitlab now runs on a completely new infrastructure allowing for more reliability and better performance
 
 ## [1.2.1] - 2022-08-27
 
