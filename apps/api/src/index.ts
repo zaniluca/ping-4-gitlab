@@ -14,6 +14,8 @@ const port = process.env.PORT ?? 8080;
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
+  debug: process.env.NODE_ENV === "development",
+  enabled: process.env.NODE_ENV === "production",
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({
@@ -30,6 +32,13 @@ app.use(Sentry.Handlers.tracingHandler());
 app.use(express.json());
 app.use(
   "/user",
+  expressjwt({
+    secret: process.env.JWT_ACCESS_SECRET!,
+    algorithms: ["HS256"],
+  })
+);
+app.use(
+  "/notification",
   expressjwt({
     secret: process.env.JWT_ACCESS_SECRET!,
     algorithms: ["HS256"],

@@ -40,6 +40,9 @@
     "node": "^16.0.0",
     "pnpm": ">=7.0.0"
   },
+  "prisma": {
+    "seed": "ts-node-dev prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^4.0.0",
     "@sentry/node": "^7.6.0",

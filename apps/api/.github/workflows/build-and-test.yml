@@ -25,7 +25,19 @@ jobs:
           node-version: 16.15.1
 
       - name: Build
-        run: pnpm tsc --noEmit
+        run: pnpm tsc
 
       - name: Test
         run: pnpm test
+
+      - name: Create Sentry release
+        if: github.event_name == 'push'
+        uses: getsentry/action-release@v1
+        with:
+          environment: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+          sourcemaps: "./dist"
+          ignore_empty: true
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}

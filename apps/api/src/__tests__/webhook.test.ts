@@ -84,7 +84,7 @@ X-GitLab-NotificationReason:
 };
 
 const EXPECTED_NOTIFICATION_DATA = {
-  contentHash: "3054c33171dda1f57dbbb723bfa236afa2114a58",
+  contentHash: "10c6960f21feed9e0cf632c071d6b559e4c203ce",
   headers: {
     "auto-submitted": "auto-generated",
     "content-transfer-encoding": "7bit",

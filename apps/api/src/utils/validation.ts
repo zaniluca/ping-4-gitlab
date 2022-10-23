@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as yup from "yup";
 import * as jwt from "jsonwebtoken";
 import type { User } from "@prisma/client";
 import type { ObjectShape } from "yup/lib/object";
@@ -11,25 +11,27 @@ type Shape<T extends Record<any, any>> = Partial<
   Record<keyof T, ObjectShapeValues>
 >;
 
-const PasswordSchema = Yup.string()
+const PasswordSchema = yup
+  .string()
   .min(6)
   .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
   .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
   .matches(/^(?=.*[0-9])/, "Must contain at least one number")
   .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character");
 
-export const SignupBodySchema = Yup.object({
-  email: Yup.string().email().required().label("Email"),
+export const SignupBodySchema = yup.object({
+  email: yup.string().email().required().label("Email"),
   password: PasswordSchema.required().label("Password"),
 });
 
-export const LoginBodySchema = Yup.object({
-  email: Yup.string().email().required().label("Email"),
-  password: Yup.string().required().label("Password"),
+export const LoginBodySchema = yup.object({
+  email: yup.string().email().required().label("Email"),
+  password: yup.string().required().label("Password"),
 });
 
-export const RefreshBodySchema = Yup.object({
-  refreshToken: Yup.string()
+export const RefreshBodySchema = yup.object({
+  refreshToken: yup
+    .string()
     .required()
     .test("is-valid-refresh-token", "Invalid refresh token", (value) => {
       try {
@@ -41,9 +43,9 @@ export const RefreshBodySchema = Yup.object({
     }),
 });
 
-export const UserUpdateBodySchema = Yup.object<Shape<User>>({
-  email: Yup.string().email(),
+export const UserUpdateBodySchema = yup.object<Shape<User>>({
+  email: yup.string().email(),
   password: PasswordSchema,
-  expoPushTokens: Yup.array().of(Yup.string()),
-  mutedUntil: Yup.date().min(new Date()),
+  expoPushTokens: yup.array().of(yup.string()),
+  mutedUntil: yup.date().min(new Date()).nullable(),
 });

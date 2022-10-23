@@ -28,12 +28,6 @@ type NotificationWithHeaders = Notification & {
   headers: Headers;
 };
 
-const composeGenericNotification = (n: NotificationWithHeaders) => ({
-  title: n.subject
-    .replace(`Re: ${n.headers["x-gitlab-project"]} | `, "")
-    .trimStart(),
-});
-
 const composePipelineNotification = (n: NotificationWithHeaders) => {
   const status = n.headers["x-gitlab-pipeline-status"];
   const STATUS_TITLE: Record<PipelineStatus, string> = {
@@ -43,34 +37,24 @@ const composePipelineNotification = (n: NotificationWithHeaders) => {
 
   return {
     title: status ? STATUS_TITLE[status] : "Pipeline",
-    body: n.subject
-      .replace(`${n.headers["x-gitlab-project"]} | `, "")
-      .trimStart(),
+    body: n.subject,
   };
 };
 
 const composeNotificationContent = (n: NotificationWithHeaders) => {
   // We treat a notification as generic if it doesn't have a project associated
-  const isGeneric = !n.headers["x-gitlab-project"];
   const isPipeline = !!n.headers["x-gitlab-pipeline-id"];
-
-  if (isGeneric) {
-    return composeGenericNotification(n);
-  }
 
   if (isPipeline) {
     return composePipelineNotification(n);
   }
 
-  const title = n.subject
-    // Removing "Re: 'project-name'" used normally for emails
-    .replace(`Re: ${n.headers["x-gitlab-project"]} | `, "")
-    .trimStart();
+  const title = sanitizeSubject(n.subject);
 
   const body = n.text?.split("\n")[0].trim();
   return {
     title,
-    body,
+    body: body ?? "You have a new notification!",
   };
 };
 
@@ -79,6 +63,13 @@ const sanitizeText = (text: string) => {
   //https://stackoverflow.com/a/56391193/12661017
   // return text.trimStart().replace(/-- .*/g, "$'");
   return text.trimStart().split("--")[0];
+};
+
+const sanitizeSubject = (subject: string) => {
+  // Remove everything before the first |
+  const STRING_BEFORE_FIRST_PIPE_REGEX = /^[^\|]*\|/;
+
+  return subject.replace(STRING_BEFORE_FIRST_PIPE_REGEX, "").trimStart();
 };
 
 router.post("/webhook", multer().none(), async (req, res, next) => {
@@ -98,7 +89,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   const {
     to,
-    subject,
+    subject: rawSubject,
     text: rawText,
     html: rawHtml,
     headers: rawHeaders,
@@ -114,10 +105,14 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   // Removing unwanted parts from html
   const html = removeFooterFromHtml(rawHtml);
 
+  // Removing unwanted parts from subject
+  const subject = sanitizeSubject(rawSubject);
+
   const hashPayload = {
     subject,
     text,
     html,
+    to,
   };
 
   const hookId = to.split("@")[0];
@@ -157,8 +152,8 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
 
   const notificationsCount = await prisma.notification.count();
 
-  if (notificationsCount === 1) {
-    console.log("First notification created, Onboarding completed");
+  if (!user.onboardingCompleted && !!notificationsCount) {
+    console.log("First notification recived, Onboarding completed");
 
     user = await prisma.user.update({
       where: {

@@ -103,8 +103,7 @@ describe("POST /signup", () => {
         expect(res.body.message).toBeDefined();
       });
   });
-  // TODO: Re enable after firebase migration
-  it.skip("Fails if user already exists", async () => {
+  it("Fails if user already exists", async () => {
     prismaMock.user.count.mockResolvedValue(1);
 
     await request(app)
@@ -146,7 +145,7 @@ describe("POST /signup", () => {
       })
       .expect("Content-Type", /json/)
       .expect((res) => {
-        expect(res.status).toBe(201);
+        expect(res.status).toBe(200);
         expect(res.body.accessToken).toBeDefined();
         expect(res.body.refreshToken).toBeDefined();
       });
