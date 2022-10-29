@@ -21,7 +21,7 @@ import SettingsListFooter from "./SettingsListFooter";
 
 type SectionItem = {
   name: string;
-  icon: (props: SvgProps) => JSX.Element;
+  icon: (_props: SvgProps) => JSX.Element;
   onPress?: () => void;
   right?: JSX.Element;
 };

@@ -12,7 +12,7 @@ import { Theme } from "../utils/theme";
 import { Box, Text } from "./restyle";
 
 type CustomToastParams = {
-  Icon?: (props: SvgProps) => JSX.Element;
+  Icon?: (_props: SvgProps) => JSX.Element;
 };
 
 type CustomToastProps = ToastConfigParams<BaseToastProps> &
