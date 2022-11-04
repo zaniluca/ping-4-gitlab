@@ -21,7 +21,7 @@ import SettingsListFooter from "./SettingsListFooter";
 
 type SectionItem = {
   name: string;
-  icon: (props: SvgProps) => JSX.Element;
+  icon: (_props: SvgProps) => JSX.Element;
   onPress?: () => void;
   right?: JSX.Element;
 };
@@ -131,7 +131,7 @@ const SettingsList = () => {
           variant="callout"
           fontFamily={fontFamily.semibold}
           textTransform="uppercase"
-          paddingHorizontal="l"
+          paddingHorizontal="xl"
           letterSpacing={1.5}
         >
           {section.title}
@@ -148,11 +148,11 @@ const SettingsList = () => {
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
-          padding="m"
+          padding="l"
           backgroundColor="primaryBackground"
         >
           <Box flexDirection="row">
-            <Box paddingRight="m">
+            <Box paddingRight="l">
               <item.icon stroke={colors.primary} strokeWidth={2} />
             </Box>
             <Text variant="headline">{name}</Text>

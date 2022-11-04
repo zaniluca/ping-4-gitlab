@@ -29,8 +29,8 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         zIndex: 1000,
       }}
     >
-      <Box paddingHorizontal="m" marginBottom="xxl" flex={1}>
-        <Box flexDirection="column" flexGrow={1} marginTop="xl">
+      <Box paddingHorizontal="l" marginBottom="4xl" flex={1}>
+        <Box flexDirection="column" flexGrow={1} marginTop="3xl">
           <Box alignItems="center">
             <Text variant="smallTitle" color="primary">
               Never miss a notification
@@ -74,8 +74,8 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
           <Box
             justifyContent="center"
             flexDirection="row"
-            marginTop="m"
-            paddingBottom="xl"
+            marginTop="l"
+            paddingBottom="3xl"
           >
             <Text variant="body">Already have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
