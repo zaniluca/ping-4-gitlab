@@ -74,19 +74,19 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <Box paddingHorizontal="m" paddingVertical="s">
+        <Box paddingHorizontal="l" paddingVertical="s">
           <Text variant="headline">Welcome to Ping for Gitlab!</Text>
           <Text variant="body">
             Connecting your Gitlab account is as simple as adding a new address
             to your associated emails.
           </Text>
-          <Text variant="body" marginTop="m">
+          <Text variant="body" marginTop="l">
             By adding the address we give you as the notifications address you
             will start reciving messages delivered instanly to your phone.
             everything else like which notifications to recive and so on and so
             forth will be configurable from gitlab!
           </Text>
-          <Text variant="headline" marginTop="m">
+          <Text variant="headline" marginTop="l">
             Make sure to read all the way throgh this guide before starting!
           </Text>
           <Text variant="body" marginTop="s">
@@ -104,11 +104,11 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard marginTop="m" content={hookEmail} />
+          <CopyToCliboard marginTop="l" content={hookEmail} />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>
-          <Text marginTop="m" variant="headline">
+          <Text marginTop="l" variant="headline">
             Wait until the end before pressing{" "}
             <Text color="blue">"Add email address"</Text> or this screen will
             dismiss.
@@ -129,12 +129,12 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
             the steps above and enjoy reciving all your team updates directly on
             your phone!
           </BulletPointListItem>
-          <Text variant="body" marginTop="xl">
+          <Text variant="body" marginTop="3xl">
             In case you already have an account and went here by mistake press
             the button below!
           </Text>
         </Box>
-        <Box padding="m">
+        <Box padding="l">
           <Button onPress={handleGoBackToLanding}>Go back to landing</Button>
         </Box>
       </ScrollView>

@@ -12,10 +12,10 @@ const InboxEmpty = () => {
   const navigation = useRootStackNavigation();
 
   return (
-    <Box marginTop="xxl" flexDirection="column" alignItems="center">
-      <Box flexDirection="row" padding="m" justifyContent="center">
+    <Box marginTop="4xl" flexDirection="column" alignItems="center">
+      <Box flexDirection="row" padding="l" justifyContent="center">
         <RandomIcon />
-        <Box marginLeft="m" width="85%">
+        <Box marginLeft="l" width="85%">
           <Box backgroundColor="tertiary" width="45%" height={11} />
           <Box
             backgroundColor="tertiary"
@@ -34,12 +34,12 @@ const InboxEmpty = () => {
       <Skeleton backgroundColor="primaryBackground">
         <Box
           flexDirection="row"
-          padding="m"
+          padding="l"
           justifyContent="center"
           style={{ transform: [{ scale: 0.92 }] }}
         >
           <RandomIcon />
-          <Box marginLeft="m" width="85%">
+          <Box marginLeft="l" width="85%">
             <Box backgroundColor="tertiary" width="45%" height={11} />
             <Box
               backgroundColor="tertiary"
@@ -56,14 +56,14 @@ const InboxEmpty = () => {
           </Box>
         </Box>
       </Skeleton>
-      <Box alignItems="center" marginTop="m">
+      <Box alignItems="center" marginTop="l">
         <Text variant="smallTitle">Your inbox is empty</Text>
         <Text variant="body" color="secondary" textAlign="center">
           Once you receive a notification{"\n"}you'll see that here
         </Text>
       </Box>
       {!user.hasCompletedOnboarding && (
-        <Box marginTop="l">
+        <Box marginTop="xl">
           <TouchableOpacity onPress={() => navigation.push("GetStarted")}>
             <Text variant="headline" color="accent" textAlign="center">
               Go back to setup screen
