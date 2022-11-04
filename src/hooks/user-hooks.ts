@@ -4,6 +4,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
+import * as Sentry from "sentry-expo";
 
 import { http } from "../utils/http";
 import { APIUser, APIError } from "../utils/types";
@@ -24,6 +25,12 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
     onSuccess: async (data) => {
       // If no data is returned from the API, it means the user has been deleted
       if (!data) await logout();
+
+      Sentry.Native.setUser({
+        id: data.id,
+        email: data.email || undefined,
+        username: data.hookId,
+      });
     },
     onError: (err) => {
       if (err.response?.status !== 403) {
