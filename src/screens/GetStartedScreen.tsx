@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
+import * as Updates from "expo-updates";
 import { useCallback, useLayoutEffect, PropsWithChildren } from "react";
 import { BackHandler, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -55,12 +56,9 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  // TODO: Fix for EAS Update
   const hookEmail =
     user.data?.hookId +
-    (process.env.EAS_BUILD_PROFILE === "staging"
-      ? "@staging.pfg.app"
-      : "@pfg.app");
+    (Updates.channel === "production" ? "@pfg.app" : "@staging.pfg.app");
 
   return (
     <SafeAreaView
