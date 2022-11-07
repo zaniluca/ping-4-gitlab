@@ -43,7 +43,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackButton />
         <KeyboardAvoid>
-          <Text variant="largeTitle" marginTop="l">
+          <Text variant="largeTitle" marginTop="xl">
             Login
           </Text>
           <Text variant="body" marginTop="s">
@@ -115,7 +115,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     </Box>
                   )}
                   {/* Login CTA */}
-                  <Box marginTop="xl">
+                  <Box marginTop="3xl">
                     <Button onPress={submit}>
                       {login.isLoading ? (
                         <ActivityIndicator color="white" />
@@ -131,8 +131,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             <Box
               justifyContent="center"
               flexDirection="row"
-              marginTop="m"
-              paddingBottom="xl"
+              marginTop="l"
+              paddingBottom="3xl"
             >
               <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -142,7 +142,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </Box>
             {/* Forgot Password Button */}
-            {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
+            {/* <Box flexDirection="row" justifyContent="center" marginTop="l">
               <TouchableOpacity>
                 <Text variant="headline" color="accent">
                   I Forgot my Password :(

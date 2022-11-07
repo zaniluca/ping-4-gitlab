@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
-### Changed
+## [2.0.0] - 2022-10-23
 
-- Ping for Gitlab now runs on a compleatly new infrastructure allowing for more reliability and better performance
+### Changes
+
+- Ping for Gitlab now runs on a completely new infrastructure allowing for more reliability and better performance
 
 ## [1.2.1] - 2022-08-27
 
@@ -74,10 +76,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First release on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.2.1...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.0.0...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
 [1.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.1
 [1.2.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.2.0
 [1.2.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.2.1
+[2.0.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.0.0

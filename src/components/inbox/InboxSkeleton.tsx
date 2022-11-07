@@ -8,9 +8,9 @@ const InboxSkeleton = () => {
   return (
     <Skeleton backgroundColor="primaryBackground">
       {[...Array(8)].map((_, i) => (
-        <Box key={i} flexDirection="row" padding="m">
+        <Box key={i} flexDirection="row" padding="l">
           <RandomIcon />
-          <Box marginLeft="m" width="100%">
+          <Box marginLeft="l" width="100%">
             <Box backgroundColor="tertiary" width="45%" height={11} />
             <Box
               backgroundColor="tertiary"

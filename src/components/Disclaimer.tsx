@@ -5,7 +5,7 @@ import { Text } from "./restyle";
 
 const Disclaimer = () => {
   return (
-    <Text marginTop="m" textAlign="center" color="primary">
+    <Text marginTop="l" textAlign="center" color="primary">
       By using the app you're agree to our{"\n"}
       {/* <Text color="accent" onPress={() => openUrl("https://google.com")}>
         Terms of Use{" "}

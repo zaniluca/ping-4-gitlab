@@ -12,7 +12,7 @@ import { Theme } from "../utils/theme";
 import { Box, Text } from "./restyle";
 
 type CustomToastParams = {
-  Icon?: (props: SvgProps) => JSX.Element;
+  Icon?: (_props: SvgProps) => JSX.Element;
 };
 
 type CustomToastProps = ToastConfigParams<BaseToastProps> &
@@ -29,8 +29,8 @@ const BaseToast: React.FC<CustomToastProps> = ({
   <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
     <Box
       backgroundColor={backgroundColor}
-      paddingHorizontal="l"
-      paddingVertical="m"
+      paddingHorizontal="xl"
+      paddingVertical="l"
       borderRadius={4}
       flexDirection="row"
       alignItems="center"
@@ -38,7 +38,7 @@ const BaseToast: React.FC<CustomToastProps> = ({
       width={Dimensions.get("screen").width * 0.95}
     >
       {Icon && (
-        <Box paddingRight="m">
+        <Box paddingRight="l">
           <Icon stroke="white" />
         </Box>
       )}
@@ -47,7 +47,7 @@ const BaseToast: React.FC<CustomToastProps> = ({
           {text1}
         </Text>
         {text2 && (
-          <Text marginTop="xxs" variant="callout" color="white">
+          <Text marginTop="2xs" variant="callout" color="white">
             {text2}
           </Text>
         )}

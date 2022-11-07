@@ -13,17 +13,17 @@ export const SettingsHeader = () => {
   const user = useUser();
 
   return (
-    <Box alignItems="center" paddingVertical="xxl">
+    <Box alignItems="center" paddingVertical="4xl">
       <Text variant="headline">
         {user.isAnonymous ? "Anonymous User" : "You're logged in"}
       </Text>
-      <Text variant="callout" color="secondary" paddingTop="xxs">
+      <Text variant="callout" color="secondary" paddingTop="2xs">
         {user.isAnonymous
           ? "Signup to save data between devices"
           : `with ${user.data?.email}`}
       </Text>
       {user.isAnonymous && (
-        <Box paddingTop="m">
+        <Box paddingTop="l">
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Box
               flexDirection="row"
@@ -32,7 +32,7 @@ export const SettingsHeader = () => {
               alignItems="center"
               justifyContent="center"
               paddingVertical="s"
-              paddingHorizontal="m"
+              paddingHorizontal="l"
               borderRadius={100}
             >
               <Text variant="headline" color="white">
