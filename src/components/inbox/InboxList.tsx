@@ -1,18 +1,12 @@
-import { useCallback } from "react";
-import { FlatList, ListRenderItem } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { RefreshCw } from "react-native-feather";
 
 import { useNotificationsList } from "../../hooks/notifications-hooks";
 import { useTheme } from "../../utils/theme";
-import { APINotification } from "../../utils/types";
 import { Divider } from "../ListSeparator";
 import { Box, Text } from "../restyle";
 import InboxEmpty from "./InboxEmpty";
 import InboxItem from "./InboxItem";
-
-const renderListRow: ListRenderItem<APINotification> = ({ item }) => (
-  <InboxItem notification={item} />
-);
 
 const ListFooterComponent = () => {
   const { colors } = useTheme();
@@ -36,16 +30,15 @@ const ListFooterComponent = () => {
 const InboxList = () => {
   const { data: notifications } = useNotificationsList();
 
-  const renderItem = useCallback(renderListRow, [notifications]);
-
   return (
-    <FlatList
+    <FlashList
       contentInsetAdjustmentBehavior="automatic"
       data={notifications}
-      renderItem={renderItem}
+      renderItem={({ item }) => <InboxItem notification={item} />}
       ItemSeparatorComponent={Divider}
       keyExtractor={(item) => item.id}
       removeClippedSubviews
+      estimatedItemSize={80}
       ListFooterComponent={
         (notifications?.length ?? 0) >= 50 ? ListFooterComponent : null
       }
