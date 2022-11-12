@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { FormikProvider, useFormik } from "formik";
 import React from "react";
 import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,10 +26,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const login = useLogin();
 
-  const onSubmit = (values: typeof INITIAL_VALUES) => {
-    login.reset();
-    login.mutate(values);
-  };
+  const formik = useFormik({
+    initialValues: INITIAL_VALUES,
+    validationSchema: LoginSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      login.reset();
+      login.mutate(values);
+    },
+  });
 
   return (
     <SafeAreaView
@@ -50,83 +56,68 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             Use your credentials to log in to your account
           </Text>
           <Box style={{ marginTop: 24 }}>
-            <Formik
-              initialValues={INITIAL_VALUES}
-              onSubmit={onSubmit}
-              validateOnChange={false}
-              validateOnBlur={false}
-              validationSchema={LoginSchema}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit: submit,
-                values,
-                errors,
-              }) => (
-                <>
-                  <Input
-                    placeholder="Enter your email"
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                    error={errors.email}
-                    label="email"
-                    autoComplete="email"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    textContentType="emailAddress"
-                  />
-                  <Input
-                    style={{ marginTop: 8 }}
-                    secureTextEntry
-                    placeholder="Enter your password"
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    error={errors.password}
-                    label="password"
-                    autoComplete="password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                    textContentType="password"
-                    onSubmitEditing={() => submit()}
-                  />
-                  {/* Validation Errors */}
-                  {!!Object.entries(errors).length && (
-                    <Box marginTop="s">
-                      <ErrorsList errors={errors} />
-                    </Box>
-                  )}
-                  {/* API Error */}
-                  {login.error && (
-                    <Box marginTop="s">
-                      <ErrorsList
-                        errors={{
-                          error:
-                            login.error.response?.data.message ??
-                            "Unknown error",
-                        }}
-                      />
-                    </Box>
-                  )}
-                  {/* Login CTA */}
-                  <Box marginTop="3xl">
-                    <Button onPress={submit}>
-                      {login.isLoading ? (
-                        <ActivityIndicator color="white" />
-                      ) : (
-                        "Login"
-                      )}
-                    </Button>
+            <FormikProvider value={formik}>
+              <>
+                <Input
+                  placeholder="Enter your email"
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.email}
+                  error={formik.errors.email}
+                  label="email"
+                  autoComplete="email"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                  textContentType="emailAddress"
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Enter your password"
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  value={formik.values.password}
+                  error={formik.errors.password}
+                  label="password"
+                  autoComplete="password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  textContentType="password"
+                  onSubmitEditing={() => formik.handleSubmit()}
+                />
+                {/* Validation Errors */}
+                {!!Object.entries(formik.errors).length && (
+                  <Box marginTop="s">
+                    <ErrorsList errors={formik.errors} />
                   </Box>
-                </>
-              )}
-            </Formik>
+                )}
+                {/* API Error */}
+                {login.error && (
+                  <Box marginTop="s">
+                    <ErrorsList
+                      errors={{
+                        error:
+                          login.error.response?.data.message ?? "Unknown error",
+                      }}
+                    />
+                  </Box>
+                )}
+                {/* Login CTA */}
+                <Box marginTop="3xl">
+                  <Button onPress={formik.handleSubmit}>
+                    {login.isLoading ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </Box>
+              </>
+            </FormikProvider>
             {/* Signup navigation */}
             <Box
               justifyContent="center"
@@ -141,14 +132,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </Box>
-            {/* Forgot Password Button */}
-            {/* <Box flexDirection="row" justifyContent="center" marginTop="l">
-              <TouchableOpacity>
-                <Text variant="headline" color="accent">
-                  I Forgot my Password :(
-                </Text>
-              </TouchableOpacity>
-            </Box> */}
           </Box>
         </KeyboardAvoid>
       </ScrollView>
