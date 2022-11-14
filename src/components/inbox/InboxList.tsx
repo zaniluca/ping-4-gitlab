@@ -23,7 +23,7 @@ const ListFooterComponent = () => {
       flexDirection="row"
       alignItems="center"
       justifyContent="center"
-      margin="l"
+      margin="xl"
     >
       <RefreshCw width={12} stroke={colors.secondary} />
       <Text marginLeft="s" variant="caption" color="secondary">

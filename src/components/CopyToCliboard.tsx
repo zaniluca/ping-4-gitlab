@@ -29,7 +29,7 @@ const CopyToCliboard: React.FC<Props> = ({ content, ...rest }) => {
       <TouchableOpacity onPress={handleOnPress} activeOpacity={0.5}>
         <Box
           style={{ paddingVertical: 12 }}
-          paddingHorizontal="m"
+          paddingHorizontal="l"
           backgroundColor="quaternary"
           borderRadius={4}
           flexDirection="row"

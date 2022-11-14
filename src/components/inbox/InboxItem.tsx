@@ -25,7 +25,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate("NotificationDetail", notification)}
     >
-      <Box flexDirection="row" paddingHorizontal="m" paddingVertical="s">
+      <Box flexDirection="row" paddingHorizontal="l" paddingVertical="s">
         <Box paddingRight="s" alignItems="center">
           <InboxItemIcon headers={headers} width={20} />
           {!notification.viewed && (
@@ -40,7 +40,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
         </Box>
         <Box flex={1} flexShrink={1}>
           <Box flexDirection="row" justifyContent="space-between">
-            <Box flexShrink={1} paddingEnd="xxs">
+            <Box flexShrink={1} paddingEnd="2xs">
               {/* Only display if it has everything */}
               {projectPath && (
                 <Text

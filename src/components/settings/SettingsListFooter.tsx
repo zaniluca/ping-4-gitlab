@@ -6,7 +6,7 @@ import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
   return (
-    <Box flex={1} alignItems="center" paddingTop="l">
+    <Box flex={1} alignItems="center" paddingTop="xl">
       {__DEV__ ? (
         <Text variant="caption" color="secondary">
           Ping (Development)

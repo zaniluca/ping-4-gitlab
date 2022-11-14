@@ -10,7 +10,13 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        varsIgnorePattern: "^_",
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
   settings: {
     "import/ignore": ["react-native"],
