@@ -112,27 +112,33 @@ export const useUpdateNotification = () => {
         return;
       }
 
-      console.log(`Optimistically updating notification ${id}:`, data);
+      // We need the index of both the element to update and the page it's in to update the cache
+      const previousNotificationIndex = associatedNotificationPage.data.indexOf(
+        previousNotificationData
+      );
 
-      // Creating a new page with the updated notification inside
+      const associatedNotificationPageIndex = previousData.pages.indexOf(
+        associatedNotificationPage
+      );
+
+      console.log(
+        `Optimistically updating notification ${id} at index ${previousNotificationIndex} in page ${associatedNotificationPageIndex}`
+      );
+
       const updatedNotificationPage: APIPaginatedNotifications = {
         nextCursor: associatedNotificationPage.nextCursor,
-        data: [
-          ...associatedNotificationPage.data.filter((n) => n.id !== id),
-          { ...previousNotificationData, ...data },
-        ],
+        // The third argument of Object.assign() is an object with the key as the index of the element to update
+        data: Object.assign([], associatedNotificationPage, {
+          [previousNotificationIndex]: { ...previousNotificationData, ...data },
+        }),
       };
 
-      // Optimistically update the notifications
       queryClient.setQueryData<InfiniteData<APIPaginatedNotifications>>(
         ["notifications"],
         () => ({
-          pages: [
-            ...previousData.pages.filter(
-              (p) => p !== associatedNotificationPage
-            ),
-            updatedNotificationPage,
-          ],
+          pages: Object.assign([], previousData.pages, {
+            [associatedNotificationPageIndex]: updatedNotificationPage,
+          }),
           pageParams: previousData.pageParams,
         })
       );
