@@ -33,6 +33,7 @@
     "expo-font": "~10.2.0",
     "expo-haptics": "~11.3.0",
     "expo-linear-gradient": "~11.4.0",
+    "expo-network": "~4.3.0",
     "expo-notifications": "~0.16.1",
     "expo-secure-store": "~11.3.0",
     "expo-splash-screen": "~0.16.2",
