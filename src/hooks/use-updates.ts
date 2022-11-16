@@ -30,8 +30,6 @@ export const useUpdates = () => {
 
         const result = await Updates.fetchUpdateAsync();
 
-        console.log(result);
-
         Sentry.Native.addBreadcrumb({
           event_id: "fetch-update",
           category: "updates",
@@ -40,13 +38,24 @@ export const useUpdates = () => {
         });
 
         setIsCheckingForUpdate(false);
-        await Updates.reloadAsync();
+
+        if (result.isNew) {
+          console.log("New update downloaded! Reloading...");
+          try {
+            await Updates.reloadAsync();
+          } catch (error) {
+            console.error("Could't reload app after update", error);
+            Sentry.Native.captureException(error);
+          }
+        }
       } else {
         console.log("No updates available.");
       }
     } catch (error) {
+      console.error("Error checking for updates", error);
       Sentry.Native.captureException(error);
     }
+
     setIsCheckingForUpdate(false);
   };
 
