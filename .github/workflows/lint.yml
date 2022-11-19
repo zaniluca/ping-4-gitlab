@@ -6,6 +6,8 @@ on:
       - reopened
       - synchronize
       - ready_for_review
+  paths:
+    - "**/*.[ts|tsx|js]"
 
 jobs:
   lint:
