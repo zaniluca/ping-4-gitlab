@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changes
+
+- Small performance improvements
+
+### Fixed
+
+- Fixed a layout shift in the inbox when a notification is viewed
+
 ## [2.0.0] - 2022-10-23
 
 ### Changes
