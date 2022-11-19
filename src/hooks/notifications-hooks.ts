@@ -1,4 +1,6 @@
 import {
+  InfiniteData,
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -9,15 +11,31 @@ import { http } from "../utils/http";
 import { APIError, APINotification } from "../utils/types";
 import { useUser } from "./user-hooks";
 
-const fetchNotificationsList = () =>
-  http.get("notification/list").then((res) => res.data);
-
 const fetchNotification = (id: string) =>
   http.get(`notification/${id}`).then((res) => res.data);
+
+const fetchNotificationsList = async ({ pageParam = "" }) => {
+  const { data } = await http.get(
+    "notification/list?" +
+      new URLSearchParams({
+        cursor: pageParam,
+      })
+  );
+
+  return {
+    data,
+    nextCursor: data.length ? data[data.length - 1].id : undefined,
+  };
+};
 
 type NotificationUpdateRequest = {
   id: string;
   data: Partial<APINotification>;
+};
+
+type APIPaginatedNotifications = {
+  data: APINotification[];
+  nextCursor?: number;
 };
 
 const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
@@ -28,12 +46,12 @@ const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
 export const useNotificationsList = () => {
   const user = useUser();
 
-  return useQuery<APINotification[], APIError>(
+  return useInfiniteQuery<APIPaginatedNotifications, APIError>(
     ["notifications"],
     fetchNotificationsList,
     {
       enabled: !!user.hasCompletedOnboarding,
-      refetchInterval: 1000 * 60,
+      getNextPageParam: (lastPage, _pages) => lastPage.nextCursor,
       onError: (err: APIError) => {
         console.log(
           "Error fetching notifications",
@@ -75,28 +93,54 @@ export const useUpdateNotification = () => {
 
       const previousData = queryClient.getQueryData([
         "notifications",
-      ]) as APINotification[];
+      ]) as InfiniteData<APIPaginatedNotifications>;
 
-      const previousNotificationData = previousData.find((n) => n.id === id);
+      // Finding the page that contains the notification
+      const associatedNotificationPage = previousData.pages.find(({ data }) =>
+        data.find((n) => n.id === id)
+      );
 
-      if (!previousNotificationData) {
+      // Finding the notification in the page
+      const previousNotificationData = associatedNotificationPage?.data.find(
+        (n) => n.id === id
+      );
+
+      if (!previousNotificationData || !associatedNotificationPage) {
         console.log(
           "Notification not found in cache, skipping optimistic update"
         );
         return;
       }
 
-      console.log(`Optimistically updating notification ${id}:`, data);
+      // We need the index of both the element to update and the page it's in to update the cache
+      const previousNotificationIndex = associatedNotificationPage.data.indexOf(
+        previousNotificationData
+      );
 
-      const updatedNotification = {
-        ...previousNotificationData,
-        ...data,
+      const associatedNotificationPageIndex = previousData.pages.indexOf(
+        associatedNotificationPage
+      );
+
+      console.log(
+        `Optimistically updating notification ${id} at index ${previousNotificationIndex} in page ${associatedNotificationPageIndex}`
+      );
+
+      const updatedNotificationPage: APIPaginatedNotifications = {
+        nextCursor: associatedNotificationPage.nextCursor,
+        // The third argument of Object.assign() is an object with the key as the index of the element to update
+        data: Object.assign([], associatedNotificationPage, {
+          [previousNotificationIndex]: { ...previousNotificationData, ...data },
+        }),
       };
 
-      // Optimistically update the notifications
-      queryClient.setQueryData(
+      queryClient.setQueryData<InfiniteData<APIPaginatedNotifications>>(
         ["notifications"],
-        [...previousData.filter((n) => n.id !== id), updatedNotification]
+        () => ({
+          pages: Object.assign([], previousData.pages, {
+            [associatedNotificationPageIndex]: updatedNotificationPage,
+          }),
+          pageParams: previousData.pageParams,
+        })
       );
       // Return a context object with the snapshotted value
       return previousData;
