@@ -4,9 +4,9 @@ on:
     branches:
       - master
       - production
-  paths:
-    - "**/*.[ts|tsx|js|json|lock]"
-    - "!eas.json"
+    paths:
+      - "**/*.[ts|tsx|js|json|lock]"
+      - "!eas.json"
 
 jobs:
   update:
