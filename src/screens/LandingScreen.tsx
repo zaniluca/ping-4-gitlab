@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { useAnonymousLogin, useGitlabLogin } from "../hooks/auth-hooks";
+import { useGitlabLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -14,7 +14,6 @@ type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
-  const signInAnonymously = useAnonymousLogin();
   const colorScheme = useColorScheme();
   const loginWithGitlab = useGitlabLogin();
 
@@ -61,13 +60,8 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         </Box>
         <Box flexShrink={1}>
           <Button
-            label="Let's get started!"
-            onPress={signInAnonymously.mutate}
-          />
-          <Button
             marginTop="m"
-            label="Gitlab"
-            variant="outline"
+            label="Continue with Gitlab"
             onPress={loginWithGitlab}
           />
           <Disclaimer />

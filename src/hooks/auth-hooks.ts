@@ -2,6 +2,8 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import { WebBrowserRedirectResult } from "expo-web-browser";
+import Toast from "react-native-toast-message";
+import * as Sentry from "sentry-expo";
 
 import { API_URL, http } from "../utils/http";
 import { APIAuthResponse, APIError } from "../utils/types";
@@ -102,22 +104,42 @@ export const useLogout = () => {
 };
 
 export const useGitlabLogin = () => {
+  const user = useUser();
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
   return async () => {
     try {
       const res = (await WebBrowser.openAuthSessionAsync(
-        `${API_URL}/oauth/gitlab/authorize`,
+        `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
         "/login/gitlab"
       )) as WebBrowserRedirectResult;
 
+      // Only "success" is a suppoterd type but this doesn't ensure that the
+      // response is a successful one
       if (res.type !== "success") {
-        console.error("Error during Gitlab login: ", res);
+        console.error("Error response from OAuth: ", res);
+        Sentry.Native.captureException(
+          new Error("Error response from OAuth: " + res)
+        );
         return;
       }
 
       const parsedResponse = Linking.parse(res.url);
+
+      const error = parsedResponse.queryParams?.error;
+
+      if (error) {
+        console.error("Error during Gitlab login: ", error);
+
+        Toast.show({
+          type: "error",
+          text1: "Error during Gitlab login",
+          text2: error as string,
+        });
+
+        return;
+      }
 
       const accessToken = parsedResponse.queryParams?.accessToken;
       const refreshToken = parsedResponse.queryParams?.refreshToken;
@@ -133,9 +155,14 @@ export const useGitlabLogin = () => {
       await setValueForKey("accessToken", accessToken as string);
       await setValueForKey("refreshToken", refreshToken as string);
 
-      await queryClient.refetchQueries(["user"]);
+      await queryClient.invalidateQueries(["user"]);
 
       console.log("Succesfull Gitlab login");
+
+      Toast.show({
+        type: "success",
+        text1: "Succesfully logged in with Gitlab",
+      });
     } catch (err: any) {
       console.error("Error during Gitlab login: ", err.message);
     }
