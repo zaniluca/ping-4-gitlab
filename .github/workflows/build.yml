@@ -8,7 +8,7 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "**/*.[ts|tsx|js|json|lock]"
+      - "**/*.[ts-tsx-js-json-lock]"
 
 jobs:
   build:
