@@ -8,17 +8,19 @@ generator client {
 }
 
 model User {
-  id                  String         @id @default(cuid())
-  email               String?        @unique
-  hookId              String?        @unique @map("hook_id")
+  id                  String    @id @default(cuid())
+  email               String?   @unique
+  hookId              String?   @unique @map("hook_id")
   password            String?
-  expoPushTokens      String[]       @map("expo_push_tokens")
-  createdAt           DateTime       @default(now()) @map("created_at")
-  updatedAt           DateTime       @updatedAt @map("updated_at")
-  lastLogin           DateTime       @default(now()) @map("last_login")
-  onboardingCompleted Boolean        @default(false) @map("onboarding_completed")
-  mutedUntil          DateTime?      @map("muted_until")
-  notifications       Notification[]
+  expoPushTokens      String[]  @map("expo_push_tokens")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+  lastLogin           DateTime  @default(now()) @map("last_login")
+  onboardingCompleted Boolean   @default(false) @map("onboarding_completed")
+  mutedUntil          DateTime? @map("muted_until")
+  gitlabId            Int?      @unique @map("gitlab_id")
+
+  notifications Notification[]
 
   @@map("users")
 }

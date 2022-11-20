@@ -128,4 +128,5 @@ const MOCK_USER: User = {
   lastLogin: new Date(Date.now() - 1000),
   onboardingCompleted: false,
   mutedUntil: null,
+  gitlabId: null,
 };

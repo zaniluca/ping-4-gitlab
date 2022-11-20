@@ -8,4 +8,5 @@ export const USER_PUBLIC_FIELDS: Partial<Record<keyof User, boolean>> = {
   expoPushTokens: true,
   onboardingCompleted: true,
   mutedUntil: true,
+  gitlabId: true,
 };
