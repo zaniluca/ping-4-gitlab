@@ -21,8 +21,8 @@ const getDevelopmentHost = () => {
 
 const getReleaseApiUrl = () =>
   Updates.channel === "production"
-    ? "https://api-ping-4-gitlab-production.up.railway.app/"
-    : "https://api-ping-4-gitlab-staging.up.railway.app/";
+    ? "https://api-ping-4-gitlab-production.up.railway.app"
+    : "https://api-ping-4-gitlab-staging.up.railway.app";
 
 export const API_URL =
   process.env.NODE_ENV === "production"
