@@ -33,11 +33,16 @@ const redirectWithError = (res: Response, error: string) =>
   );
 
 router.get("/authorize", async (req, res) => {
+  console.log({
+    redirect_uri: `${req.protocol}://${req.get("host")}/oauth/gitlab/callback`,
+  });
   return res.redirect(
     "https://gitlab.com/oauth/authorize?" +
       new URLSearchParams({
         client_id: process.env.GITLAB_APP_ID!,
-        redirect_uri: `${req.protocol}://${req.headers.host}/oauth/gitlab/callback`,
+        redirect_uri: `${req.protocol}://${req.get(
+          "host"
+        )}/oauth/gitlab/callback`,
         response_type: "code",
         scope: "read_user",
         state: req.query.state as string,
@@ -59,7 +64,9 @@ router.get("/callback", async (req, res) => {
           client_secret: process.env.GITLAB_APP_SECRET!,
           grant_type: "authorization_code",
           code,
-          redirect_uri: `${req.protocol}://${req.headers.host}/oauth/gitlab/callback`,
+          redirect_uri: `${req.protocol}://${req.get(
+            "host"
+          )}/oauth/gitlab/callback`,
         },
       }
     );
