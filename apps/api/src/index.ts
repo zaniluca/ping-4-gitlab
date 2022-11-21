@@ -13,6 +13,8 @@ import * as Tracing from "@sentry/tracing";
 const app = express();
 const port = process.env.PORT ?? 8080;
 
+app.enable("trust proxy");
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   debug: process.env.NODE_ENV === "development",
