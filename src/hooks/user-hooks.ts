@@ -48,7 +48,7 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
   });
 
   return {
-    isAnonymous: !userQuery.data?.email,
+    isAnonymous: !userQuery.data?.email && !userQuery.data?.gitlabId,
     hasCompletedOnboarding: userQuery.data?.onboardingCompleted,
     ...userQuery,
   };

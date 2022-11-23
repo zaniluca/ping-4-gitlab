@@ -10,7 +10,7 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useSignup } from "../hooks/auth-hooks";
+import { useGitlabLogin, useSignup } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 import { SignupSchema } from "../utils/validation";
@@ -28,6 +28,7 @@ const PASSWORD_RULES_IOS =
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
+  const loginWithGitlab = useGitlabLogin();
 
   const signup = useSignup();
 
@@ -142,6 +143,12 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     ) : (
                       "Create an account"
                     )}
+                  </Button>
+                </Box>
+                {/* Gitlab CTA */}
+                <Box marginTop="m">
+                  <Button onPress={loginWithGitlab} variant="outline">
+                    Continue with Gitlab
                   </Button>
                 </Box>
               </>

@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { useAnonymousLogin } from "../hooks/auth-hooks";
+import { useGitlabLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -14,8 +14,8 @@ type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
-  const signInAnonymously = useAnonymousLogin();
   const colorScheme = useColorScheme();
+  const loginWithGitlab = useGitlabLogin();
 
   // "transparent" doesn't work properly on iOS so we have to use this workaround
   const transparent = colorScheme === "light" ? "#FFFFFF00" : "#1F1F1F00";
@@ -38,7 +38,6 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
-          {/* For some reasons expo-linear-gradient doesn't work with SDK45 */}
           <LinearGradient
             colors={[transparent, colors.primaryBackground]}
             style={{
@@ -61,8 +60,9 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         </Box>
         <Box flexShrink={1}>
           <Button
-            title="Let's get started!"
-            onPress={signInAnonymously.mutate}
+            marginTop="m"
+            label="Continue with Gitlab"
+            onPress={loginWithGitlab}
           />
           <Disclaimer />
           <Box

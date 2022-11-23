@@ -127,18 +127,24 @@ export const useUpdateNotification = () => {
 
       const updatedNotificationPage: APIPaginatedNotifications = {
         nextCursor: associatedNotificationPage.nextCursor,
-        // The third argument of Object.assign() is an object with the key as the index of the element to update
-        data: Object.assign([], associatedNotificationPage, {
-          [previousNotificationIndex]: { ...previousNotificationData, ...data },
-        }),
+        data: associatedNotificationPage.data.splice(
+          previousNotificationIndex,
+          1,
+          {
+            ...previousNotificationData,
+            ...data,
+          }
+        ),
       };
 
       queryClient.setQueryData<InfiniteData<APIPaginatedNotifications>>(
         ["notifications"],
         () => ({
-          pages: Object.assign([], previousData.pages, {
-            [associatedNotificationPageIndex]: updatedNotificationPage,
-          }),
+          pages: previousData.pages.splice(
+            associatedNotificationPageIndex,
+            1,
+            updatedNotificationPage
+          ),
           pageParams: previousData.pageParams,
         })
       );
