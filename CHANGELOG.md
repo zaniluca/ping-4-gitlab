@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- You can now login directly with your Gitlab account
+- A notifications is displayed when the internet connection is lost
+
 ### Changes
 
 - Small performance improvements
