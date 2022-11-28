@@ -18,6 +18,7 @@ const lightPalette = {
   secondary: "#8C929D",
   primary: "#2E2E2E",
   white: "#FFFFFF",
+  black: "#000000",
 };
 
 const font = {
@@ -86,6 +87,21 @@ export const lightTheme = createTheme({
       fontFamily: font.regular,
       fontSize: 12,
       color: "primary",
+    },
+  },
+  buttonVariants: {
+    defaults: {
+      backgroundColor: lightPalette.purple,
+    },
+    outline: {
+      elevation: 1,
+      backgroundColor: "primaryBackground",
+      borderWidth: 1,
+      borderColor: "tertiary",
+      shadowColor: "black",
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 2 },
     },
   },
 });
