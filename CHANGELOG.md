@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- You can now login with your Gitlab account
+- Removed the 50 latest notifications limit, you can now see all your notifications
+
 ### Changes
 
 - Small performance improvements
