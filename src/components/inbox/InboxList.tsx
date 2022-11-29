@@ -1,18 +1,13 @@
-import { useCallback, useMemo } from "react";
-import { FlatList, ListRenderItem } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import { useMemo } from "react";
 import { RefreshCw } from "react-native-feather";
 
 import { useNotificationsList } from "../../hooks/notifications-hooks";
 import { useTheme } from "../../utils/theme";
-import { APINotification } from "../../utils/types";
 import { Divider } from "../ListSeparator";
 import { Box, Text } from "../restyle";
 import InboxEmpty from "./InboxEmpty";
 import InboxItem from "./InboxItem";
-
-const renderListRow: ListRenderItem<APINotification> = ({ item }) => (
-  <InboxItem notification={item} />
-);
 
 const ListFooterComponent = () => {
   const { colors } = useTheme();
@@ -36,21 +31,20 @@ const ListFooterComponent = () => {
 const InboxList = () => {
   const notifications = useNotificationsList();
 
-  const renderItem = useCallback(renderListRow, [notifications.data?.pages]);
-
   const data = useMemo(
     () => notifications.data?.pages?.flatMap((page) => page.data),
     [notifications.data?.pages]
   );
 
   return (
-    <FlatList
+    <FlashList
       contentInsetAdjustmentBehavior="automatic"
+      renderItem={({ item }) => <InboxItem notification={item} />}
       data={data}
-      renderItem={renderItem}
       ItemSeparatorComponent={Divider}
       keyExtractor={(item) => item.id}
       removeClippedSubviews
+      estimatedItemSize={80}
       ListFooterComponent={
         notifications.hasNextPage ? ListFooterComponent : null
       }
