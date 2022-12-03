@@ -75,6 +75,7 @@ jobs:
 
       - name: Tag on master
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
+        continue-on-error: true
         run: |
           git checkout master
           git tag "v${{steps.version.outputs.prop}}"
@@ -82,6 +83,7 @@ jobs:
 
       - name: Tag on production
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
+        continue-on-error: true
         run: |
           git checkout production
           git tag "v${{steps.version.outputs.prop}}"
