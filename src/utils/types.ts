@@ -5,6 +5,7 @@ export type NotificationType = "issue" | "merge" | "general";
 export type Headers = ProjectHeaders &
   IssueHeaders &
   MergeHeaders &
+  CommitHeaders &
   PipelineHeaders;
 
 type ProjectHeaders = {
@@ -26,6 +27,10 @@ type MergeHeaders = {
 type PipelineHeaders = {
   "x-gitlab-pipeline-id": string;
   "x-gitlab-pipeline-status": PipelineStatus;
+};
+
+type CommitHeaders = {
+  "x-gitlab-commit-id": string;
 };
 
 export type PipelineStatus = "success" | "failed";
