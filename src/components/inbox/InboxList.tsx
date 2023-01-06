@@ -1,5 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { RefreshCw } from "react-native-feather";
 
 import { useNotificationsList } from "../../hooks/notifications-hooks";
@@ -30,11 +30,18 @@ const ListFooterComponent = () => {
 
 const InboxList = () => {
   const notifications = useNotificationsList();
+  const [isManuallyRefreshing, setIsManuallyRefreshing] = useState(false);
 
   const data = useMemo(
     () => notifications.data?.pages?.flatMap((page) => page.data),
     [notifications.data?.pages]
   );
+
+  const handlePullToRefresh = async () => {
+    setIsManuallyRefreshing(true);
+    await notifications.refetch();
+    setIsManuallyRefreshing(false);
+  };
 
   return (
     <FlashList
@@ -53,8 +60,8 @@ const InboxList = () => {
       onEndReached={() =>
         notifications.hasNextPage ? notifications.fetchNextPage() : null
       }
-      onRefresh={notifications.refetch}
-      refreshing={notifications.isRefetching}
+      onRefresh={handlePullToRefresh}
+      refreshing={isManuallyRefreshing}
     />
   );
 };
