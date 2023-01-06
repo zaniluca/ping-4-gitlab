@@ -53,6 +53,8 @@ const InboxList = () => {
       onEndReached={() =>
         notifications.hasNextPage ? notifications.fetchNextPage() : null
       }
+      onRefresh={notifications.refetch}
+      refreshing={notifications.isRefetching}
     />
   );
 };
