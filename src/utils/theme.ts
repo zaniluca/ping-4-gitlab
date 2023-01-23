@@ -33,6 +33,7 @@ export const lightTheme = createTheme({
     primaryBackground: lightPalette.white,
     divider: "#D2D2D2",
     accent: lightPalette.indigo,
+    progressBar: lightPalette.blue,
   },
   fontFamily: {
     ...font,
@@ -118,6 +119,7 @@ export const darkTheme = createTheme({
     primaryBackground: "#1F1F1F",
     divider: "#333333",
     accent: lightPalette.purple,
+    progressBar: lightPalette.orange,
   },
 });
 

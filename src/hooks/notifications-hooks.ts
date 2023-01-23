@@ -16,10 +16,12 @@ const fetchNotification = (id: string) =>
 
 const fetchNotificationsList = async ({ pageParam = "" }) => {
   const { data } = await http.get(
-    "notification/list?" +
-      new URLSearchParams({
-        cursor: pageParam,
-      })
+    "notification/list" +
+      (pageParam
+        ? `?${new URLSearchParams({
+            cursor: pageParam,
+          })}`
+        : "")
   );
 
   return {
