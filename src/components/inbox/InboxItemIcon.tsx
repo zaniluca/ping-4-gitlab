@@ -6,6 +6,7 @@ import {
   CheckCircle,
   XCircle,
   GitCommit,
+  Layers,
 } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 
@@ -23,6 +24,7 @@ const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {
   const isMerge = headers["x-gitlab-mergerequest-iid"];
   const isPipe = headers["x-gitlab-pipeline-id"];
   const isCommit = headers["x-gitlab-commit-id"];
+  const isEpic = headers["x-gitlab-epic-iid"];
 
   if (isIssue) {
     return <Circle {...props} stroke={colors.green} />;
@@ -30,6 +32,8 @@ const InboxItemIcon: React.FC<Props> = ({ headers, ...props }) => {
     return <GitPullRequest {...props} stroke={colors.blue} />;
   } else if (isCommit) {
     return <GitCommit {...props} stroke={colors.orange} />;
+  } else if (isEpic) {
+    return <Layers {...props} stroke={colors.purple} />;
   } else if (isPipe) {
     if (headers["x-gitlab-pipeline-status"] === "success") {
       return <CheckCircle {...props} stroke={colors.green} />;
