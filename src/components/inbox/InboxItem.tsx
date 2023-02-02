@@ -17,7 +17,9 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
   const headers = notification.headers;
 
   const projectPath =
-    headers?.["x-gitlab-project-path"] ?? headers?.["x-gitlab-project"];
+    headers?.["x-gitlab-project-path"] ??
+    headers?.["x-gitlab-project"] ??
+    headers?.["x-gitlab-group-path"];
 
   const getIdentifier = () => {
     if (headers?.["x-gitlab-mergerequest-iid"]) {
