@@ -18,6 +18,7 @@ type ProjectHeaders = {
 type EpicHeaders = {
   "x-gitlab-epic-id": string;
   "x-gitlab-epic-iid": string;
+  "x-gitlab-group-path": string;
 };
 
 type IssueHeaders = {
