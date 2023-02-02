@@ -5,6 +5,7 @@ export type NotificationType = "issue" | "merge" | "general";
 export type Headers = ProjectHeaders &
   IssueHeaders &
   MergeHeaders &
+  EpicHeaders &
   CommitHeaders &
   PipelineHeaders;
 
@@ -12,6 +13,11 @@ type ProjectHeaders = {
   "x-gitlab-project": string;
   "x-gitlab-project-id": string;
   "x-gitlab-project-path": string;
+};
+
+type EpicHeaders = {
+  "x-gitlab-epic-id": string;
+  "x-gitlab-epic-iid": string;
 };
 
 type IssueHeaders = {

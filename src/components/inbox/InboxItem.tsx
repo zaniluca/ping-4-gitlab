@@ -15,11 +15,21 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
   const navigation = useRootStackNavigation();
 
   const headers = notification.headers;
-  const iid =
-    headers?.["x-gitlab-issue-iid"] ?? headers?.["x-gitlab-mergerequest-iid"];
 
   const projectPath =
     headers?.["x-gitlab-project-path"] ?? headers?.["x-gitlab-project"];
+
+  const getIdentifier = () => {
+    if (headers?.["x-gitlab-mergerequest-iid"]) {
+      return `!${headers["x-gitlab-mergerequest-iid"]}`;
+    } else if (headers?.["x-gitlab-issue-iid"]) {
+      return `#${headers["x-gitlab-issue-iid"]}`;
+    } else if (headers?.["x-gitlab-epic-iid"]) {
+      return `&${headers["x-gitlab-epic-iid"]}`;
+    } else {
+      return "";
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -49,7 +59,7 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
                   variant="body"
                   color="secondary"
                 >
-                  {projectPath} {iid ? `#${iid}` : ""}
+                  {projectPath} {getIdentifier()}
                 </Text>
               )}
               <Text numberOfLines={2} ellipsizeMode="tail" variant="body">
