@@ -25,13 +25,14 @@ Sentry.init({
       app,
     }),
   ],
-  tracesSampleRate: 0.11,
+  tracesSampleRate: 1, // TODO: lower it once test are completed
 });
 
 // Middlewares
-app.use(requestLogger);
+// The request handler must be the first middleware on the app
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
+app.use(requestLogger);
 app.use(express.json());
 app.use(
   "/user",
