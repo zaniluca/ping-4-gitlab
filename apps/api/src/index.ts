@@ -9,6 +9,7 @@ import { handleError, logError, requestLogger } from "./middlewares";
 import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
+import prisma from "../prisma/client";
 
 const app = express();
 const port = process.env.PORT ?? 8080;
@@ -21,6 +22,7 @@ Sentry.init({
   enabled: process.env.NODE_ENV === "production",
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Prisma({ client: prisma }),
     new Tracing.Integrations.Express({
       app,
     }),
