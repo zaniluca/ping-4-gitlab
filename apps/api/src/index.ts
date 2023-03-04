@@ -9,6 +9,8 @@ import { handleError, logError, requestLogger } from "./middlewares";
 import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
+import "@sentry/tracing"; // NOTE: @sentry/tracing needs to be imported before @sentry/profiling-node
+import * as Profiling from "@sentry/profiling-node";
 import prisma from "../prisma/client";
 
 const app = express();
@@ -26,8 +28,11 @@ Sentry.init({
     new Tracing.Integrations.Express({
       app,
     }),
+    new Profiling.ProfilingIntegration(),
   ],
-  tracesSampleRate: 1, // TODO: lower it once test are completed
+  // TODO: lower it once test are completed
+  tracesSampleRate: 1,
+  profilesSampleRate: 1,
 });
 
 // Middlewares
