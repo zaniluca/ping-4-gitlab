@@ -1,0 +1,63 @@
+name: Preview
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "**.ts"
+      - "**.tsx"
+      - "**.js"
+      - "**.json"
+      - "**.lock"
+
+jobs:
+  preview:
+    name: Preview
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Create preview
+        uses: expo/expo-github-action/preview@v8
+        with:
+          command: |
+            SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+            SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+            eas update --auto
+
+      - name: Add preview label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["preview available"]
+            })

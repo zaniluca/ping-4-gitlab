@@ -45,7 +45,7 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
-        uses: expo/expo-github-action@v7
+        uses: expo/expo-github-action@v8
         with:
           expo-version: latest
           eas-version: latest
@@ -117,7 +117,7 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
-        uses: expo/expo-github-action@v7
+        uses: expo/expo-github-action@v8
         with:
           expo-version: latest
           eas-version: latest
