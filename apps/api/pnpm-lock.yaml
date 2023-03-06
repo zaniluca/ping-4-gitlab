@@ -18,6 +18,7 @@ specifiers:
   '@types/supertest': ^2.0.12
   axios: ^1.1.2
   bcrypt: ^5.1.0
+  cross-env: ^7.0.3
   dotenv: ^16.0.1
   expo-server-sdk: ^3.6.0
   express: ^4.18.1
@@ -68,6 +69,7 @@ devDependencies:
   '@types/node': 17.0.45
   '@types/object-hash': 2.2.1
   '@types/supertest': 2.0.12
+  cross-env: 7.0.3
   husky: 8.0.1
   jest: 27.5.1
   jest-mock-axios: 4.7.0-beta_@types+node@17.0.45
@@ -2135,6 +2137,14 @@ packages:
 
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+    dev: true
+
+  /cross-env/7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
     dev: true
 
   /cross-spawn/7.0.3:

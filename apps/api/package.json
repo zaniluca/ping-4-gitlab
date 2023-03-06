@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn src/index.ts",
     "build": "prisma migrate deploy && tsc",
-    "start": "node dist/src/index.js",
+    "start": "cross-env NODE_ENV=production node dist/src/index.js",
     "studio": "prisma studio --port 5556",
     "test": "jest -i",
     "test:watch": "jest -i --watch",
@@ -27,6 +27,7 @@
     "@types/node": "^17.0.45",
     "@types/object-hash": "^2.2.1",
     "@types/supertest": "^2.0.12",
+    "cross-env": "^7.0.3",
     "husky": "^8.0.1",
     "jest": "^27.5.1",
     "jest-mock-axios": "4.7.0-beta",

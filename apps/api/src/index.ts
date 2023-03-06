@@ -9,7 +9,6 @@ import { handleError, logError, requestLogger } from "./middlewares";
 import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
-import "@sentry/tracing"; // NOTE: @sentry/tracing needs to be imported before @sentry/profiling-node
 import * as Profiling from "@sentry/profiling-node";
 import prisma from "../prisma/client";
 
@@ -30,9 +29,8 @@ Sentry.init({
     }),
     new Profiling.ProfilingIntegration(),
   ],
-  // TODO: lower it once test are completed
-  tracesSampleRate: 1,
-  profilesSampleRate: 1,
+  tracesSampleRate: 0.33,
+  profilesSampleRate: 0.33,
 });
 
 // Middlewares
