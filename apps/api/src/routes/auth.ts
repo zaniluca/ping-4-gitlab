@@ -47,7 +47,11 @@ router.post(
       },
     });
 
-    if (!user || !bcrypt.compareSync(password, user.password!)) {
+    if (
+      !user ||
+      !user.password ||
+      !bcrypt.compareSync(password, user.password)
+    ) {
       return next(new CredentialsError("Invalid credentials"));
     }
 
