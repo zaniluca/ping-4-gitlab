@@ -26,15 +26,14 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Yarn install
         uses: ./.github/actions/yarn-install
 
-      - name: Setup Expo
-        uses: expo/expo-github-action@v7
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 

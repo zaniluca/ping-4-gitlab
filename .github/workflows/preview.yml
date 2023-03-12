@@ -1,0 +1,74 @@
+name: Preview
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "**.ts"
+      - "**.tsx"
+      - "**.js"
+      - "**.json"
+      - "**.lock"
+
+jobs:
+  preview:
+    name: Preview
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      # We need to checkout the PR head to get the commit message for the update
+      # Otherwise, we'll get the commit message from the merge commit
+      - name: Checkout PR head
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Extract last commit message
+        id: get_head_commit_message
+        run: |
+          echo "Last commit message: $(git show -s --format=%s)"
+          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish update
+        run: |
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          eas update --branch=${{ github.head_ref }} --message="${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}"
+
+      - name: Add preview label
+        uses: actions/github-script@v6
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["preview available"]
+            })
