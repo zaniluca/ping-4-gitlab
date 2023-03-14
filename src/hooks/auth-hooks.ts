@@ -117,7 +117,7 @@ export const useGitlabLogin = () => {
 
       // Only "success" is a suppoterd type but this doesn't ensure that the
       // response is a successful one
-      if (res.type !== "success") {
+      if (res.type !== "success" && res.type === "cancel") {
         console.error("Error response from OAuth: ", res);
         Sentry.Native.captureException(
           new Error("Error response from OAuth: " + res)
