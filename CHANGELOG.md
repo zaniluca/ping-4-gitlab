@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changes
+
+- Changed app display name to "Gitlab Ping"
+
 ## [2.1.0] - 2022-12-04
 
 ### Added

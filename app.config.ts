@@ -25,15 +25,18 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
   icon: getIconForBuildEnv(),
   hooks: {
     postPublish: [
-      {
-        file: "sentry-expo/upload-sourcemaps",
-        config: {
-          organization: process.env.SENTRY_ORG!,
-          project: process.env.SENTRY_PROJECT!,
-          authToken: process.env.SENTRY_AUTH_TOKEN!,
-          setCommits: true,
-        },
-      },
+      // Don't run sentry-expo/upload-sourcemaps if we're building on CI
+      !process.env.CI
+        ? {
+            file: "sentry-expo/upload-sourcemaps",
+            config: {
+              organization: process.env.SENTRY_ORG!,
+              project: process.env.SENTRY_PROJECT!,
+              authToken: process.env.SENTRY_AUTH_TOKEN!,
+              setCommits: true,
+            },
+          }
+        : {},
     ],
   },
   extra: {
