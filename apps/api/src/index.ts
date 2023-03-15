@@ -31,6 +31,21 @@ Sentry.init({
   ],
   tracesSampleRate: 0.33,
   profilesSampleRate: 0.33,
+  beforeSendTransaction(event) {
+    // Remove the cursor from the transaction
+    event.transaction = event.transaction?.replace(
+      /cursor=\w+/,
+      "cursor={cursor}"
+    );
+
+    // Remove the notification id after /notification/ from the transaction
+    event.transaction = event.transaction?.replace(
+      /\/notification\/\w+/,
+      "/notification/{id}"
+    );
+
+    return event;
+  },
 });
 
 // Middlewares
