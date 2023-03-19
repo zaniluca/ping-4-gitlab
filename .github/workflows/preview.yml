@@ -12,6 +12,8 @@ on:
       - "**.js"
       - "**.json"
       - "**.lock"
+    branches-ignore:
+      - production
 
 jobs:
   preview:
