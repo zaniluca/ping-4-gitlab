@@ -35,7 +35,8 @@ jobs:
       - name: Cleanup preview
         shell: bash
         run: |
-          local channels=$(eas channel:list --json --non-interactive | jq '.currentPage[] .name')
+          echo `eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
+          local channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
 
           echo $channels
           echo "Looking for $GITHUB_REF_NAME"
