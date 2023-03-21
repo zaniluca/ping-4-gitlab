@@ -64,6 +64,7 @@ jobs:
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
+          CI=true \
           eas build --local \
             --non-interactive \
             --output=./out \
@@ -71,7 +72,7 @@ jobs:
             --profile=production
 
       - name: Upload binary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ping-4-gitlab-${{ matrix.platform }}
           path: out

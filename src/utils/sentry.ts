@@ -1,5 +1,9 @@
 import Constants from "expo-constants";
+import * as Updates from "expo-updates";
 import * as Sentry from "sentry-expo";
+
+export const routingInstrumentation =
+  new Sentry.Native.ReactNavigationInstrumentation();
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -9,4 +13,10 @@ Sentry.init({
   sessionTrackingIntervalMillis: 10000,
   tracesSampleRate: 0.55,
   release: Constants.manifest?.revisionId,
+  environment: Updates.channel ?? "development",
+  integrations: [
+    new Sentry.Native.ReactNativeTracing({
+      routingInstrumentation,
+    }),
+  ],
 });
