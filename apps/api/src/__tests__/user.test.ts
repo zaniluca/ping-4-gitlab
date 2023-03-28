@@ -1,9 +1,9 @@
-import prismaMock from "../../prisma/mocked-client";
 import request from "supertest";
 import bcrypt from "bcrypt";
 import app from "..";
 import { USER_PUBLIC_FIELDS } from "../utils/constants";
 import { getAccessToken } from "../utils/common";
+import prismaMock from "../../prisma/mocked-client";
 
 const NEW_EMAIL = "updated@test.com";
 const NEW_HOOK = "updated";
