@@ -40,7 +40,7 @@ Sentry.init({
 
     // Remove the notification id after /notification/ from the transaction
     event.transaction = event.transaction?.replace(
-      /\/notification\/\w+/,
+      /\/notification\/\w+\d+/,
       "/notification/{id}"
     );
 
