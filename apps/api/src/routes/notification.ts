@@ -20,22 +20,24 @@ router.get("/list", async (req: ExpressJwtRequest, res) => {
     };
   }
 
-  const notifications = await prisma.notification.findMany({
-    where: {
-      userId: req.auth?.uid,
-    },
-    orderBy: {
-      recived: "desc",
-    },
-    take: 50,
-    ...paginationParams,
-  });
+  const [notifications, totalCount] = await prisma.$transaction([
+    prisma.notification.findMany({
+      where: {
+        userId: req.auth?.uid,
+      },
+      orderBy: {
+        recived: "desc",
+      },
+      take: 50,
+      ...paginationParams,
+    }),
 
-  const totalCount = await prisma.notification.count({
-    where: {
-      userId: req.auth?.uid,
-    },
-  });
+    prisma.notification.count({
+      where: {
+        userId: req.auth?.uid,
+      },
+    }),
+  ]);
 
   res.setHeader("X-Total-Count", totalCount);
 
