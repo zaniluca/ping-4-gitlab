@@ -13,9 +13,9 @@ const router = Router();
 // optionally providing an access token if you have enabled push security
 const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
-const removeFooterFromHtml = (html: string) => {
+const removeFooterFromHtml = (html?: string) => {
   const FOOTER_REGEX = /<div\b[^>]*class="footer"[^>]*>([\s\S]*?)<\/div>/;
-  return html.replace(FOOTER_REGEX, "");
+  return html?.replace(FOOTER_REGEX, "") ?? "<p>No Content</p>";
 };
 
 const isValidToken = (t: string) => {
@@ -150,7 +150,11 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     return;
   }
 
-  const notificationsCount = await prisma.notification.count();
+  const notificationsCount = await prisma.notification.count({
+    where: {
+      userId: user.id,
+    },
+  });
 
   if (!user.onboardingCompleted && !!notificationsCount) {
     console.log("First notification recived, Onboarding completed");
