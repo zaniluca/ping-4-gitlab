@@ -10,6 +10,7 @@ import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import * as Profiling from "@sentry/profiling-node";
+import { RewriteFrames } from "@sentry/integrations";
 import prisma from "../prisma/client";
 
 const app = express();
@@ -28,6 +29,10 @@ Sentry.init({
       app,
     }),
     new Profiling.ProfilingIntegration(),
+    // RewriteFrames is needed to show the correct source code in Sentry when using TypeScript
+    new RewriteFrames({
+      root: global.__dirname,
+    }),
   ],
   tracesSampleRate: 0.33,
   profilesSampleRate: 0.33,
