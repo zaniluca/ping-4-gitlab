@@ -19,7 +19,7 @@ export type WebhookPayload = {
   headers: string;
   from: string;
   to: string;
-  text: string;
+  text?: string;
   html?: string;
   subject: string;
   dkim: string;

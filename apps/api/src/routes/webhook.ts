@@ -15,7 +15,7 @@ const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
 const removeFooterFromHtml = (html?: string) => {
   const FOOTER_REGEX = /<div\b[^>]*class="footer"[^>]*>([\s\S]*?)<\/div>/;
-  return html?.replace(FOOTER_REGEX, "") ?? "<p>No Content</p>";
+  return html?.replace(FOOTER_REGEX, "") ?? "<p>No Content</p>"; // TODO: Remove this and make db field nullable
 };
 
 const isValidToken = (t: string) => {
@@ -58,11 +58,11 @@ const composeNotificationContent = (n: NotificationWithHeaders) => {
   };
 };
 
-const sanitizeText = (text: string) => {
+const sanitizeText = (text?: string) => {
   // Removing "Reply to this email..."
   //https://stackoverflow.com/a/56391193/12661017
   // return text.trimStart().replace(/-- .*/g, "$'");
-  return text.trimStart().split("--")[0];
+  return text?.trimStart()?.split("--")?.[0] ?? "No Text"; // TODO: Remove this and make db field nullable
 };
 
 const sanitizeSubject = (subject: string) => {
