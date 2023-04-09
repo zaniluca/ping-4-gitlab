@@ -26,7 +26,7 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
   hooks: {
     postPublish: [
       // Don't run sentry-expo/upload-sourcemaps if we're building on CI
-      !process.env.CI
+      !process.env.SENTRY_SKIP_RELEASE
         ? {
             file: "sentry-expo/upload-sourcemaps",
             config: {
