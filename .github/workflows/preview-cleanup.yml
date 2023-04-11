@@ -26,6 +26,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
       - name: Setup EAS
         uses: expo/expo-github-action@v8
         with:
