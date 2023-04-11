@@ -32,6 +32,13 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Configure project
+        run: |
+          eas init --id bdcab203-d9ce-48aa-95db-938dbfe1be17 --force --non-interactive
+
+      - name: Test eas channels:list
+        run: eas channel:list --json --non-interactive
+
       - name: Cleanup preview
         shell: bash
         run: |
