@@ -45,5 +45,3 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
     },
   },
 });
-
-// testing

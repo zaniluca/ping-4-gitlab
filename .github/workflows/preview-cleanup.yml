@@ -1,6 +1,8 @@
 name: Preview Cleanup
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - master
     paths:
@@ -13,6 +15,7 @@ on:
 
 jobs:
   preview:
+    if: github.event.pull_request.merged == true
     name: Preview Cleanup
     runs-on: ubuntu-latest
     steps:
@@ -35,25 +38,15 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Configure project
-        run: |
-          eas init --id bdcab203-d9ce-48aa-95db-938dbfe1be17 --force --non-interactive
-
-      - name: Test eas channels:list
-        run: eas channel:list --json --non-interactive
-
       - name: Cleanup preview
         shell: bash
         run: |
-          EXPO_DEBUG=true eas channel:list --json --non-interactive > channels.json
-          echo `EXPO_DEBUG=true eas channel:list --json --non-interactive > channels.json`
-
-          channels=`jq '.currentPage[] .name' ./channels.json`
+          channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
 
           echo $channels
           echo "Looking for $GITHUB_REF_NAME"
 
-          if printf '%s\0' "${channels[@]}" | grep -Fxqz -- '$GITHUB_REF_NAME'; then
+          if grep -q "$GITHUB_REF_NAME" <<< "$channels"; then
             eas channel:delete --non-interactive $GITHUB_REF_NAME
             eas branch:delete --non-interactive $GITHUB_REF_NAME
           else
