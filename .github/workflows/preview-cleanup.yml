@@ -38,7 +38,7 @@ jobs:
           EXPO_DEBUG=true eas channel:list --json --non-interactive > channels.json
           echo `EXPO_DEBUG=true eas channel:list --json --non-interactive > channels.json`
 
-          local channels=`jq '.currentPage[] .name' ./channels.json`
+          channels=`jq '.currentPage[] .name' ./channels.json`
 
           echo $channels
           echo "Looking for $GITHUB_REF_NAME"
