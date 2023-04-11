@@ -44,11 +44,11 @@ jobs:
           channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
 
           echo $channels
-          echo "Looking for $GITHUB_REF_NAME"
+          echo "Looking for $GITHUB_HEAD_REF"
 
-          if grep -q "$GITHUB_REF_NAME" <<< "$channels"; then
-            eas channel:delete --non-interactive $GITHUB_REF_NAME
-            eas branch:delete --non-interactive $GITHUB_REF_NAME
+          if grep -q "$GITHUB_HEAD_REF" <<< "$channels"; then
+            eas channel:delete --non-interactive $GITHUB_HEAD_REF
+            eas branch:delete --non-interactive $GITHUB_HEAD_REF
           else
             echo "Preview channel not found"
           fi
