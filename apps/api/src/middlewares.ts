@@ -35,6 +35,7 @@ export const logError = (
   if (err.name === "UnauthorizedError") return next(err);
 
   console.error(`${err.name}: ${err.message}`);
+  next(err);
 };
 
 export const requestLogger = morgan(
