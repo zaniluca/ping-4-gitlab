@@ -1,4 +1,3 @@
-import Constants from "expo-constants";
 import * as Updates from "expo-updates";
 import * as Sentry from "sentry-expo";
 
@@ -12,7 +11,6 @@ Sentry.init({
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
   tracesSampleRate: 0.55,
-  release: Constants.manifest?.revisionId,
   environment: Updates.channel ?? "development",
   integrations: [
     new Sentry.Native.ReactNativeTracing({
