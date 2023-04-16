@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { ExpoConfig, ConfigContext } from "@expo/config";
-import * as Updates from "expo-updates";
 
 const getIconForBuildEnv = () => {
   if (
@@ -35,7 +34,6 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
               project: process.env.SENTRY_PROJECT!,
               authToken: process.env.SENTRY_AUTH_TOKEN!,
               setCommits: true,
-              deployEnv: Updates.channel ?? "development",
             },
           }
         : {},

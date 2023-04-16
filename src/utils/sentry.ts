@@ -1,4 +1,3 @@
-import * as Updates from "expo-updates";
 import * as Sentry from "sentry-expo";
 
 export const routingInstrumentation =
@@ -11,7 +10,6 @@ Sentry.init({
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
   tracesSampleRate: 0.55,
-  environment: Updates.channel ?? "development",
   integrations: [
     new Sentry.Native.ReactNativeTracing({
       routingInstrumentation,
