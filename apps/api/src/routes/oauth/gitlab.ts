@@ -11,7 +11,7 @@ const router = Router();
 const APP_REDIRECT_SCHEME =
   process.env.NODE_ENV === "production"
     ? "ping4gitlab://"
-    : "exp://localhost:19000/--";
+    : "exp://localhost:19000/--/";
 
 type GitLabTokenResponse = {
   access_token: string;
@@ -29,7 +29,7 @@ type GitlabUserResponse = {
 
 const redirectWithError = (res: Response, error: string) =>
   res.redirect(
-    `${APP_REDIRECT_SCHEME}/gitlab/login?error=${encodeURIComponent(error)}`
+    `${APP_REDIRECT_SCHEME}login/gitlab?error=${encodeURIComponent(error)}`
   );
 
 router.get("/authorize", async (req, res) => {
@@ -95,7 +95,7 @@ router.get("/callback", async (req, res) => {
     const refreshToken = getRefreshToken(alreadyExistingUser.id);
 
     return res.redirect(
-      `${APP_REDIRECT_SCHEME}/gitlab/login?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `${APP_REDIRECT_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   }
 
@@ -153,7 +153,7 @@ router.get("/callback", async (req, res) => {
   const refreshToken = getRefreshToken(user.id);
 
   return res.redirect(
-    `${APP_REDIRECT_SCHEME}/gitlab/login?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    `${APP_REDIRECT_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
   );
 });
 
