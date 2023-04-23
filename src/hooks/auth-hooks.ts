@@ -31,7 +31,8 @@ export const useSignup = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(signup, {
+  return useMutation({
+    mutationFn: signup,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
@@ -51,7 +52,8 @@ export const useLogin = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(login, {
+  return useMutation({
+    mutationFn: login,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
@@ -69,7 +71,8 @@ export const useAnonymousLogin = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(anonymousLogin, {
+  return useMutation({
+    mutationFn: anonymousLogin,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);

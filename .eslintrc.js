@@ -1,6 +1,8 @@
 module.exports = {
+  plugins: ["@tanstack/query"],
   extends: [
     "universe/native",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     // "universe/shared/typescript-analysis"
   ],
   rules: {
