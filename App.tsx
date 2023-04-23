@@ -12,10 +12,11 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useEffect } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import * as Sentry from "sentry-expo";
 
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
@@ -24,15 +25,16 @@ import useNetworkState from "./src/hooks/use-network-state";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import queryClient from "./src/utils/query-client";
+import { routingInstrumentation } from "./src/utils/sentry";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
-import "./src/utils/sentry";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
-export default function App() {
+const App = () => {
   const colorScheme = useColorScheme();
   const isOnline = useNetworkState();
+  const navigation = useRef(null);
 
   useOnlineManager();
   useAppState();
@@ -55,6 +57,8 @@ export default function App() {
   });
 
   const onLayoutRootView = useCallback(async () => {
+    routingInstrumentation.registerNavigationContainer(navigation);
+
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
@@ -68,6 +72,7 @@ export default function App() {
     <ThemeProvider theme={colorScheme === "light" ? lightTheme : darkTheme}>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer
+          ref={navigation}
           theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
           onReady={onLayoutRootView}
         >
@@ -92,4 +97,6 @@ export default function App() {
       </QueryClientProvider>
     </ThemeProvider>
   );
-}
+};
+
+export default Sentry.Native.wrap(App);

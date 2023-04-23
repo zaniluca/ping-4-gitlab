@@ -112,15 +112,20 @@ export const useGitlabLogin = () => {
     try {
       const res = (await WebBrowser.openAuthSessionAsync(
         `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
-        "/login/gitlab"
+        Linking.createURL("/login/gitlab")
       )) as WebBrowserRedirectResult;
 
       // Only "success" is a suppoterd type but this doesn't ensure that the
       // response is a successful one
+      if (res.type !== "success" && res.type === "cancel") {
+        console.warn("OAuth cancelled by user");
+        return;
+      }
+
       if (res.type !== "success") {
         console.error("Error response from OAuth: ", res);
         Sentry.Native.captureException(
-          new Error("Error response from OAuth: " + res)
+          new Error("Error response from OAuth: " + JSON.stringify(res))
         );
         return;
       }

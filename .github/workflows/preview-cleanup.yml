@@ -1,9 +1,10 @@
-name: Update
+name: Preview Cleanup
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - master
-      - production
     paths:
       - "**.ts"
       - "**.tsx"
@@ -13,10 +14,10 @@ on:
       - "!eas.json"
 
 jobs:
-  update:
-    name: Update
+  preview:
+    if: github.event.pull_request.merged == true
+    name: Preview Cleanup
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'skip update')"
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -37,10 +38,17 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Publish update
+      - name: Cleanup preview
+        shell: bash
         run: |
-          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
-          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
-          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-          eas update --auto
+          channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
+
+          echo $channels
+          echo "Looking for $GITHUB_HEAD_REF"
+
+          if grep -q "$GITHUB_HEAD_REF" <<< "$channels"; then
+            eas channel:delete --non-interactive $GITHUB_HEAD_REF
+            eas branch:delete --non-interactive $GITHUB_HEAD_REF
+          else
+            echo "Preview channel not found"
+          fi

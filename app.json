@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Ping",
+    "name": "Gitlab Ping",
     "owner": "zaniluca",
     "scheme": "ping4gitlab",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "2.2.0",
+    "version": "2.1.1",
     "privacy": "public",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",

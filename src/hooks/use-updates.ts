@@ -1,70 +1,57 @@
 import * as Updates from "expo-updates";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Toast from "react-native-toast-message";
 import * as Sentry from "sentry-expo";
 
 export const useUpdates = () => {
   const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false);
 
-  const handleCheckForUpdate = async () => {
-    console.log("Checking for updates...");
+  const updateEventHandler = async (event: Updates.UpdateEvent) => {
+    setIsCheckingForUpdate(true);
 
-    Sentry.Native.addBreadcrumb({
-      event_id: "check-for-update",
-      category: "updates",
-      message: "Checking for updates",
-      level: "info",
-    });
+    if (event.type === Updates.UpdateEventType.ERROR) {
+      console.error("Error while checking for updates", event.message);
+      Sentry.Native.captureException(event.message);
 
-    try {
-      setIsCheckingForUpdate(true);
-      const update = await Updates.checkForUpdateAsync();
+      setIsCheckingForUpdate(false);
+    } else if (event.type === Updates.UpdateEventType.NO_UPDATE_AVAILABLE) {
+      console.log("No updates available.");
 
-      if (update.isAvailable) {
-        console.log("New update available! Fetching...");
-        Toast.show({
-          type: "info",
-          text1: "A new update is available!",
-          text2: "Please wait while we download it.",
-        });
+      setIsCheckingForUpdate(false);
+    } else if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+      console.log("New update available! Fetching...");
+      Toast.show({
+        type: "info",
+        text1: "A new update is available!",
+        text2: "Please wait while we download it.",
+      });
 
-        const result = await Updates.fetchUpdateAsync();
+      const result = await Updates.fetchUpdateAsync();
 
-        Sentry.Native.addBreadcrumb({
-          event_id: "fetch-update",
-          category: "updates",
-          message: "Update fetched",
-          level: "info",
-        });
+      console.log("Update fetched", result);
 
-        setIsCheckingForUpdate(false);
+      Sentry.Native.addBreadcrumb({
+        event_id: "fetch-update",
+        category: "updates",
+        message: "Update fetched",
+        level: "info",
+      });
 
-        if (result.isNew) {
-          console.log("New update downloaded! Reloading...");
-          try {
-            await Updates.reloadAsync();
-          } catch (error) {
-            console.error("Could't reload app after update", error);
-            Sentry.Native.captureException(error);
-          }
+      setIsCheckingForUpdate(false);
+
+      if (result.isNew) {
+        console.log("New update available! Reloading...");
+        try {
+          await Updates.reloadAsync();
+        } catch (error) {
+          console.error("Could not reload app after update", error);
+          Sentry.Native.captureException(error);
         }
-      } else {
-        console.log("No updates available.");
       }
-    } catch (error) {
-      console.error("Error checking for updates", error);
-      Sentry.Native.captureException(error);
     }
-
-    setIsCheckingForUpdate(false);
   };
 
-  useEffect(() => {
-    // We cannot check for updates in development
-    // Or the app will crash
-    if (__DEV__) return;
-    handleCheckForUpdate();
-  }, []);
+  Updates.useUpdateEvents(updateEventHandler);
 
   return {
     isCheckingForUpdate,

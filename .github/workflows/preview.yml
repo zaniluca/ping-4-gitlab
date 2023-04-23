@@ -1,6 +1,5 @@
 name: Preview
 on:
-  workflow_dispatch:
   pull_request:
     types:
       - opened
@@ -13,6 +12,8 @@ on:
       - "**.js"
       - "**.json"
       - "**.lock"
+    branches-ignore:
+      - production
 
 jobs:
   preview:
@@ -29,6 +30,19 @@ jobs:
             exit 1
           fi
 
+      # We need to checkout the PR head to get the commit message for the update
+      # Otherwise, we'll get the commit message from the merge commit
+      - name: Checkout PR head
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Extract last commit message
+        id: get_head_commit_message
+        run: |
+          echo "Last commit message: $(git show -s --format=%s)"
+          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -41,22 +55,21 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Create preview
-        uses: expo/expo-github-action/preview@v8
-        with:
-          command: |
-            SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
-            SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
-            SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-            eas update --auto
+      - name: Publish update
+        run: |
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          eas update --branch=${{ github.head_ref }} --message="${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}"
 
       - name: Add preview label
         uses: actions/github-script@v6
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           script: |
             github.rest.issues.addLabels({
-              issue_number: context.pull_request.number,
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: ["preview available"]
