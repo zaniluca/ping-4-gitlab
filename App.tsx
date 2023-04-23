@@ -12,10 +12,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import * as Sentry from "sentry-expo";
 
 import Toaster from "./src/components/Toaster";
@@ -33,22 +32,11 @@ SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   const colorScheme = useColorScheme();
-  const isOnline = useNetworkState();
   const navigation = useRef(null);
 
   useOnlineManager();
   useAppState();
-
-  useEffect(() => {
-    if (!isOnline) {
-      Toast.show({
-        type: "error",
-        text1: "No internet connection",
-        text2: "It seems you are offline",
-        autoHide: false,
-      });
-    }
-  }, [isOnline]);
+  useNetworkState();
 
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
