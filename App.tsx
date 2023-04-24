@@ -20,6 +20,7 @@ import * as Sentry from "sentry-expo";
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";
+import useNetworkState from "./src/hooks/use-network-state";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import queryClient from "./src/utils/query-client";
@@ -35,6 +36,7 @@ const App = () => {
 
   useOnlineManager();
   useAppState();
+  useNetworkState();
 
   const [fontsLoaded] = useFonts({
     SourceSansPro_700Bold,
