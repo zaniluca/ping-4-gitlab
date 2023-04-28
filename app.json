@@ -40,7 +40,17 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "category": ["BROWSABLE", "DEFAULT"],
+          "data": {
+            "scheme": "ping4gitlab",
+            "path": "/login/gitlab"
+          }
+        }
+      ]
     },
     "plugins": [
       "sentry-expo",
