@@ -174,31 +174,6 @@ describe("POST /signup", () => {
   });
 });
 
-describe("POST /anonymous", () => {
-  it("Creates a new anonymous user", async () => {
-    prismaMock.user.create.mockResolvedValue(MOCK_USER);
-
-    await request(app)
-      .post("/anonymous")
-      .send({})
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(201);
-        expect(res.body.accessToken).toBeDefined();
-        expect(res.body.refreshToken).toBeDefined();
-      });
-
-    expect(prismaMock.user.create).toHaveBeenLastCalledWith({
-      data: {
-        hookId: "test",
-      },
-      select: {
-        id: true,
-      },
-    });
-  });
-});
-
 describe("POST /refresh", () => {
   it("Fails if required fields aren't provided", async () => {
     await request(app)

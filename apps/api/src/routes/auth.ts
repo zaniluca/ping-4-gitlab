@@ -126,22 +126,6 @@ router.post(
   }
 );
 
-router.post("/anonymous", async (_req: Request, res) => {
-  const user = await prisma.user.create({
-    data: {
-      hookId: generateUniqueHook(),
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  return res.status(201).json({
-    accessToken: getAccessToken(user.id),
-    refreshToken: getRefreshToken(user.id),
-  });
-});
-
 type RefreshPayload = InferType<typeof RefreshBodySchema>;
 
 router.post(
