@@ -70,26 +70,25 @@ export const useNotification = (
 ) => {
   const user = useUser();
 
-  return useQuery<APINotification, APIError>(
-    ["notifications", id],
-    () => fetchNotification(id),
-    {
-      enabled: !!user.data,
-      onError: (err) => {
-        console.log(
-          `Error fetching notification ${id}`,
-          err.response?.data?.message
-        );
-      },
-      ...options,
-    }
-  );
+  return useQuery<APINotification, APIError>({
+    queryKey: ["notifications", id],
+    queryFn: () => fetchNotification(id),
+    enabled: !!user.data,
+    onError: (err) => {
+      console.log(
+        `Error fetching notification ${id}`,
+        err.response?.data?.message
+      );
+    },
+    ...options,
+  });
 };
 
 export const useUpdateNotification = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateNotification, {
+  return useMutation({
+    mutationFn: updateNotification,
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries(["notifications"]);
 
