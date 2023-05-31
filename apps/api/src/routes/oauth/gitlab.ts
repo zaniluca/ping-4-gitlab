@@ -80,6 +80,7 @@ router.get("/callback", async (req, res) => {
     profile = data;
   } catch (error) {
     Sentry.captureException(error);
+    console.error("Error while authenticating with GitLab", error);
     return redirectWithError(res, "Couldn't authenticate with GitLab");
   }
 
@@ -110,10 +111,11 @@ router.get("/callback", async (req, res) => {
             id: state as string,
           },
         });
-      } catch {
+      } catch (error) {
+        console.error("Error while retriving user from state: ", error);
         return redirectWithError(
           res,
-          "The user with the given id does not exist"
+          "We couldn't associate your GitLab account with your email password account. Please try again."
         );
       }
 
@@ -146,6 +148,7 @@ router.get("/callback", async (req, res) => {
         );
       }
     }
+    Sentry.captureException(e);
     throw e;
   }
 
