@@ -115,7 +115,10 @@ export const useGitlabLogin = () => {
     try {
       const res = (await WebBrowser.openAuthSessionAsync(
         `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
-        Linking.createURL("/login/gitlab")
+        Linking.createURL("/login/gitlab"),
+        {
+          showInRecents: true,
+        }
       )) as WebBrowserRedirectResult;
 
       // Only "success" is a suppoterd type but this doesn't ensure that the

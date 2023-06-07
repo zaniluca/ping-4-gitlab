@@ -46,8 +46,7 @@
           "action": "VIEW",
           "category": ["BROWSABLE", "DEFAULT"],
           "data": {
-            "scheme": "ping4gitlab",
-            "path": "/login/gitlab"
+            "scheme": "ping4gitlab"
           }
         }
       ]
