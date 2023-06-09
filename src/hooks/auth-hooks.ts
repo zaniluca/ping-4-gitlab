@@ -31,7 +31,8 @@ export const useSignup = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(signup, {
+  return useMutation({
+    mutationFn: signup,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
@@ -51,7 +52,8 @@ export const useLogin = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(login, {
+  return useMutation({
+    mutationFn: login,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
@@ -69,7 +71,8 @@ export const useAnonymousLogin = () => {
   const { setValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
 
-  return useMutation(anonymousLogin, {
+  return useMutation({
+    mutationFn: anonymousLogin,
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
@@ -112,7 +115,10 @@ export const useGitlabLogin = () => {
     try {
       const res = (await WebBrowser.openAuthSessionAsync(
         `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
-        Linking.createURL("/login/gitlab")
+        Linking.createURL("/login/gitlab"),
+        {
+          showInRecents: true,
+        }
       )) as WebBrowserRedirectResult;
 
       // Only "success" is a suppoterd type but this doesn't ensure that the
