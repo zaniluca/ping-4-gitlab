@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+
+## [2.1.2] - 2023-06-10
+
+### Fixed
+
+- Fixed GitLab login (Android)
+
 ## [2.1.1] - 2023-03-25
 
 ### Changes
@@ -97,7 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First release on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.1.2...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
@@ -107,3 +114,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [2.0.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.0.0
 [2.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.0
 [2.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.1
+[2.1.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.2
