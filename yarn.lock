@@ -4824,6 +4824,13 @@ expo-haptics@~12.4.0:
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-12.4.0.tgz#99ad9d6a8eafb219aee022ec1412a998e1c90d71"
   integrity sha512-eELhZOO64oJa6AtEUxosatjSENE/tQgF2rVJxDsvRdx8Vgd3uFC+FRoM3nbMVJkxDgAaP3EKOPT1zVM41sNurw==
 
+expo-insights@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/expo-insights/-/expo-insights-0.2.0.tgz#b31a1a6aee4e0f638bd097b237cf739e8dc41192"
+  integrity sha512-1TN1DALyCGXnohoxBO3hW+2T4X6h33StsmRUutw+Dp7Y4oDcrhB8ViDEhUzvVPPDWIRbYLmo6ZqzgvPltZUtJw==
+  dependencies:
+    expo-eas-client "~0.6.0"
+
 expo-json-utils@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/expo-json-utils/-/expo-json-utils-0.7.0.tgz#98d501208031a0f415fee99c0a4cfd3c14a33db8"
