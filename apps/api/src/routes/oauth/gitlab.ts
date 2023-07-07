@@ -10,10 +10,10 @@ const router = Router();
 
 const APP_REDIRECT_SCHEME =
   process.env.NODE_ENV === "production"
-    ? "ping4gitlab://"
+    ? "com.zaniluca.ping4gitlab://"
     : process.env.ANDROID_EMULATOR
-    ? "exp://10.0.2.2:19000/--/" // Android emulator w/ Expo
-    : "exp://localhost:19000/--/"; // iOS simulator w/ Expo
+    ? "exp://10.0.2.2:8081/--/" // Android emulator w/ Expo
+    : "exp://localhost:8081/--/"; // iOS simulator w/ Expo
 
 type GitLabTokenResponse = {
   access_token: string;
