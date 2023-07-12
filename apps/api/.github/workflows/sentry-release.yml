@@ -16,6 +16,9 @@ jobs:
       JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
       JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
       WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,13 +31,12 @@ jobs:
       - name: Build
         run: pnpm tsc
 
+      - name: Inject Debug IDS
+        run: sentry-cli sourcemaps inject --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         with:
           environment: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
           sourcemaps: "./dist"
           ignore_empty: true
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
