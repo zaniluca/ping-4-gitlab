@@ -31,7 +31,8 @@ Sentry.init({
     new Profiling.ProfilingIntegration(),
     // RewriteFrames is needed to show the correct source code in Sentry when using TypeScript
     new RewriteFrames({
-      root: global.__dirname,
+      // Why process.cwd() instead of global.__dirname ?: https://stackoverflow.com/a/63848735/12661017
+      root: process.cwd(),
     }),
   ],
   tracesSampleRate: 0.33,

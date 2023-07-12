@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "inlineSources": true,
     "sourceRoot": "/",
     "outDir": "dist",
     "strict": true,
