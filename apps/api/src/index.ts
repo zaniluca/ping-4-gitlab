@@ -5,7 +5,12 @@ import notification from "./routes/notification";
 import oauth from "./routes/oauth";
 import auth from "./routes/auth";
 import webhook from "./routes/webhook";
-import { handleError, logError, requestLogger } from "./middlewares";
+import {
+  attachSentryUserInfo,
+  handleError,
+  logError,
+  requestLogger,
+} from "./middlewares";
 import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
@@ -59,6 +64,7 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(requestLogger);
+app.use(attachSentryUserInfo);
 app.use(express.json());
 app.use(
   "/user",

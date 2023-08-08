@@ -2,6 +2,8 @@ import type { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import { BadRequestError, ErrorWithStatus } from "./utils/errors";
 import yup, { ValidationError } from "yup";
+import * as Sentry from "@sentry/node";
+import type { Request as ExpressJwtRequest } from "express-jwt";
 
 export const handleError = (
   err: Error | ErrorWithStatus,
@@ -55,3 +57,17 @@ export const validate =
     }
     next();
   };
+
+export const attachSentryUserInfo = (
+  req: ExpressJwtRequest,
+  _res: Response,
+  next: NextFunction
+) => {
+  if (!req.auth?.uid) return next();
+
+  Sentry.setUser({
+    id: req.auth?.uid,
+    username: req.auth?.hookId,
+  });
+  next();
+};

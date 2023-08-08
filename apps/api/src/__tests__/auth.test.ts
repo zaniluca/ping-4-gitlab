@@ -139,7 +139,7 @@ describe("POST /signup", () => {
 
     await request(app)
       .post("/signup")
-      .set("Authorization", "Bearer " + getAccessToken(MOCK_USER.id))
+      .set("Authorization", "Bearer " + getAccessToken({ uid: MOCK_USER.id }))
       .send({
         email: "test@test.com",
         password: "Test1234!",

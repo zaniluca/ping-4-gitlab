@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import prisma from "../../prisma/client";
 import bcrypt from "bcrypt";
 import type {
@@ -8,7 +8,7 @@ import type {
 import {
   getAccessToken,
   getRefreshToken,
-  getUidFromToken,
+  getTokenPayload,
   updateLastLogin,
 } from "../utils/common";
 import type { User } from "@prisma/client";
@@ -58,7 +58,10 @@ router.post(
     await updateLastLogin(user.id);
 
     return res.status(200).json({
-      accessToken: getAccessToken(user.id),
+      accessToken: getAccessToken({
+        uid: user.id,
+        hookId: user.hookId,
+      }),
       refreshToken: getRefreshToken(user.id),
     });
   }
@@ -88,7 +91,7 @@ router.post(
       return next(new ErrorWithStatus(409, "User already exists"));
     }
 
-    let user: Pick<User, "id">;
+    let user: Pick<User, "id" | "hookId">;
 
     if (isAnonymous) {
       console.log("Upgrading anonymous user to permanent user");
@@ -103,6 +106,7 @@ router.post(
         },
         select: {
           id: true,
+          hookId: true,
         },
       });
     } else {
@@ -114,13 +118,17 @@ router.post(
         },
         select: {
           id: true,
+          hookId: true,
         },
       });
     }
 
     // If the user is anonymous we don't create a new resource so the status should not be 201
     return res.status(isAnonymous ? 200 : 201).json({
-      accessToken: getAccessToken(user.id),
+      accessToken: getAccessToken({
+        uid: user.id,
+        hookId: user.hookId,
+      }),
       refreshToken: getRefreshToken(user.id),
     });
   }
@@ -134,13 +142,17 @@ router.post(
   async (req: RequestWithPayload<RefreshPayload>, res) => {
     const { refreshToken } = req.body;
 
-    const uid = getUidFromToken(refreshToken);
+    const payload = getTokenPayload(refreshToken);
 
-    await updateLastLogin(uid);
+    await updateLastLogin(payload.uid);
 
     return res.status(200).json({
-      accessToken: getAccessToken(uid),
-      refreshToken: getRefreshToken(uid),
+      // We can't pass the payload directly because it contains the iat and exp fields
+      accessToken: getAccessToken({
+        uid: payload.uid,
+        hookId: payload.hookId,
+      }),
+      refreshToken: getRefreshToken(payload.uid),
     });
   }
 );

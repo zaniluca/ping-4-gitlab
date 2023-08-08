@@ -3,16 +3,10 @@ import * as Sentry from "@sentry/node";
 import type { CustomJWTClaims, Headers } from "./types";
 import prisma from "../../prisma/client";
 
-export const getAccessToken = (uid: string) => {
-  return jwt.sign(
-    {
-      uid,
-    },
-    process.env.JWT_ACCESS_SECRET!,
-    {
-      expiresIn: "1h",
-    }
-  );
+export const getAccessToken = (payload: CustomJWTClaims) => {
+  return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
+    expiresIn: "1h",
+  });
 };
 
 export const getRefreshToken = (uid: string) => {
@@ -27,9 +21,9 @@ export const getRefreshToken = (uid: string) => {
   );
 };
 
-export const getUidFromToken = (token: string) => {
+export const getTokenPayload = (token: string) => {
   try {
-    return (jwt.decode(token) as CustomJWTClaims).uid;
+    return jwt.decode(token) as CustomJWTClaims;
   } catch (e) {
     throw new Error("Invalid token");
   }

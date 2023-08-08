@@ -36,7 +36,7 @@ describe("PUT /user", () => {
   it("Updates user data", async () => {
     await request(app)
       .put("/user")
-      .set("Authorization", "Bearer " + getAccessToken("1"))
+      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
       .send({
         email: NEW_EMAIL,
         hookId: NEW_HOOK,
@@ -60,7 +60,7 @@ describe("PUT /user", () => {
   it.skip("Updates user password", async () => {
     await request(app)
       .put("/user")
-      .set("Authorization", "Bearer " + getAccessToken("1"))
+      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
       .send({
         email: NEW_EMAIL,
         hookId: NEW_HOOK,
@@ -98,7 +98,7 @@ describe("DELETE /user", () => {
   it("Deletes user", async () => {
     await request(app)
       .delete("/user")
-      .set("Authorization", "Bearer " + getAccessToken("1"))
+      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
       .expect("Content-Type", /json/)
       .expect((res) => {
         expect(res.status).toBe(200);
