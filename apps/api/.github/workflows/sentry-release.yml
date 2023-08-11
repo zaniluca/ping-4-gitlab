@@ -1,6 +1,7 @@
 name: Sentry Release
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -32,7 +33,7 @@ jobs:
         run: pnpm tsc
 
       - name: Inject Debug IDS
-        run: sentry-cli sourcemaps inject --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
+        run: ./node_modules/.bin/sentry-cli sourcemaps inject --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1
