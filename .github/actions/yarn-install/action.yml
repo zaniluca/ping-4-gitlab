@@ -5,7 +5,7 @@ inputs:
   node-version:
     description: "Node version to use"
     required: true
-    default: 14.x
+    default: 16.x
 
 runs:
   using: "composite"
