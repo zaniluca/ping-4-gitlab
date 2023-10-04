@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
 const getIconForBuildEnv = () => {
@@ -30,10 +29,9 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
         ? {
             file: "sentry-expo/upload-sourcemaps",
             config: {
-              organization: process.env.SENTRY_ORG!,
-              project: process.env.SENTRY_PROJECT!,
-              authToken: process.env.SENTRY_AUTH_TOKEN!,
               setCommits: true,
+              organization: process.env.SENTRY_ORG,
+              project: process.env.SENTRY_PROJECT,
             },
           }
         : {},

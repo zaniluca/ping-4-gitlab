@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Platform, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box, Text } from "../../components/restyle";
@@ -65,19 +65,21 @@ const AccountSettingsScreen: React.FC<Props> = () => {
   const SECTIONS: SettingsSettingsSections[] = useMemo(
     () => [
       {
-        data: user.data?.gitlabId
-          ? []
-          : [
-              {
-                key: "connect-gitlab",
-                content: <ConnectGitlab />,
-                footer: (
-                  <Text variant="caption" color="secondary">
-                    Connect your Gitlab account to more easily login to the app
-                  </Text>
-                ),
-              },
-            ],
+        data:
+          user.data?.gitlabId || Platform.OS === "android" // TODO: remove this when we have a way to login with Gitlab on Android
+            ? []
+            : [
+                {
+                  key: "connect-gitlab",
+                  content: <ConnectGitlab />,
+                  footer: (
+                    <Text variant="caption" color="secondary">
+                      Connect your Gitlab account to more easily login to the
+                      app
+                    </Text>
+                  ),
+                },
+              ],
       },
       {
         data: [
