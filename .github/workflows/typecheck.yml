@@ -1,0 +1,30 @@
+name: Typecheck
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "**.ts"
+      - "**.tsx"
+      - "**.js"
+      - "**.json"
+      - "**.lock"
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Typecheck
+        run: yarn typecheck
