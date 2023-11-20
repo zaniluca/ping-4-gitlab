@@ -50,6 +50,16 @@ router.get("/authorize", async (req, res) => {
 });
 
 router.get("/callback", async (req, res) => {
+  if (req.query.error && req.query.error_description) {
+    console.error(
+      "Error on GitLab OAuth callback: ",
+      req.query.error,
+      req.query.error_description
+    );
+
+    return redirectWithError(res, req.query.error_description as string);
+  }
+
   const { code, state } = req.query;
 
   let profile: GitlabUserResponse;
