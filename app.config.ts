@@ -3,7 +3,7 @@ import { ExpoConfig, ConfigContext } from "@expo/config";
 const getIconForBuildEnv = () => {
   if (
     ["development", "staging", "preview"].includes(
-      process.env.EAS_BUILD_PROFILE
+      process.env.EAS_BUILD_PROFILE!
     )
   ) {
     return `./assets/icon-${process.env.EAS_BUILD_PROFILE}.png`;
@@ -43,5 +43,3 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
     },
   },
 });
-
-//test
