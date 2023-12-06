@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/pnpm-install
         with:
-          node-version: 16.15.1
+          node-version-file: ".nvmrc"
 
       - name: Build
         run: pnpm tsc
