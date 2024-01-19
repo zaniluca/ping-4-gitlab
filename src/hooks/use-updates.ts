@@ -1,7 +1,7 @@
+import * as Sentry from "@sentry/react-native";
 import * as Updates from "expo-updates";
 import { useState } from "react";
 import Toast from "react-native-toast-message";
-import * as Sentry from "sentry-expo";
 
 export const useUpdates = () => {
   const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false);
@@ -11,7 +11,7 @@ export const useUpdates = () => {
 
     if (event.type === Updates.UpdateEventType.ERROR) {
       console.error("Error while checking for updates", event.message);
-      Sentry.Native.captureException(event.message);
+      Sentry.captureException(event.message);
 
       setIsCheckingForUpdate(false);
     } else if (event.type === Updates.UpdateEventType.NO_UPDATE_AVAILABLE) {
@@ -30,7 +30,7 @@ export const useUpdates = () => {
 
       console.log("Update fetched", result);
 
-      Sentry.Native.addBreadcrumb({
+      Sentry.addBreadcrumb({
         event_id: "fetch-update",
         category: "updates",
         message: "Update fetched",
@@ -45,7 +45,7 @@ export const useUpdates = () => {
           await Updates.reloadAsync();
         } catch (error) {
           console.error("Could not reload app after update", error);
-          Sentry.Native.captureException(error);
+          Sentry.captureException(error);
         }
       }
     }

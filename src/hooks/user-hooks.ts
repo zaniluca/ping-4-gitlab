@@ -1,10 +1,10 @@
+import * as Sentry from "@sentry/react-native";
 import {
   useMutation,
   useQuery,
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
-import * as Sentry from "sentry-expo";
 
 import { http } from "../utils/http";
 import { APIUser, APIError } from "../utils/types";
@@ -28,7 +28,7 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
       // If no data is returned from the API, it means the user has been deleted
       if (!data) await logout();
 
-      Sentry.Native.setUser({
+      Sentry.setUser({
         id: data.id,
         email: data.email || undefined,
         username: data.hookId,

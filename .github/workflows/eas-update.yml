@@ -44,3 +44,7 @@ jobs:
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           eas update --auto
+
+      - name: Upload Source Maps
+        run: |
+          npx sentry-expo-upload-sourcemaps dist

@@ -1,10 +1,10 @@
+import * as Sentry from "@sentry/react-native";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import { WebBrowserRedirectResult } from "expo-web-browser";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
-import * as Sentry from "sentry-expo";
 
 import { API_URL, http } from "../utils/http";
 import { APIAuthResponse, APIError } from "../utils/types";
@@ -140,7 +140,7 @@ export const useGitlabLogin = () => {
 
       if (res.type !== "success") {
         console.error("Error response from OAuth: ", res);
-        Sentry.Native.captureException(
+        Sentry.captureException(
           new Error("Error response from OAuth: " + JSON.stringify(res))
         );
         return;

@@ -57,14 +57,13 @@ jobs:
 
       # Eas local doesn't support environment variables
       # so we have to pass them via the shell
+      # We're not setting SENTRY_AUTH_TOKEN here because of https://docs.expo.dev/guides/using-sentry/#app-configuration
       - name: Build
         run: |
           EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
-          SENTRY_SKIP_RELEASE=true \
           eas build --local \
             --non-interactive \
             --output=./out \
