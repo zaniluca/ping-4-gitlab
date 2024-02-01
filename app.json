@@ -43,6 +43,8 @@
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
     },
     "plugins": [
+      "expo-font",
+      "expo-secure-store",
       [
         "expo-notifications",
         {
@@ -53,6 +55,9 @@
           "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
         }
       ]
-    ]
+    ],
+    "experiments": {
+      "tsconfigPaths": false
+    }
   }
 }
