@@ -2,11 +2,12 @@ import { Router } from "express";
 import type { Headers, PipelineStatus, WebhookPayload } from "../utils/types";
 import hash from "object-hash";
 import prisma from "../../prisma/client";
-import type { Notification, User } from "@prisma/client";
+import { Notification, Prisma, User } from "@prisma/client";
 import multer from "multer";
 import { Expo, ExpoPushMessage } from "expo-server-sdk";
 import { parseHeaders } from "../utils/common";
 import { ErrorWithStatus } from "../utils/errors";
+import * as Sentry from "@sentry/node";
 
 const router = Router();
 
@@ -144,9 +145,23 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
         userId: user.id,
       },
     });
-  } catch (error) {
-    console.error("Failed to create notification", error);
-    res.status(400).end();
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (e.code) {
+        case "P2002":
+          console.warn("Notification already exists", e.message, e.meta);
+          res.status(200).end();
+          return;
+        default:
+          console.error("Failed to create notification", e);
+          Sentry.captureException(e);
+          res.status(400).end();
+          return;
+      }
+    }
+    console.error("Unknown Error creating notification", e);
+    Sentry.captureException(e);
+    res.status(500).end();
     return;
   }
 
