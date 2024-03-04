@@ -52,8 +52,15 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup EAS local builds
-        run: yarn global add eas-cli-local-build-plugin
+      - name: Setup Java SDK 17
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 17
+
+      # - name: Setup EAS local builds
+      #   run: yarn global add eas-cli-local-build-plugin
 
       # Eas local doesn't support environment variables
       # so we have to pass them via the shell
