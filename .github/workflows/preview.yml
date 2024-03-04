@@ -12,6 +12,7 @@ on:
       - "**.js"
       - "**.json"
       - "**.lock"
+      - "**.yml"
     branches-ignore:
       - production
 

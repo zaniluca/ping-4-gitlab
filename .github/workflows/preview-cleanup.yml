@@ -12,6 +12,7 @@ on:
       - "**.json"
       - "**.lock"
       - "!eas.json"
+      - "**.yml"
 
 jobs:
   preview:
