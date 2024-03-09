@@ -6,11 +6,11 @@ import { WebBrowserRedirectResult } from "expo-web-browser";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
-import { API_URL, http } from "../utils/http";
-import { APIAuthResponse, APIError } from "../utils/types";
 import { useRootStackNavigation } from "./navigation-hooks";
 import { useSecureStore } from "./use-secure-store";
 import { useUser } from "./user-hooks";
+import { API_URL, http } from "../utils/http";
+import { APIAuthResponse, APIError } from "../utils/types";
 
 type AuthPayload = {
   email: string;

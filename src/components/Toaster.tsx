@@ -8,8 +8,8 @@ import Toast, {
   ToastConfigParams,
 } from "react-native-toast-message";
 
-import { Theme } from "../utils/theme";
 import { Box, Text } from "./restyle";
+import { Theme } from "../utils/theme";
 
 type CustomToastParams = {
   Icon?: (_props: SvgProps) => JSX.Element;
