@@ -1,7 +1,7 @@
 import React from "react";
 
-import { openURL } from "../utils/open-url";
 import { Text } from "./restyle";
+import { openURL } from "../utils/open-url";
 
 const Disclaimer = () => {
   return (

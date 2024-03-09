@@ -22,7 +22,7 @@ jobs:
       matrix:
         include:
           - platform: "ios"
-            os: "macos-12"
+            os: "macos-13"
           - platform: "android"
             os: "ubuntu-latest"
 
@@ -52,8 +52,12 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup EAS local builds
-        run: yarn global add eas-cli-local-build-plugin
+      - name: Setup Java SDK
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 17
 
       # Eas local doesn't support environment variables
       # so we have to pass them via the shell
@@ -62,9 +66,8 @@ jobs:
           EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
-          SENTRY_SKIP_RELEASE=true \
+          SENTRY_DISABLE_AUTO_UPLOAD=true \
           eas build --local \
             --non-interactive \
             --output=./out \

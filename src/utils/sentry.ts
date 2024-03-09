@@ -1,18 +1,23 @@
-import * as Sentry from "sentry-expo";
+import * as Sentry from "@sentry/react-native";
+import * as Updates from "expo-updates";
 
 export const routingInstrumentation =
-  new Sentry.Native.ReactNavigationInstrumentation();
+  new Sentry.ReactNavigationInstrumentation();
 
 Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
-  enableInExpoDevelopment: false,
-  debug: process.env.NODE_ENV === "development",
+  // debug: process.env.NODE_ENV === "development",
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
   tracesSampleRate: 0.55,
   integrations: [
-    new Sentry.Native.ReactNativeTracing({
+    new Sentry.ReactNativeTracing({
       routingInstrumentation,
     }),
   ],
+});
+
+Sentry.configureScope((scope) => {
+  scope.setTag("expo-update-id", Updates.updateId);
+  scope.setTag("expo-is-embedded-update", Updates.isEmbeddedLaunch);
 });

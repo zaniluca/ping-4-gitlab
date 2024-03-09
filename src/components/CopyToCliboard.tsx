@@ -6,8 +6,8 @@ import { TouchableOpacity } from "react-native";
 import { Copy } from "react-native-feather";
 import Toast from "react-native-toast-message";
 
-import { Theme, useTheme } from "../utils/theme";
 import { Box, Text } from "./restyle";
+import { Theme, useTheme } from "../utils/theme";
 
 type Props = SpacingProps<Theme> & {
   content: string;
