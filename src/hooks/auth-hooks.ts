@@ -113,13 +113,14 @@ export const useGitlabLogin = () => {
   const queryClient = useQueryClient();
 
   // https://docs.expo.dev/guides/authentication/#warming-the-browser
-  useEffect(() => {
-    WebBrowser.warmUpAsync();
+  // Temporarily disabled due to the removal of OAuth support for Android
+  // useEffect(() => {
+  //   WebBrowser.warmUpAsync();
 
-    return () => {
-      WebBrowser.coolDownAsync();
-    };
-  }, []);
+  //   return () => {
+  //     WebBrowser.coolDownAsync();
+  //   };
+  // }, []);
 
   return async () => {
     try {
