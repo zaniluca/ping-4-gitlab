@@ -6,10 +6,10 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
-import { http } from "../utils/http";
-import { APIUser, APIError } from "../utils/types";
 import { useLogout } from "./auth-hooks";
 import { useSecureStore } from "./use-secure-store";
+import { http } from "../utils/http";
+import { APIUser, APIError } from "../utils/types";
 
 const fetchUser = () => http.get("user").then((res) => res.data);
 

@@ -4,12 +4,12 @@ import { Dimensions } from "react-native";
 import { RefreshCw } from "react-native-feather";
 import * as Progress from "react-native-progress";
 
+import InboxEmpty from "./InboxEmpty";
+import InboxItem from "./InboxItem";
 import { useNotificationsList } from "../../hooks/notifications-hooks";
 import { useTheme } from "../../utils/theme";
 import { Divider } from "../ListSeparator";
 import { Box, Text } from "../restyle";
-import InboxEmpty from "./InboxEmpty";
-import InboxItem from "./InboxItem";
 
 const ListFooterComponent = () => {
   const { colors } = useTheme();

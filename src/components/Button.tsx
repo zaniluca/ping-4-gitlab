@@ -10,8 +10,8 @@ import {
 import React, { PropsWithChildren } from "react";
 import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 
-import { Theme } from "../utils/theme";
 import { Text } from "./restyle";
+import { Theme } from "../utils/theme";
 
 const BaseButton = createBox<Theme, TouchableOpacityProps>(TouchableOpacity);
 
