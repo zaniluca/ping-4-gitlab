@@ -15,6 +15,9 @@ Sentry.init({
       routingInstrumentation,
     }),
   ],
+  _experiments: {
+    profilesSampleRate: 1.0,
+  },
 });
 
 Sentry.configureScope((scope) => {
