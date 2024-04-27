@@ -102,7 +102,7 @@ export const useUpdateNotification = () => {
       );
 
       // Finding the notification in the page
-      const previousNotificationData = associatedNotificationPage?.data.find(
+      const previousNotificationData = associatedNotificationPage?.data?.find(
         (n) => n.id === id
       );
 

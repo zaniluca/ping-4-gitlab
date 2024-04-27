@@ -134,7 +134,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     <ErrorsList
                       errors={{
                         error:
-                          signup.error.response?.data.message ??
+                          signup.error.response?.data?.message ??
                           "Unknown Error",
                       }}
                     />

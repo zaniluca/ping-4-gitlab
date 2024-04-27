@@ -63,7 +63,7 @@ export const useLogin = () => {
       await queryClient.refetchQueries(["user"]);
     },
     onError: (err: APIError) => {
-      console.error("Error during POST /login: ", err.response?.data.message);
+      console.error("Error during POST /login: ", err.response?.data?.message);
     },
   });
 };
@@ -82,7 +82,7 @@ export const useAnonymousLogin = () => {
     onError: (err: APIError) => {
       console.error(
         "Error signing in POST /anonymous",
-        err.response?.data.message
+        err.response?.data?.message
       );
     },
   });
