@@ -46,13 +46,13 @@ Sentry.init({
     // Remove the cursor from the transaction
     event.transaction = event.transaction?.replace(
       /cursor=\w+/,
-      "cursor={cursor}"
+      "cursor={cursor}",
     );
 
     // Remove the notification id after /notification/ from the transaction
     event.transaction = event.transaction?.replace(
       /\/notification\/\w+\d+/,
-      "/notification/{id}"
+      "/notification/{id}",
     );
 
     return event;
@@ -71,14 +71,14 @@ app.use(
   expressjwt({
     secret: process.env.JWT_ACCESS_SECRET!,
     algorithms: ["HS256"],
-  })
+  }),
 );
 app.use(
   "/notification",
   expressjwt({
     secret: process.env.JWT_ACCESS_SECRET!,
     algorithms: ["HS256"],
-  })
+  }),
 );
 
 // Routes
@@ -93,7 +93,7 @@ app.get("/health", (_req, res) => res.send("OK"));
 app.use(
   Sentry.Handlers.errorHandler({
     shouldHandleError: (error) => error.status === 500,
-  })
+  }),
 );
 app.use(logError);
 app.use(handleError);
