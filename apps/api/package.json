@@ -39,7 +39,7 @@
   },
   "engines": {
     "node": "^18.0.0",
-    "pnpm": ">=7.0.0"
+    "pnpm": ">=8.0.0"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
