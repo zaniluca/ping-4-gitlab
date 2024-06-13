@@ -13,7 +13,9 @@ export const useUpdates = () => {
   } = Updates.useUpdates();
 
   useEffect(() => {
-    if (!__DEV__) {
+    if (__DEV__) {
+      console.log("Skipping updates check in development mode");
+    } else {
       Sentry.addBreadcrumb({
         event_id: "check-for-update",
         category: "updates",
@@ -46,6 +48,7 @@ export const useUpdates = () => {
   }, [initializationError, checkError, downloadError]);
 
   useEffect(() => {
+    if (__DEV__) return;
     if (isUpdateAvailable) {
       update();
     } else {
