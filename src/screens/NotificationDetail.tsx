@@ -24,6 +24,7 @@ const NotificationDetail: React.FC<Props> = ({ route }) => {
 
   return (
     <WebView
+      originWhitelist={["*"]}
       startInLoadingState
       ref={webview}
       source={{
