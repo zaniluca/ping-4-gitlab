@@ -7,9 +7,9 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
+import { useUser } from "./user-hooks";
 import { http } from "../utils/http";
 import { APIError, APINotification } from "../utils/types";
-import { useUser } from "./user-hooks";
 
 const fetchNotification = (id: string) =>
   http.get(`notification/${id}`).then((res) => res.data);
@@ -102,7 +102,7 @@ export const useUpdateNotification = () => {
       );
 
       // Finding the notification in the page
-      const previousNotificationData = associatedNotificationPage?.data.find(
+      const previousNotificationData = associatedNotificationPage?.data?.find(
         (n) => n.id === id
       );
 

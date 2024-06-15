@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
+import InboxItemIcon from "./InboxItemIcon";
 import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import timeElapsed from "../../utils/time-elapsed";
 import { APINotification } from "../../utils/types";
 import { Box, Text } from "../restyle";
-import InboxItemIcon from "./InboxItemIcon";
 
 type Props = {
   notification: APINotification;

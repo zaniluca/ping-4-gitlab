@@ -12,6 +12,7 @@ on:
       - "**.json"
       - "**.lock"
       - "!eas.json"
+      - "**.yml"
 
 jobs:
   preview:
@@ -27,7 +28,7 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Yarn install
         uses: ./.github/actions/yarn-install

@@ -11,13 +11,13 @@ import { BellOff, ChevronRight, LogOut, User } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import Toast from "react-native-toast-message";
 
+import SettingsListFooter from "./SettingsListFooter";
 import { usePushNotificationsContext } from "../../contexts/PushNotificationsContext";
 import { useLogout } from "../../hooks/auth-hooks";
 import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
-import SettingsListFooter from "./SettingsListFooter";
 
 type SectionItem = {
   name: string;

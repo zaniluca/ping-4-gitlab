@@ -1,16 +1,16 @@
+import * as Sentry from "@sentry/react-native";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import { WebBrowserRedirectResult } from "expo-web-browser";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
-import * as Sentry from "sentry-expo";
 
-import { API_URL, http } from "../utils/http";
-import { APIAuthResponse, APIError } from "../utils/types";
 import { useRootStackNavigation } from "./navigation-hooks";
 import { useSecureStore } from "./use-secure-store";
 import { useUser } from "./user-hooks";
+import { API_URL, http } from "../utils/http";
+import { APIAuthResponse, APIError } from "../utils/types";
 
 type AuthPayload = {
   email: string;
@@ -63,7 +63,7 @@ export const useLogin = () => {
       await queryClient.refetchQueries(["user"]);
     },
     onError: (err: APIError) => {
-      console.error("Error during POST /login: ", err.response?.data.message);
+      console.error("Error during POST /login: ", err.response?.data?.message);
     },
   });
 };
@@ -82,7 +82,7 @@ export const useAnonymousLogin = () => {
     onError: (err: APIError) => {
       console.error(
         "Error signing in POST /anonymous",
-        err.response?.data.message
+        err.response?.data?.message
       );
     },
   });
@@ -113,13 +113,14 @@ export const useGitlabLogin = () => {
   const queryClient = useQueryClient();
 
   // https://docs.expo.dev/guides/authentication/#warming-the-browser
-  useEffect(() => {
-    WebBrowser.warmUpAsync();
+  // Temporarily disabled due to the removal of OAuth support for Android
+  // useEffect(() => {
+  //   WebBrowser.warmUpAsync();
 
-    return () => {
-      WebBrowser.coolDownAsync();
-    };
-  }, []);
+  //   return () => {
+  //     WebBrowser.coolDownAsync();
+  //   };
+  // }, []);
 
   return async () => {
     try {
@@ -140,7 +141,7 @@ export const useGitlabLogin = () => {
 
       if (res.type !== "success") {
         console.error("Error response from OAuth: ", res);
-        Sentry.Native.captureException(
+        Sentry.captureException(
           new Error("Error response from OAuth: " + JSON.stringify(res))
         );
         return;

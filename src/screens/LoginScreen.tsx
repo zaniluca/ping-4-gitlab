@@ -101,7 +101,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                     <ErrorsList
                       errors={{
                         error:
-                          login.error.response?.data.message ?? "Unknown error",
+                          login.error.response?.data?.message ??
+                          "Unknown error",
                       }}
                     />
                   </Box>

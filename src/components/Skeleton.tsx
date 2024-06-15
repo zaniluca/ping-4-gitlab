@@ -2,8 +2,8 @@ import { BoxProps } from "@shopify/restyle";
 import React, { useRef, useEffect } from "react";
 import { Animated } from "react-native";
 
-import { Theme } from "../utils/theme";
 import { Box } from "./restyle";
+import { Theme } from "../utils/theme";
 
 type Props = BoxProps<Theme> & {
   children?: JSX.Element | JSX.Element[];
