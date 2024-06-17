@@ -88,6 +88,11 @@ app.use("/notification", notification);
 app.use("/", auth);
 app.use("/", webhook);
 app.get("/health", (_req, res) => res.send("OK"));
+app.get("/account-deletion-info", (_req, res) =>
+  res.send(
+    "If you want to get your account deleted you can either enter the app and delete your account in the settings screen or send an email to support@zaniluca.com with the subject 'Delete my account' along with the credentials you used to sign up.",
+  ),
+);
 
 // Error handling
 app.use(
