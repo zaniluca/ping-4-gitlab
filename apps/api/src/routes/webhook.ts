@@ -12,7 +12,10 @@ import * as Sentry from "@sentry/node";
 const router = Router();
 
 // optionally providing an access token if you have enabled push security
-const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
+const expo = new Expo({
+  accessToken: process.env.EXPO_ACCESS_TOKEN,
+  useFcmV1: false,
+});
 
 const removeFooterFromHtml = (html?: string) => {
   const FOOTER_REGEX = /<div\b[^>]*class="footer"[^>]*>([\s\S]*?)<\/div>/;
@@ -129,7 +132,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   } catch (error) {
     console.warn(`User with hook ${hookId} doesn't exist`);
     return next(
-      new ErrorWithStatus(400, `User with hook ${hookId} doesn't exist`)
+      new ErrorWithStatus(400, `User with hook ${hookId} doesn't exist`),
     );
   }
 
