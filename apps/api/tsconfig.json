@@ -7,7 +7,6 @@
     "strict": true,
     "lib": ["esnext"],
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
     "skipLibCheck": true,
     "types": ["vitest/globals"]
   }
