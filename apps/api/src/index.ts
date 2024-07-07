@@ -17,6 +17,7 @@ import * as Tracing from "@sentry/tracing";
 import * as Profiling from "@sentry/profiling-node";
 import { RewriteFrames } from "@sentry/integrations";
 import prisma from "../prisma/client";
+import { oldNotificationDeletionCron } from "./crons";
 
 const app = express();
 const port = process.env.PORT ?? 8080;
@@ -106,6 +107,7 @@ app.use(handleError);
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+    oldNotificationDeletionCron.start();
   });
 }
 
