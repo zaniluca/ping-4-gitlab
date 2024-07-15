@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useRef } from "react";
 
+import { RootStackParamList } from "./types";
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
 import { useUpdates } from "../hooks/use-updates";
@@ -14,7 +15,6 @@ import SignupScreen from "../screens/SignupScreen";
 import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import { useTheme } from "../utils/theme";
-import { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

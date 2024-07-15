@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import Toast from "react-native-toast-message";
+import * as Sentry from "@sentry/react-native";
 
 import { useRootStackNavigation } from "../hooks/navigation-hooks";
 import { useNotification } from "../hooks/notifications-hooks";
@@ -54,13 +55,16 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   });
 
   useEffect(() => {
-    if (
-      lastNotificationResponse &&
-      lastNotificationResponse.notification.request.content.data.nid
-    ) {
+    if (!lastNotificationResponse) return;
+    if (lastNotificationResponse.notification.request.content.data?.nid) {
       setNotificationId(
         lastNotificationResponse.notification.request.content.data.nid as string
       );
+    } else {
+      Sentry.configureScope((scope) => {
+        scope.setExtra("notification", lastNotificationResponse);
+        Sentry.captureMessage("Recived notification without nid");
+      });
     }
   }, [lastNotificationResponse]);
 

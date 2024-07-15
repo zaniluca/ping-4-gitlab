@@ -12,6 +12,7 @@ on:
       - "**.js"
       - "**.json"
       - "**.lock"
+      - "**.yml"
     branches-ignore:
       - production
 
@@ -33,7 +34,7 @@ jobs:
       # We need to checkout the PR head to get the commit message for the update
       # Otherwise, we'll get the commit message from the merge commit
       - name: Checkout PR head
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -44,7 +45,7 @@ jobs:
           echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Yarn install
         uses: ./.github/actions/yarn-install
@@ -57,7 +58,7 @@ jobs:
 
       - name: Publish update
         run: |
-          SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+          EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \

@@ -1,15 +1,15 @@
+import * as Sentry from "@sentry/react-native";
 import {
   useMutation,
   useQuery,
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
-import * as Sentry from "sentry-expo";
 
-import { http } from "../utils/http";
-import { APIUser, APIError } from "../utils/types";
 import { useLogout } from "./auth-hooks";
 import { useSecureStore } from "./use-secure-store";
+import { http } from "../utils/http";
+import { APIUser, APIError } from "../utils/types";
 
 const fetchUser = () => http.get("user").then((res) => res.data);
 
@@ -21,12 +21,14 @@ const deleteUser = () => http.delete("user").then((res) => res.data);
 export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
   const logout = useLogout();
 
-  const userQuery = useQuery<APIUser, APIError>(["user"], fetchUser, {
+  const userQuery = useQuery<APIUser, APIError>({
+    queryKey: ["user"],
+    queryFn: fetchUser,
     onSuccess: async (data) => {
       // If no data is returned from the API, it means the user has been deleted
       if (!data) await logout();
 
-      Sentry.Native.setUser({
+      Sentry.setUser({
         id: data.id,
         email: data.email || undefined,
         username: data.hookId,
@@ -58,7 +60,8 @@ export const useDeleteUser = () => {
   const queryClient = useQueryClient();
   const { deleteValueForKey } = useSecureStore();
 
-  return useMutation(deleteUser, {
+  return useMutation({
+    mutationFn: deleteUser,
     onSuccess: async () => {
       await deleteValueForKey("accessToken");
       await deleteValueForKey("refreshToken");
@@ -75,7 +78,8 @@ export const useDeleteUser = () => {
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateUser, {
+  return useMutation({
+    mutationFn: updateUser,
     onMutate: async (data) => {
       console.log("Optimistically updating user with: ", data);
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)

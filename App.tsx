@@ -7,6 +7,7 @@ import {
   DefaultTheme as NavLightTheme,
   NavigationContainer,
 } from "@react-navigation/native";
+import * as Sentry from "@sentry/react-native";
 import { ThemeProvider } from "@shopify/restyle";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
@@ -15,7 +16,6 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useRef } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as Sentry from "sentry-expo";
 
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
@@ -87,4 +87,4 @@ const App = () => {
   );
 };
 
-export default Sentry.Native.wrap(App);
+export default Sentry.wrap(App);

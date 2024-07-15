@@ -1,19 +1,13 @@
 name: "Yarn install or retrive from cache"
 description: "Install dependencies from cache if available"
 
-inputs:
-  node-version:
-    description: "Node version to use"
-    required: true
-    default: 14.x
-
 runs:
   using: "composite"
   steps:
     - name: Setup Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: ${{ inputs.node-version }}
+        node-version-file: ".nvmrc"
         cache: yarn
 
     - name: Find yarn cache
@@ -22,7 +16,7 @@ runs:
       run: echo "YARN_CACHE_DIR=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
     - name: Restore cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.yarn-cache-path.outputs.YARN_CACHE_DIR }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}

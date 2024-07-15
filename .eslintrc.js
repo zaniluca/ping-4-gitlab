@@ -1,7 +1,8 @@
 module.exports = {
+  plugins: ["@tanstack/query"],
   extends: [
     "universe/native",
-    // "universe/shared/typescript-analysis"
+    "plugin:@tanstack/eslint-plugin-query/recommended",
   ],
   rules: {
     "prettier/prettier": [
@@ -17,16 +18,10 @@ module.exports = {
         argsIgnorePattern: "^_",
       },
     ],
+    // Removed since we don't want to upgrade to the new API yet
+    "@tanstack/query/no-deprecated-options": "off",
   },
   settings: {
     "import/ignore": ["react-native"],
   },
-  // overrides: [
-  //   {
-  //     files: ["*.ts", "*.tsx", "*.d.ts"],
-  //     parserOptions: {
-  //       project: "./tsconfig.json",
-  //     },
-  //   },
-  // ],
 };

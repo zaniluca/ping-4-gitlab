@@ -7,9 +7,9 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
+import { useUser } from "./user-hooks";
 import { http } from "../utils/http";
 import { APIError, APINotification } from "../utils/types";
-import { useUser } from "./user-hooks";
 
 const fetchNotification = (id: string) =>
   http.get(`notification/${id}`).then((res) => res.data);
@@ -70,26 +70,25 @@ export const useNotification = (
 ) => {
   const user = useUser();
 
-  return useQuery<APINotification, APIError>(
-    ["notifications", id],
-    () => fetchNotification(id),
-    {
-      enabled: !!user.data,
-      onError: (err) => {
-        console.log(
-          `Error fetching notification ${id}`,
-          err.response?.data?.message
-        );
-      },
-      ...options,
-    }
-  );
+  return useQuery<APINotification, APIError>({
+    queryKey: ["notifications", id],
+    queryFn: () => fetchNotification(id),
+    enabled: !!user.data,
+    onError: (err) => {
+      console.log(
+        `Error fetching notification ${id}`,
+        err.response?.data?.message
+      );
+    },
+    ...options,
+  });
 };
 
 export const useUpdateNotification = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateNotification, {
+  return useMutation({
+    mutationFn: updateNotification,
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries(["notifications"]);
 
@@ -103,7 +102,7 @@ export const useUpdateNotification = () => {
       );
 
       // Finding the notification in the page
-      const previousNotificationData = associatedNotificationPage?.data.find(
+      const previousNotificationData = associatedNotificationPage?.data?.find(
         (n) => n.id === id
       );
 

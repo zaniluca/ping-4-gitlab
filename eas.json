@@ -7,7 +7,7 @@
     "base": {
       "autoIncrement": true,
       "cache": {
-        "key": "expo46"
+        "key": "expo50"
       }
     },
     "development": {
