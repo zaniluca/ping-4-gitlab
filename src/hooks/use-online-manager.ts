@@ -1,13 +1,15 @@
 import NetInfo from "@react-native-community/netinfo";
 import { onlineManager } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 export function useOnlineManager() {
+  const [isOnline, setIsOnline] = useState(false);
+
   useEffect(() => {
     if (Platform.OS !== "web") {
-      return NetInfo.addEventListener((state) => {
+      const unsubscribe = NetInfo.addEventListener((state) => {
         const isOnline =
           state.isConnected != null &&
           state.isConnected &&
@@ -17,12 +19,19 @@ export function useOnlineManager() {
           Toast.show({
             type: "error",
             text1: "No internet connection",
-            text2: "It seems you are offline (NetInfo)",
+            text2: "It seems you are offline",
             autoHide: false,
           });
 
         onlineManager.setOnline(isOnline);
+        setIsOnline(isOnline);
       });
+
+      return () => {
+        unsubscribe();
+      };
     }
   }, []);
+
+  return isOnline;
 }
