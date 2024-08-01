@@ -1,7 +1,7 @@
+import * as WebBrowser from "expo-web-browser";
 import React from "react";
 
 import { Text } from "./restyle";
-import { openURL } from "../utils/open-url";
 
 const Disclaimer = () => {
   return (
@@ -13,8 +13,8 @@ const Disclaimer = () => {
       and */}
       <Text
         color="accent"
-        onPress={() =>
-          openURL(
+        onPress={async () =>
+          WebBrowser.openBrowserAsync(
             "https://www.privacypolicies.com/live/91cf1154-e54c-45d8-90e9-fe94a46013f6"
           )
         }

@@ -1,9 +1,9 @@
+import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useRef } from "react";
 import { WebView } from "react-native-webview";
 
 import { useUpdateNotification } from "../hooks/notifications-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { openURL } from "../utils/open-url";
 
 type Props = RootStackScreenProps<"NotificationDetail">;
 
@@ -31,10 +31,10 @@ const NotificationDetail: React.FC<Props> = ({ route }) => {
         html: notification.html ?? "",
       }}
       textZoom={125}
-      onNavigationStateChange={(e) => {
+      onNavigationStateChange={async (e) => {
         if (e.url && e.url.startsWith("http")) {
           webview.current?.goBack();
-          openURL(e.url);
+          await WebBrowser.openBrowserAsync(e.url);
         }
       }}
     />
