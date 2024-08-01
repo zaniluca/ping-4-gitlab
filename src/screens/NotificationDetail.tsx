@@ -1,4 +1,3 @@
-import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useRef } from "react";
 import { WebView } from "react-native-webview";
 
@@ -31,12 +30,6 @@ const NotificationDetail: React.FC<Props> = ({ route }) => {
         html: notification.html ?? "",
       }}
       textZoom={125}
-      onNavigationStateChange={async (e) => {
-        if (e.url && e.url.startsWith("http")) {
-          webview.current?.goBack();
-          await WebBrowser.openBrowserAsync(e.url);
-        }
-      }}
     />
   );
 };
