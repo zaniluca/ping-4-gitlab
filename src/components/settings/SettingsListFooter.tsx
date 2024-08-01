@@ -1,7 +1,7 @@
 import * as Application from "expo-application";
+import * as WebBrowser from "expo-web-browser";
 import React from "react";
 
-import { openURL } from "../../utils/open-url";
 import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
@@ -21,7 +21,11 @@ const SettingsListFooter = () => {
         This app's code is available on{" "}
         <Text
           color="blue"
-          onPress={() => openURL("https://github.com/zaniluca/ping-4-gitlab")}
+          onPress={async () =>
+            await WebBrowser.openBrowserAsync(
+              "https://github.com/zaniluca/ping-4-gitlab"
+            )
+          }
         >
           GitHub
         </Text>

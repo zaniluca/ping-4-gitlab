@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Notifications from "expo-notifications";
 import {
@@ -8,7 +9,6 @@ import {
   useState,
 } from "react";
 import Toast from "react-native-toast-message";
-import * as Sentry from "@sentry/react-native";
 
 import { useRootStackNavigation } from "../hooks/navigation-hooks";
 import { useNotification } from "../hooks/notifications-hooks";
