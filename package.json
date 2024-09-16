@@ -13,7 +13,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
     "eas-build-pre-install": "echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > ./google-services.json",
     "prepare": "husky install",
-    "start-be": "cd ../api-ping-4-gitlab && pnpm dev"
+    "start-be": "cd ../api-ping-4-gitlab && pnpm dev",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo-google-fonts/source-sans-pro": "^0.2.2",
