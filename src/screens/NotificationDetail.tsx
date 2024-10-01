@@ -3,7 +3,6 @@ import { WebView } from "react-native-webview";
 
 import { useUpdateNotification } from "../hooks/notifications-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { openURL } from "../utils/open-url";
 
 type Props = RootStackScreenProps<"NotificationDetail">;
 
@@ -31,12 +30,6 @@ const NotificationDetail: React.FC<Props> = ({ route }) => {
         html: notification.html ?? "",
       }}
       textZoom={125}
-      onNavigationStateChange={(e) => {
-        if (e.url && e.url.startsWith("http")) {
-          webview.current?.goBack();
-          openURL(e.url);
-        }
-      }}
     />
   );
 };
