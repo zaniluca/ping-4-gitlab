@@ -46,9 +46,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         paddingTop: 32,
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <BackButton />
-        <KeyboardAvoid>
+      <KeyboardAvoid>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <BackButton />
           <Text variant="largeTitle" marginTop="xl">
             Login
           </Text>
@@ -134,8 +134,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </Box>
           </Box>
-        </KeyboardAvoid>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoid>
     </SafeAreaView>
   );
 };
