@@ -14,7 +14,7 @@ const router = Router();
 // optionally providing an access token if you have enabled push security
 const expo = new Expo({
   accessToken: process.env.EXPO_ACCESS_TOKEN,
-  useFcmV1: false,
+  useFcmV1: true,
 });
 
 const removeFooterFromHtml = (html?: string) => {
@@ -132,7 +132,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   } catch (error) {
     console.warn(`User with hook ${hookId} doesn't exist`);
     return next(
-      new ErrorWithStatus(400, `User with hook ${hookId} doesn't exist`),
+      new ErrorWithStatus(400, `User with hook ${hookId} doesn't exist`)
     );
   }
 
@@ -219,7 +219,8 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
       let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
       // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
     } catch (error) {
-      console.error(error);
+      console.error("Error sending push notification", error);
+      Sentry.captureException(error);
     }
   }
 
