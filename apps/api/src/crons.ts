@@ -7,17 +7,17 @@ const EVERY_DAY_AT_MIDNIGHT_CRON = "0 0 * * *";
 export const oldNotificationDeletionCron = CronJob.from({
   cronTime: EVERY_DAY_AT_MIDNIGHT_CRON,
   onTick: async () => {
-    const oneYearAgo = new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1),
+    const twoYearsAgo = new Date(
+      new Date().setFullYear(new Date().getFullYear() - 2)
     );
     console.log(
-      "Running cron job to delete notifications older than: " + oneYearAgo,
+      "Running cron job to delete notifications older than: " + twoYearsAgo
     );
     try {
       const res = await prisma.notification.deleteMany({
         where: {
           recived: {
-            lte: oneYearAgo,
+            lte: twoYearsAgo,
           },
         },
       });
@@ -30,7 +30,7 @@ export const oldNotificationDeletionCron = CronJob.from({
           name: "oldNotificationDeletionCron",
           schedule: EVERY_DAY_AT_MIDNIGHT_CRON,
         });
-        scope.setExtra("date", oneYearAgo);
+        scope.setExtra("date", twoYearsAgo);
         Sentry.captureException(error);
       });
     }
