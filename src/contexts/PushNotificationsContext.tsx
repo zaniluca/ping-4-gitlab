@@ -61,13 +61,13 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
         lastNotificationResponse.notification.request.content.data.nid as string
       );
     } else {
-      // This is needed to avoid the object being serialized as [Object object] in Sentry
-      const plainLastNotificationResponse = JSON.parse(
-        JSON.stringify(lastNotificationResponse)
-      );
       Sentry.configureScope((scope) => {
-        scope.setExtra("notification", plainLastNotificationResponse);
-        Sentry.captureMessage("Recived notification without nid");
+        scope.setExtra(
+          "notification",
+          // Needed to avoid sentry cutting the object depth
+          JSON.stringify(lastNotificationResponse, null, 2)
+        );
+        Sentry.captureMessage("Received notification without nid");
       });
     }
   }, [lastNotificationResponse]);
