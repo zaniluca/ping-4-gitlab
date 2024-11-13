@@ -33,8 +33,8 @@ importers:
         specifier: ^16.0.1
         version: 16.0.1
       expo-server-sdk:
-        specifier: ^3.11.0
-        version: 3.11.0(encoding@0.1.13)
+        specifier: ^3.12.0
+        version: 3.12.0(encoding@0.1.13)
       express:
         specifier: ^4.18.1
         version: 4.18.1
@@ -1216,8 +1216,8 @@ packages:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
     engines: {node: '>=10'}
 
-  expo-server-sdk@3.11.0:
-    resolution: {integrity: sha512-EGH82ZcdAFjKq+6daDE8Xj7BjaSeP1VDvZ3Hmtn/KzEQ3ffqHkauMsgXL2wLEPlvatLq3EsYNcejXRBV54WnFQ==}
+  expo-server-sdk@3.12.0:
+    resolution: {integrity: sha512-A3S78NLdOfWn69kx+gMhO83wemcfQ5w7ntkXH+cFWwyLmaNGbfzpb1HqgTKLwd+BmFf6cf+FgltAaTHbl8G9QA==}
 
   express-jwt@7.7.5:
     resolution: {integrity: sha512-2CMse20Ex2vbqvsuGAcai7TgQuvmFa1n39PwKLaEszTGhuRzckBERII4PwdZIibtwfYUGSNVQzPpf+QcGo2yHw==}
@@ -3652,7 +3652,7 @@ snapshots:
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
 
-  expo-server-sdk@3.11.0(encoding@0.1.13):
+  expo-server-sdk@3.12.0(encoding@0.1.13):
     dependencies:
       node-fetch: 2.6.7(encoding@0.1.13)
       promise-limit: 2.7.0
