@@ -34,11 +34,9 @@ jobs:
       - name: Inject Debug IDS
         run: ./node_modules/.bin/sentry-cli sourcemaps inject --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
 
-      - name: Upload source maps
-        run: ./node_modules/.bin/sentry-cli sourcemaps upload --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
-
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         with:
           environment: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+          sourcemaps: "./dist"
           ignore_empty: true
