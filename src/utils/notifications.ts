@@ -21,7 +21,7 @@ export const registerForPushNotificationsAsync = async () => {
   }
 
   if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
+    await Notifications.setNotificationChannelAsync("default", {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       sound: "notification.wav",
