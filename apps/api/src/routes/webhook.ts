@@ -202,6 +202,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
   const notificationPayload: ExpoPushMessage = {
     to: pushTokens,
     sound: "default",
+    channelId: "default",
     ...composeNotificationContent(notification as NotificationWithHeaders),
     data: { nid: notification.id },
   };
