@@ -15,6 +15,7 @@ import {
 import { expressjwt } from "express-jwt";
 import * as Sentry from "@sentry/node";
 import { oldNotificationDeletionCron } from "./crons";
+import { ErrorWithStatus } from "./utils/errors";
 
 const app = express();
 const port = process.env.PORT ?? 8080;
@@ -52,12 +53,16 @@ app.get("/account-deletion-info", (_req, res) =>
     "If you want to get your account deleted you can either enter the app and delete your account in the settings screen or send an email to support@zaniluca.com with the subject 'Delete my account' along with the credentials you used to sign up."
   )
 );
+
 // Error handling
 Sentry.setupExpressErrorHandler(app, {
   shouldHandleError: (error) => {
     if (error.statusCode && error.statusCode < 500) {
       return false;
+    } else if (error.name === "ErrorWithStatus") {
+      return (error as ErrorWithStatus).status >= 500;
     }
+
     return true;
   },
 });
