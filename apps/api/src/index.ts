@@ -24,21 +24,22 @@ app.enable("trust proxy");
 
 // Middlewares
 app.use(requestLogger);
-app.use(attachSentryUserInfo);
 app.use(express.json());
 app.use(
   "/user",
   expressjwt({
     secret: process.env.JWT_ACCESS_SECRET!,
     algorithms: ["HS256"],
-  })
+  }),
+  attachSentryUserInfo
 );
 app.use(
   "/notification",
   expressjwt({
     secret: process.env.JWT_ACCESS_SECRET!,
     algorithms: ["HS256"],
-  })
+  }),
+  attachSentryUserInfo
 );
 
 // Routes
