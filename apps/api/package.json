@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src/index.ts'",
-    "build": "prisma migrate deploy && tsc",
+    "build": "prisma migrate deploy && cross-env SENTRY_RELEASE=$(sentry-cli releases propose-version) tsc",
     "start": "cross-env NODE_ENV=production node dist/src/index.js",
     "studio": "prisma studio --port 5556",
     "test": "vitest run",

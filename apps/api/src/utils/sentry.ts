@@ -7,6 +7,9 @@ Sentry.init({
   integrations: [nodeProfilingIntegration(), Sentry.prismaIntegration()],
   tracesSampleRate: 0.05,
   profilesSampleRate: 0.05,
+  // This env should be implicitly used by the SDK but let's make it explicit
+  release: process.env.SENTRY_RELEASE,
+  environment: process.env.SENTRY_ENVIRONMENT,
   beforeSendTransaction(event) {
     // Remove the cursor from the transaction
     event.transaction = event.transaction?.replace(
