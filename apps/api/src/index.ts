@@ -61,6 +61,9 @@ Sentry.setupExpressErrorHandler(app, {
       return false;
     } else if (error.name === "ErrorWithStatus") {
       return (error as ErrorWithStatus).status >= 500;
+      // express-jwt doesn't have a statusCode property
+    } else if (error.name === "UnauthorizedError") {
+      return false;
     }
 
     return true;
