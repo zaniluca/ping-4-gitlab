@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
-console.log("Sentry DSN: ", process.env.SENTRY_DSN);
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   enabled: process.env.NODE_ENV === "production",

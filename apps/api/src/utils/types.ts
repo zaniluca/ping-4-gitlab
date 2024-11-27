@@ -18,12 +18,12 @@ export interface AuthRequestWithPayload<T>
 
 export type WebhookPayload = {
   headers: string;
-  from: string;
+  // from: string;
   to: string;
   text?: string;
   html?: string;
   subject: string;
-  dkim: string;
+  // dkim: string;
 };
 
 export type Headers = ProjectHeaders &

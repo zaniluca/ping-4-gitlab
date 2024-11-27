@@ -3,11 +3,11 @@ import type { Headers, PipelineStatus, WebhookPayload } from "../utils/types";
 import hash from "object-hash";
 import prisma from "../../prisma/client";
 import { Notification, Prisma, User } from "@prisma/client";
-import multer from "multer";
 import { Expo, ExpoPushMessage } from "expo-server-sdk";
 import { parseHeaders } from "../utils/common";
 import { ErrorWithStatus } from "../utils/errors";
 import * as Sentry from "@sentry/node";
+import { IncomingForm } from "formidable";
 
 const router = Router();
 
@@ -76,19 +76,53 @@ const sanitizeSubject = (subject: string) => {
   return subject.replace(STRING_BEFORE_FIRST_PIPE_REGEX, "").trimStart();
 };
 
-router.post("/webhook", multer().none(), async (req, res, next) => {
+router.post("/webhook", async (req, res, next) => {
   const { token } = req.query;
 
   if (!token || token !== process.env.WEBHOOK_SECRET) {
     return next(new ErrorWithStatus(403, "Unauthorized"));
   }
 
-  const body = req.body as WebhookPayload;
+  const form = new IncomingForm({
+    encoding: "utf-8",
+    keepExtensions: true,
+    // Since we're dealing with text fields only, we can set a reasonable maxFileSize
+    maxFileSize: 2 * 1024 * 1024, // 2MB
+  });
 
-  if (!body) {
-    console.error("Failed to parse body", body);
-    res.status(500);
-    return;
+  let payload: WebhookPayload | undefined;
+  try {
+    const [fields] = await form.parse(req);
+
+    if (!fields) {
+      console.error("Failed to parse fields", fields);
+      return next(
+        new ErrorWithStatus(500, `Failed to parse fields: ${fields}`)
+      );
+    }
+
+    // formidable returns arrays for field values, we take the first value
+    payload = {
+      to: fields.to?.[0] ?? "",
+      subject: fields.subject?.[0] ?? "",
+      text: fields.text?.[0],
+      html: fields.html?.[0],
+      headers: fields.headers?.[0] ?? "",
+    };
+
+    if (!payload.headers || !payload.to || !payload.subject) {
+      console.warn("Webhook payload is missing some fields", payload);
+      Sentry.captureEvent({
+        message: "Webhook payload is missing some fields",
+        extra: payload,
+      });
+      return next(
+        new ErrorWithStatus(400, "Webhook payload is missing some fields")
+      );
+    }
+  } catch (error) {
+    console.error("Failed to parse form", error);
+    return next(new ErrorWithStatus(500, `Failed to parse form: ${error}`));
   }
 
   const {
@@ -97,7 +131,7 @@ router.post("/webhook", multer().none(), async (req, res, next) => {
     text: rawText,
     html: rawHtml,
     headers: rawHeaders,
-  } = body!;
+  } = payload;
 
   // Parsing headers string into object
   const headers = parseHeaders(rawHeaders);
