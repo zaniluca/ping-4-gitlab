@@ -253,13 +253,88 @@ router.post("/webhook", async (req, res, next) => {
 
   const chunks = expo.chunkPushNotifications([notificationPayload]);
 
+  let receiptIds = [];
   for (const chunk of chunks) {
     try {
       let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-      // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
+
+      for (let ticket of ticketChunk) {
+        if (ticket.status === "ok") {
+          receiptIds.push(ticket.id);
+        } else {
+          if (ticket.details && ticket.details.error) {
+            console.error(`Push ticket error: ${ticket.message}`);
+            Sentry.captureException(
+              new Error(`Push ticket error: ${ticket.message}`),
+              {
+                extra: {
+                  ticket_details: ticket.details,
+                  notification_payload: notificationPayload,
+                },
+              }
+            );
+
+            // Only "DeviceNotRegistered" is considered a valid error for tickets
+            // see https://docs.expo.dev/push-notifications/sending-notifications/#push-ticket-errors
+            if (
+              ticket.details &&
+              ticket.details.error &&
+              ticket.details.error === "DeviceNotRegistered"
+            ) {
+              // TODO: Remove token from user
+              console.warn(
+                `Invalid push token detected: ${ticket.details.expoPushToken}`
+              );
+            }
+          }
+        }
+      }
     } catch (error) {
-      console.error("Error sending push notification", error);
-      Sentry.captureException(error);
+      console.error("Error sending push notification chunk", error);
+      Sentry.captureException(error, {
+        extra: {
+          chunk_size: chunk.length,
+          notification_payload: notificationPayload,
+        },
+      });
+    }
+  }
+
+  let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+  for (let chunk of receiptIdChunks) {
+    try {
+      let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+
+      for (const [receiptId, receipt] of Object.entries(receipts)) {
+        if (receipt.status === "ok") {
+          continue;
+        } else if (receipt.status === "error") {
+          console.error(
+            `There was an error sending a notification: ${receipt.message}`
+          );
+          Sentry.captureException(
+            new Error(`Push receipt error: ${receipt.message}`),
+            {
+              extra: {
+                receipt_id: receiptId,
+                receipt_details: receipt.details,
+              },
+            }
+          );
+
+          // See https://docs.expo.dev/push-notifications/sending-notifications/#push-receipt-errors
+          if (receipt.details && receipt.details.error) {
+            console.error(`Push receipt error: ${receipt.details.error}`);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error checking receipts:", error);
+      Sentry.captureException(error, {
+        extra: {
+          receipt_ids: chunk,
+        },
+      });
     }
   }
 
