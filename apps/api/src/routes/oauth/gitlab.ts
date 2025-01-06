@@ -5,15 +5,9 @@ import prisma from "../../../prisma/client";
 import { getAccessToken, getRefreshToken } from "../../utils/common";
 import generateUniqueHook from "../../utils/hook-generator";
 import * as Sentry from "@sentry/node";
+import { APP_URL_SCHEME } from "../../utils/constants";
 
 const router = Router();
-
-const APP_REDIRECT_SCHEME =
-  process.env.NODE_ENV === "production"
-    ? "com.zaniluca.ping4gitlab://"
-    : process.env.ANDROID_EMULATOR
-    ? "exp://10.0.2.2:8081/--/" // Android emulator w/ Expo
-    : "exp://localhost:8081/--/"; // iOS simulator w/ Expo
 
 type GitLabTokenResponse = {
   access_token: string;
@@ -31,7 +25,7 @@ type GitlabUserResponse = {
 
 const redirectWithError = (res: Response, error: string) =>
   res.redirect(
-    `${APP_REDIRECT_SCHEME}login/gitlab?error=${encodeURIComponent(error)}`
+    `${APP_URL_SCHEME}login/gitlab?error=${encodeURIComponent(error)}`
   );
 
 router.get("/authorize", async (req, res) => {
@@ -111,7 +105,7 @@ router.get("/callback", async (req, res) => {
     const refreshToken = getRefreshToken(alreadyExistingUser.id);
 
     return res.redirect(
-      `${APP_REDIRECT_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `${APP_URL_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   }
 
@@ -174,7 +168,7 @@ router.get("/callback", async (req, res) => {
   const refreshToken = getRefreshToken(user.id);
 
   return res.redirect(
-    `${APP_REDIRECT_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    `${APP_URL_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
   );
 });
 

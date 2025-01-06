@@ -8,6 +8,7 @@ import { parseHeaders } from "../utils/common";
 import { ErrorWithStatus } from "../utils/errors";
 import * as Sentry from "@sentry/node";
 import { IncomingForm } from "formidable";
+import { APP_URL_SCHEME } from "../utils/constants";
 
 const router = Router();
 
@@ -238,7 +239,10 @@ router.post("/webhook", async (req, res, next) => {
     sound: "default",
     channelId: "default",
     ...composeNotificationContent(notification as NotificationWithHeaders),
-    data: { nid: notification.id },
+    data: {
+      nid: notification.id,
+      url: `${APP_URL_SCHEME}notification?id=${notification.id}`,
+    },
   };
 
   if (notificationsCount === 1) {
