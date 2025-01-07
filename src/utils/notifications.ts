@@ -8,6 +8,15 @@ export const registerForPushNotificationsAsync = async () => {
     console.warn("Push notifications are not available on simulators");
     return { token: undefined, status: undefined };
   }
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      sound: "notification.wav",
+    });
+  }
+
   const { status } = await Notifications.requestPermissionsAsync({
     ios: {
       allowAlert: true,
@@ -18,14 +27,6 @@ export const registerForPushNotificationsAsync = async () => {
   if (status !== "granted") {
     console.warn("Push notifications permission denied");
     return { token: undefined, status };
-  }
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      sound: "notification.wav",
-    });
   }
 
   const projectId =

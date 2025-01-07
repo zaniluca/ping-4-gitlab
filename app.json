@@ -50,9 +50,7 @@
           "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
-          "androidMode": "collapse",
-          "defaultChannel": "default",
-          "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
+          "mode": "production"
         }
       ]
     ],
