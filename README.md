@@ -43,3 +43,7 @@ Now that you've setup the client you may want to also setup the server to start 
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.

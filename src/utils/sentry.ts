@@ -9,15 +9,18 @@ Sentry.init({
   enabled: !__DEV__,
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
-  tracesSampleRate: 0.55,
+  tracesSampleRate: 0.1,
   integrations: [
     new Sentry.ReactNativeTracing({
       routingInstrumentation,
     }),
   ],
   _experiments: {
-    profilesSampleRate: 1.0,
+    profilesSampleRate: 0.1,
   },
+  // release: nativeApplicationVersion ?? "dev",
+  // dist: `${Platform.OS}.${nativeBuildVersion}`,
+  // environment: process.env.NODE_ENV,
 });
 
 Sentry.configureScope((scope) => {

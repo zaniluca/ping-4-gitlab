@@ -26,10 +26,6 @@ export const NotificationsContext = createContext<NotificationsContextValues>(
   {}
 );
 
-Notifications.addNotificationResponseReceivedListener((notification) =>
-  console.log("Notification recived", notification)
-);
-
 export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
@@ -38,7 +34,6 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   const navigation = useRootStackNavigation();
   const updateUser = useUpdateUser();
   const queryClient = useQueryClient();
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
   const [notificationId, setNotificationId] = useState<string | null>(null);
 
   useNotification(notificationId!, {
@@ -55,49 +50,82 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   });
 
   useEffect(() => {
-    if (!lastNotificationResponse) return;
-    if (lastNotificationResponse.notification.request.content.data?.nid) {
-      setNotificationId(
-        lastNotificationResponse.notification.request.content.data.nid as string
-      );
-    } else {
-      Sentry.configureScope((scope) => {
-        scope.setExtra(
-          "notification",
-          // Needed to avoid sentry cutting the object depth
-          JSON.stringify(lastNotificationResponse, null, 2)
+    let isMounted = true;
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      console.log("Last notification response", response);
+
+      if (!isMounted || !response?.notification) return;
+      if (response.notification.request.content.data?.nid) {
+        setNotificationId(
+          response.notification.request.content.data.nid as string
         );
-        Sentry.captureMessage("Received notification without nid");
-      });
-    }
-  }, [lastNotificationResponse]);
+      } else {
+        Sentry.captureMessage("Received last notification without nid", {
+          extra: {
+            // Needed to avoid sentry cutting the object depth
+            response: JSON.stringify(response, null, 2),
+          },
+        });
+      }
+    });
+
+    // Register handler for notifications received when the app is in the foreground
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("Notification recived", response);
+        if (!response.notification.request.content.data?.nid) {
+          Sentry.captureMessage("Received notification without nid", {
+            extra: {
+              // Needed to avoid sentry cutting the object depth
+              response: JSON.stringify(response, null, 2),
+            },
+          });
+          return;
+        }
+        setNotificationId(
+          response.notification.request.content.data.nid as string
+        );
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (!user.data) return;
 
-    registerForPushNotificationsAsync().then((res) => {
-      const { token, status } = res;
-      setPushToken(token);
+    registerForPushNotificationsAsync()
+      .then((res) => {
+        const { token, status } = res;
+        setPushToken(token);
 
-      if (status === "denied") {
-        Toast.show({
-          type: "error",
-          text1: "Notifications not permitted",
-          text2: "We suggest enabling them for the best experience!",
+        if (status === "denied") {
+          Toast.show({
+            type: "error",
+            text1: "Notifications not permitted",
+            text2: "We suggest enabling them for the best experience!",
+          });
+          return;
+        }
+        const tokens = user.data.expoPushTokens;
+        console.log("ExpoPushToken: ", token);
+        // We are on emulator or the user has not allowed notifications
+        if (!token) return;
+        // Token already present
+        if (tokens.includes(token)) return;
+
+        updateUser.mutate({
+          expoPushTokens: [...tokens, token],
         });
-        return;
-      }
-      const tokens = user.data.expoPushTokens;
-      console.log("ExpoPushToken: ", token);
-      // We are on emulator or the user has not allowed notifications
-      if (!token) return;
-      // Token already present
-      if (tokens.includes(token)) return;
-
-      updateUser.mutate({
-        expoPushTokens: [...tokens, token],
+      })
+      .catch((error) => {
+        console.error("Failed to get push token for push notification", error);
+        Sentry.captureException(error);
       });
-    });
     // Here we put userData.onboarding to avoid re-adding the expo_push_token when the user logs out
     // If the user logs out and so removes the expo_push_token, we MUST NOT re-execute this effect
     // see: https://github.com/zaniluca/ping-4-gitlab/issues/86

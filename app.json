@@ -5,8 +5,7 @@
     "scheme": "com.zaniluca.ping4gitlab",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "2.1.5",
-    "privacy": "public",
+    "version": "2.1.6",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/zaniluca/ping-4-gitlab",
@@ -51,8 +50,7 @@
           "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
-          "androidMode": "collapse",
-          "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
+          "mode": "production"
         }
       ]
     ],
