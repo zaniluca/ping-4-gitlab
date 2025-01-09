@@ -1,6 +1,6 @@
 import { LinkingOptions } from "@react-navigation/native";
 import * as Sentry from "@sentry/react-native";
-import Linking from "expo-linking";
+import * as Linking from "expo-linking";
 import * as Notifications from "expo-notifications";
 
 import { RootStackParamList } from "./types";
@@ -29,17 +29,31 @@ export const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/")],
   config: {
     screens: {
-      NotificationDetail: {
-        path: "notification/:id",
+      Login: "login",
+      Inbox: {
+        path: "notifications",
+        screens: {
+          NotificationDetail: {
+            path: ":id",
+            parse: {
+              id: (id: string) => id,
+            },
+          },
+        },
+      },
+      Settings: {
+        path: "settings",
+        screens: {
+          AccountSettings: "account",
+        },
       },
     },
   },
   async getInitialURL() {
-    // First, you may want to do the default deep link handling
     // Check if app was opened from a deep link
     const initialURL = await Linking.getInitialURL();
-
     if (initialURL != null) {
+      console.log("Linking initial url:", initialURL);
       return initialURL;
     }
 
@@ -48,7 +62,10 @@ export const linking: LinkingOptions<RootStackParamList> = {
     return handleNotificationDeepLink(response);
   },
   subscribe(listener) {
-    const onReceiveURL = ({ url }: { url: string }) => listener(url);
+    const onReceiveURL = ({ url }: { url: string }) => {
+      console.log("Recived Linking url:", url);
+      listener(url);
+    };
 
     // Listen to incoming links from deep linking
     const eventListenerSubscription = Linking.addEventListener(
@@ -61,7 +78,6 @@ export const linking: LinkingOptions<RootStackParamList> = {
       (response) => {
         const url = handleNotificationDeepLink(response);
         if (url) {
-          // Let React Navigation handle the URL
           listener(url);
         }
       }

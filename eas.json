@@ -7,11 +7,12 @@
     "base": {
       "autoIncrement": true,
       "cache": {
-        "key": "expo50"
+        "key": "expo51"
       }
     },
     "development": {
       "extends": "base",
+      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"

@@ -1,3 +1,4 @@
+import "expo-dev-client";
 import {
   SourceSansPro_700Bold,
   SourceSansPro_400Regular,
