@@ -24,11 +24,9 @@ export default ({ config }: CustomConfig): ExpoConfig => ({
   icon: getIconForBuildEnv(),
   plugins: [
     ...(config.plugins || []),
-    // Maybe we can remove the options and the plugin should inherit the values from the environment variables
     [
       "@sentry/react-native/expo",
       {
-        url: "https://sentry.io/",
         organization: process.env.SENTRY_ORG,
         project: process.env.SENTRY_PROJECT,
       },

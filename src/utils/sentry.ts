@@ -1,7 +1,5 @@
 import * as Sentry from "@sentry/react-native";
-import { nativeApplicationVersion, nativeBuildVersion } from "expo-application";
 import * as Updates from "expo-updates";
-import { Platform } from "react-native";
 
 export const routingInstrumentation =
   new Sentry.ReactNavigationInstrumentation();
@@ -20,9 +18,9 @@ Sentry.init({
   _experiments: {
     profilesSampleRate: 0.1,
   },
-  release: nativeApplicationVersion ?? "dev",
-  dist: `${Platform.OS}.${nativeBuildVersion}`,
-  environment: process.env.NODE_ENV,
+  // release: nativeApplicationVersion ?? "dev",
+  // dist: `${Platform.OS}.${nativeBuildVersion}`,
+  // environment: process.env.NODE_ENV,
 });
 
 Sentry.configureScope((scope) => {
