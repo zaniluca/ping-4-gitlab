@@ -11,17 +11,17 @@ import { BellOff, ChevronRight, LogOut, User } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
 import Toast from "react-native-toast-message";
 
-import { useAuth } from "../../contexts/AuthContext";
-import { useData } from "../../contexts/DataContext";
-import { useNotifications } from "../../contexts/NotificationsContext";
-import { useRootStackNavigation } from "../../navigation/RootStackNavigator";
+import SettingsListFooter from "./SettingsListFooter";
+import { usePushNotificationsContext } from "../../contexts/PushNotificationsContext";
+import { useLogout } from "../../hooks/auth-hooks";
+import { useRootStackNavigation } from "../../hooks/navigation-hooks";
+import { useUpdateUser, useUser } from "../../hooks/user-hooks";
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
-import SettingsListFooter from "./SettingsListFooter";
 
 type SectionItem = {
   name: string;
-  icon: (props: SvgProps) => JSX.Element;
+  icon: (_props: SvgProps) => JSX.Element;
   onPress?: () => void;
   right?: JSX.Element;
 };
@@ -36,13 +36,20 @@ type SectionHeaderProps = {
 };
 
 const PauseNotificationsSwitch = () => {
-  const { userData, updateUserData } = useData();
   const { colors } = useTheme();
+  const updateUser = useUpdateUser();
+  const user = useUser();
 
   const togglePauseNotifications = async () => {
-    const newValue = !userData?.hasDisabledNotifications;
-    await updateUserData({
-      hasDisabledNotifications: newValue,
+    const oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+    const newValue = user.data?.mutedUntil
+      ? null
+      : oneYearFromNow.toISOString();
+
+    await updateUser.mutateAsync({
+      mutedUntil: newValue,
     });
 
     Toast.show({
@@ -57,29 +64,28 @@ const PauseNotificationsSwitch = () => {
       }}
       thumbColor={
         Platform.OS === "android"
-          ? userData?.hasDisabledNotifications
+          ? user.data?.mutedUntil
             ? colors.orange
             : colors.primary
           : undefined
       }
       onChange={togglePauseNotifications}
-      value={userData?.hasDisabledNotifications}
+      value={!!user.data?.mutedUntil}
     />
   );
 };
 
 const SettingsList = () => {
   const { colors, fontFamily } = useTheme();
-  const { logout, user } = useAuth();
-  const { updateUserData, userData } = useData();
-  const { pushToken } = useNotifications();
+  const { pushToken } = usePushNotificationsContext();
   const navigation = useRootStackNavigation();
+  const updateUser = useUpdateUser();
+  const user = useUser();
+  const logout = useLogout();
 
   const handleLogout = async () => {
-    await updateUserData({
-      expo_push_tokens: userData?.expo_push_tokens?.filter(
-        (t) => t !== pushToken
-      ),
+    await updateUser.mutateAsync({
+      expoPushTokens: user.data?.expoPushTokens?.filter((t) => t !== pushToken),
     });
     await logout();
   };
@@ -88,15 +94,11 @@ const SettingsList = () => {
     {
       title: "General",
       data: [
-        ...(!user?.isAnonymous
-          ? [
-              {
-                name: "Pause Notifications",
-                icon: (props: SvgProps) => <BellOff {...props} />,
-                right: <PauseNotificationsSwitch />,
-              },
-            ]
-          : []),
+        {
+          name: "Pause Notifications",
+          icon: (props: SvgProps) => <BellOff {...props} />,
+          right: <PauseNotificationsSwitch />,
+        },
         {
           name: "Account",
           icon: (props: SvgProps) => <User {...props} />,
@@ -105,7 +107,7 @@ const SettingsList = () => {
         },
       ],
     },
-    ...(!user?.isAnonymous
+    ...(!user.isAnonymous
       ? [
           {
             title: "",
@@ -129,7 +131,7 @@ const SettingsList = () => {
           variant="callout"
           fontFamily={fontFamily.semibold}
           textTransform="uppercase"
-          paddingHorizontal="l"
+          paddingHorizontal="xl"
           letterSpacing={1.5}
         >
           {section.title}
@@ -146,11 +148,11 @@ const SettingsList = () => {
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
-          padding="m"
+          padding="l"
           backgroundColor="primaryBackground"
         >
           <Box flexDirection="row">
-            <Box paddingRight="m">
+            <Box paddingRight="l">
               <item.icon stroke={colors.primary} strokeWidth={2} />
             </Box>
             <Text variant="headline">{name}</Text>

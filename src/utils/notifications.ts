@@ -1,12 +1,22 @@
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
-    console.log("Push notifications are not available on simulators");
+    console.warn("Push notifications are not available on simulators");
     return { token: undefined, status: undefined };
   }
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      sound: "notification.wav",
+    });
+  }
+
   const { status } = await Notifications.requestPermissionsAsync({
     ios: {
       allowAlert: true,
@@ -15,21 +25,21 @@ export const registerForPushNotificationsAsync = async () => {
     },
   });
   if (status !== "granted") {
-    console.error("Failed to get push token for push notification!");
+    console.warn("Push notifications permission denied");
     return { token: undefined, status };
   }
 
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      sound: "notification",
-    });
+  const projectId =
+    Constants?.expoConfig?.extra?.eas?.projectId ??
+    Constants?.easConfig?.projectId;
+
+  if (!projectId) {
+    throw new Error("Failed to get project id for push notification");
   }
 
   const token = (
     await Notifications.getExpoPushTokenAsync({
-      experienceId: "@zaniluca/ping4gitlab",
+      projectId,
     })
   ).data;
 

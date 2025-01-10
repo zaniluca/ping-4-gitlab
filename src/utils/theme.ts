@@ -18,6 +18,7 @@ const lightPalette = {
   secondary: "#8C929D",
   primary: "#2E2E2E",
   white: "#FFFFFF",
+  black: "#000000",
 };
 
 const font = {
@@ -32,24 +33,32 @@ export const lightTheme = createTheme({
     primaryBackground: lightPalette.white,
     divider: "#D2D2D2",
     accent: lightPalette.indigo,
+    progressBar: lightPalette.blue,
   },
   fontFamily: {
     ...font,
   },
   spacing: {
-    xxs: 2,
+    "2xs": 2,
     xs: 4,
     s: 8,
-    m: 16,
-    l: 20,
-    xl: 32,
-    xxl: 40,
+    m: 12,
+    l: 16,
+    xl: 20,
+    "2xl": 24,
+    "3xl": 32,
+    "4xl": 40,
   },
   breakpoints: {
     phone: 0,
     tablet: 768,
   },
   textVariants: {
+    // defaults: {
+    //   fontFamily: font.regular,
+    //   fontSize: 17,
+    //   color: "primary",
+    // },
     largeTitle: {
       fontFamily: font.bold,
       fontSize: 34,
@@ -81,6 +90,21 @@ export const lightTheme = createTheme({
       color: "primary",
     },
   },
+  buttonVariants: {
+    defaults: {
+      backgroundColor: lightPalette.purple,
+    },
+    outline: {
+      elevation: 1,
+      backgroundColor: "primaryBackground",
+      borderWidth: 1,
+      borderColor: "tertiary",
+      shadowColor: "black",
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 2 },
+    },
+  },
 });
 
 export type Theme = typeof lightTheme;
@@ -95,6 +119,7 @@ export const darkTheme = createTheme({
     primaryBackground: "#1F1F1F",
     divider: "#333333",
     accent: lightPalette.purple,
+    progressBar: lightPalette.orange,
   },
 });
 

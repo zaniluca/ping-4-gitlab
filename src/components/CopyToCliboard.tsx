@@ -6,8 +6,8 @@ import { TouchableOpacity } from "react-native";
 import { Copy } from "react-native-feather";
 import Toast from "react-native-toast-message";
 
-import { Theme, useTheme } from "../utils/theme";
 import { Box, Text } from "./restyle";
+import { Theme, useTheme } from "../utils/theme";
 
 type Props = SpacingProps<Theme> & {
   content: string;
@@ -16,12 +16,12 @@ type Props = SpacingProps<Theme> & {
 const CopyToCliboard: React.FC<Props> = ({ content, ...rest }) => {
   const theme = useTheme();
 
-  const handleOnPress = () => {
+  const handleOnPress = async () => {
     Toast.show({
       text1: "Copied!",
     });
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Clipboard.setString(content);
+    await Clipboard.setStringAsync(content);
   };
 
   return (
@@ -29,7 +29,7 @@ const CopyToCliboard: React.FC<Props> = ({ content, ...rest }) => {
       <TouchableOpacity onPress={handleOnPress} activeOpacity={0.5}>
         <Box
           style={{ paddingVertical: 12 }}
-          paddingHorizontal="m"
+          paddingHorizontal="l"
           backgroundColor="quaternary"
           borderRadius={4}
           flexDirection="row"

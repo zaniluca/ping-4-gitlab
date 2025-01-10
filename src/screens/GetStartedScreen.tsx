@@ -1,51 +1,64 @@
-import { useLayoutEffect } from "react";
-import { ScrollView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import * as Updates from "expo-updates";
+import { useCallback, useLayoutEffect, PropsWithChildren } from "react";
+import { BackHandler, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
 import CopyToCliboard from "../components/CopyToCliboard";
 import Toaster from "../components/Toaster";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
-import { useData } from "../contexts/DataContext";
+import { useLogout } from "../hooks/auth-hooks";
+import { useDeleteUser, useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
-  const { userData } = useData();
   const { colors } = useTheme();
-  const { deleteUser, user } = useAuth();
+  const logout = useLogout();
+
+  const user = useUser({
+    refetchInterval: 5000,
+  });
+
+  const deleteUser = useDeleteUser();
 
   useLayoutEffect(() => {
-    if (hasCompletedOnboarding) {
+    if (user.hasCompletedOnboarding) {
       // User correctly added the hook and recived a notification
       if (navigation.canGoBack()) navigation.goBack();
       else navigation.navigate("Inbox");
     }
-  }, [navigation, userData]);
+  }, [navigation, user]);
 
-  // Disabling android hardware back buttons
-  useLayoutEffect(() => {
-    const listener = navigation.addListener("beforeRemove", (e) => {
-      // When user has finished onboarding re-enable back button
-      if (hasCompletedOnboarding) {
-        e.preventDefault();
-      }
-    });
-    return () => listener();
-  }, [navigation, userData]);
+  // https://reactnavigation.org/docs/custom-android-back-button-handling/
+  useFocusEffect(
+    useCallback(() => {
+      // Returning true from onBackPress denotes that we have handled the event
+      const onBackPress = () => true;
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [user.hasCompletedOnboarding])
+  );
 
   const handleGoBackToLanding = async () => {
-    if (user?.isAnonymous) {
+    if (user.isAnonymous) {
       // Only deleting anonymous users
-      await deleteUser();
+      await deleteUser.mutateAsync();
+    } else {
+      // Logging out authenticated users
+      await logout();
     }
-    navigation.navigate("Landing");
   };
 
-  const hasCompletedOnboarding = !userData?.onboarding;
+  const hookEmail =
+    user.data?.hookId +
+    (Updates.channel === "production" ? "@pfg.app" : "@staging.pfg.app");
 
   return (
     <SafeAreaView
@@ -59,19 +72,19 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <Box paddingHorizontal="m" paddingVertical="s">
+        <Box paddingHorizontal="l" paddingVertical="s">
           <Text variant="headline">Welcome to Ping for Gitlab!</Text>
           <Text variant="body">
             Connecting your Gitlab account is as simple as adding a new address
             to your associated emails.
           </Text>
-          <Text variant="body" marginTop="m">
+          <Text variant="body" marginTop="l">
             By adding the address we give you as the notifications address you
             will start reciving messages delivered instanly to your phone.
             everything else like which notifications to recive and so on and so
             forth will be configurable from gitlab!
           </Text>
-          <Text variant="headline" marginTop="m">
+          <Text variant="headline" marginTop="l">
             Make sure to read all the way throgh this guide before starting!
           </Text>
           <Text variant="body" marginTop="s">
@@ -89,14 +102,11 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
           <BulletPointListItem>
             You will need to add this email:
           </BulletPointListItem>
-          <CopyToCliboard
-            marginTop="m"
-            content={`${userData?.hook_id}@pfg.app`}
-          />
+          <CopyToCliboard marginTop="l" content={hookEmail} />
           <Text variant="caption" color="secondary" marginTop="xs">
             Tap on this box to copy it to your clipboard!
           </Text>
-          <Text marginTop="m" variant="headline">
+          <Text marginTop="l" variant="headline">
             Wait until the end before pressing{" "}
             <Text color="blue">"Add email address"</Text> or this screen will
             dismiss.
@@ -117,12 +127,12 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
             the steps above and enjoy reciving all your team updates directly on
             your phone!
           </BulletPointListItem>
-          <Text variant="body" marginTop="xl">
+          <Text variant="body" marginTop="3xl">
             In case you already have an account and went here by mistake press
             the button below!
           </Text>
         </Box>
-        <Box padding="m">
+        <Box padding="l">
           <Button onPress={handleGoBackToLanding}>Go back to landing</Button>
         </Box>
       </ScrollView>
@@ -131,7 +141,7 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const BulletPointListItem: React.FC = ({ children }) => {
+const BulletPointListItem: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box flexDirection="row" marginTop="s">
       <Text variant="body">{"\u2022"}</Text>

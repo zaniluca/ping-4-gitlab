@@ -6,15 +6,74 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [2.1.6] - 2025-01-09
+
+### Fixed
+
+- Bug fixes
+
+## [2.1.5] - 2024-10-04
+
+### Fixed
+
+- Stability improvements
+
+## [2.1.4] - 2024-06-17
+
+### Changes
+
+- Small internal changes
+
+## [2.1.3] - 2023-10-11
+
+### Changes
+
+- Minor internal stability changes
+
+## [2.1.2] - 2023-06-10
+
+### Fixed
+
+- Fixed GitLab login (Android)
+
+## [2.1.1] - 2023-03-25
+
+### Changes
+
+- Changed app display name to "Gitlab Ping"
+
+## [2.1.0] - 2022-12-04
+
 ### Added
 
-- Keychain support for password autofill (iOS)
+- You can now login with your Gitlab account
+- Removed the 50 latest notifications limit, you can now see all your notifications
+
+### Changes
+
+- Small performance improvements
+
+### Fixed
+
+- Fixed a layout shift in the inbox when a notification is viewed
+
+## [2.0.0] - 2022-10-23
+
+### Changes
+
+- Ping for Gitlab now runs on a completely new infrastructure allowing for more reliability and better performance
+
+## [1.2.1] - 2022-08-27
+
+### Added
+
 - Added image to the landing page
 
 ### Changes
 
 - Ping for Gitlab is evolving, with this release we allow users to migrate their anonymous and permanent accounts to the new infrastructure, which will be introduced in the next major release
 - Links in notifications now open on external browser
+
 ## [1.2.0] - 2022-07-06
 
 ### Added
@@ -66,11 +125,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- First relase on the stores
+- First release on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.1.6...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
 [1.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.1
 [1.2.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.2.0
+[1.2.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.2.1
+[2.0.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.0.0
+[2.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.0
+[2.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.1
+[2.1.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.2
+[2.1.3]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.3
+[2.1.4]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.4
+[2.1.5]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.5
+[2.1.6]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.6

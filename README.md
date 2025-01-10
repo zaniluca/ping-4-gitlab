@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://user-images.githubusercontent.com/59318963/167304601-eb5b48fa-f914-4fa7-ab3e-137b05827299.png" alt="Ping for Gitlab" width="84" height="84"> 
+ <img src="https://user-images.githubusercontent.com/59318963/187087277-524b1e3b-b7cf-406c-8ed9-500a18c23867.png" alt="Ping for Gitlab" width="84" height="84">
 </p>
 
 # Ping for Gitlab
@@ -38,10 +38,12 @@ yarn start
 
 ## What Now?
 
-At the current state the backend (firebase) is not available for local testing so you can't test the app locally with a working backend. soon it will be available at the repo linked below.
-
-Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to [this repo](https://github.com/zaniluca/ping-4-gitlab-firebase)
+Now that you've setup the client you may want to also setup the server to start locally testing the app. For this please refer to [this repo](https://github.com/zaniluca/api-ping-4-gitlab)
 
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.

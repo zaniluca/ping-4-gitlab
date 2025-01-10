@@ -1,6 +1,11 @@
-import { Formik } from "formik";
-import React, { useState } from "react";
-import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
+import { useFormik, FormikProvider } from "formik";
+import React from "react";
+import {
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import BackButton from "../components/BackButton";
@@ -10,9 +15,8 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useGitlabLogin, useSignup } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import { SignupSchema } from "../utils/validation";
 
@@ -28,27 +32,21 @@ const PASSWORD_RULES_IOS =
   "minlength: 6; required: lower; required: upper; required: digit; required: [oqtu-#&'()+,./;?@];";
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
-  const { signup, user } = useAuth();
   const { colors } = useTheme();
+  const loginWithGitlab = useGitlabLogin();
 
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
+  const signup = useSignup();
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
-
-    try {
-      await signup(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
-  };
+  const formik = useFormik({
+    initialValues: INITIAL_VALUES,
+    validationSchema: SignupSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      signup.reset();
+      signup.mutate(values);
+    },
+  });
 
   return (
     <SafeAreaView
@@ -59,118 +57,116 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
         paddingTop: 32,
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <BackButton />
-        <KeyboardAvoid>
-          <Text variant="largeTitle" marginTop="l">
+      <KeyboardAvoid>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <BackButton />
+          <Text variant="largeTitle" marginTop="xl">
             Sign Up
           </Text>
           <Text variant="body" marginTop="s">
             Create an account so you can save your notifications across devices
           </Text>
           <Box style={{ marginTop: 24 }}>
-            <Formik
-              initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
-              validationSchema={SignupSchema}
-              validateOnChange={false}
-              validateOnBlur={false}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit: submit,
-                values,
-                errors,
-                isSubmitting,
-              }) => (
-                <>
-                  <Input
-                    placeholder="Enter your email"
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                    error={errors.email}
-                    label="email"
-                    autoCompleteType="email"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    textContentType="emailAddress"
-                  />
-                  <Input
-                    style={{ marginTop: 8 }}
-                    secureTextEntry
-                    placeholder="Enter your password"
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    error={errors.password}
-                    label="password"
-                    autoCompleteType="password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    passwordRules={PASSWORD_RULES_IOS}
-                    textContentType="newPassword"
-                  />
-                  <Input
-                    style={{ marginTop: 8 }}
-                    secureTextEntry
-                    placeholder="Confirm password"
-                    onChangeText={handleChange("confirmPassword")}
-                    onBlur={handleBlur("confirmPassword")}
-                    value={values.confirmPassword}
-                    error={errors.confirmPassword}
-                    label="confirm"
-                    autoCompleteType="password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                    textContentType="newPassword"
-                    passwordRules={PASSWORD_RULES_IOS}
-                    onSubmitEditing={() => submit()}
-                  />
-                  {/* Validation errors */}
-                  <Box marginTop="s">
-                    {Object.entries(errors).length ? (
-                      <ErrorsList errors={errors} />
-                    ) : (
-                      <Text variant="caption" color="secondary">
-                        Your password must be 6 or more characters long &
-                        contain a mix of upper & lower case letters, numbers &
-                        symbols.
-                      </Text>
-                    )}
-                  </Box>
-                  {/* Firebase Error */}
-                  {firebaseError && (
-                    <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
-                    </Box>
+            <FormikProvider value={formik}>
+              <>
+                <Input
+                  placeholder="Enter your email"
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.email}
+                  error={formik.errors.email}
+                  label="email"
+                  autoComplete="email"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                  textContentType="emailAddress"
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Enter your password"
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  value={formik.values.password}
+                  error={formik.errors.password}
+                  label="password"
+                  autoComplete="password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  passwordRules={PASSWORD_RULES_IOS}
+                  textContentType="newPassword"
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Confirm password"
+                  onChangeText={formik.handleChange("confirmPassword")}
+                  onBlur={formik.handleBlur("confirmPassword")}
+                  value={formik.values.confirmPassword}
+                  error={formik.errors.confirmPassword}
+                  label="confirm"
+                  autoComplete="password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  textContentType="newPassword"
+                  passwordRules={PASSWORD_RULES_IOS}
+                  onSubmitEditing={() => formik.handleSubmit()}
+                />
+                {/* Validation errors */}
+                <Box marginTop="s">
+                  {Object.entries(formik.errors).length ? (
+                    <ErrorsList errors={formik.errors} />
+                  ) : (
+                    <Text variant="caption" color="secondary">
+                      Your password must be 6 or more characters long & contain
+                      a mix of upper & lower case letters, numbers & symbols.
+                    </Text>
                   )}
-                  {/* Signup CTA */}
-                  <Box marginTop="xl">
-                    <Button onPress={submit}>
-                      {isSubmitting ? (
-                        <ActivityIndicator color="white" />
-                      ) : (
-                        "Create an account"
-                      )}
+                </Box>
+                {/* API Error */}
+                {signup.error && (
+                  <Box marginTop="s">
+                    <ErrorsList
+                      errors={{
+                        error:
+                          signup.error.response?.data?.message ??
+                          "Unknown Error",
+                      }}
+                    />
+                  </Box>
+                )}
+                {/* Signup CTA */}
+                <Box marginTop="3xl">
+                  <Button onPress={formik.handleSubmit}>
+                    {signup.isLoading ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      "Create an account"
+                    )}
+                  </Button>
+                </Box>
+                {/* Gitlab CTA */}
+                {Platform.OS === "ios" && ( // TODO: remove this when we have a way to login with Gitlab on Android
+                  <Box marginTop="m">
+                    <Button onPress={loginWithGitlab} variant="outline">
+                      Continue with Gitlab
                     </Button>
                   </Box>
-                </>
-              )}
-            </Formik>
+                )}
+              </>
+            </FormikProvider>
             <Disclaimer />
             {/* Login redirect button */}
             <Box
               justifyContent="center"
               flexDirection="row"
-              marginTop="m"
-              paddingBottom="xl"
+              marginTop="l"
+              paddingBottom="3xl"
             >
               <Text variant="body">Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
@@ -180,8 +176,8 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </Box>
           </Box>
-        </KeyboardAvoid>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoid>
     </SafeAreaView>
   );
 };

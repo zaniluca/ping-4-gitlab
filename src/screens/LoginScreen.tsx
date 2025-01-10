@@ -1,5 +1,5 @@
-import { Formik } from "formik";
-import React, { useState } from "react";
+import { FormikProvider, useFormik } from "formik";
+import React from "react";
 import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,9 +9,8 @@ import ErrorsList from "../components/ErrorsList";
 import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
-import { AUTH_ERROR_MESSAGES } from "../utils/constants";
 import { useTheme } from "../utils/theme";
 import { LoginSchema } from "../utils/validation";
 
@@ -23,26 +22,20 @@ const INITIAL_VALUES = {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { login, user } = useAuth();
   const { colors } = useTheme();
-  const [firebaseError, setFirebaseError] = useState<string | undefined>();
 
-  const handleSubmit = async (values: typeof INITIAL_VALUES) => {
-    setFirebaseError(undefined);
-    const wasAnonymous = !!user;
+  const login = useLogin();
 
-    try {
-      await login(values.email, values.password);
-      // If the user wasn't anonymous before this process the navigation is automatic
-      if (wasAnonymous) navigation.navigate("Inbox");
-    } catch (error) {
-      console.error("Error while signing up: ", error);
-
-      setFirebaseError(
-        AUTH_ERROR_MESSAGES[error.code] ?? "Unknown error occurred"
-      );
-    }
-  };
+  const formik = useFormik({
+    initialValues: INITIAL_VALUES,
+    validationSchema: LoginSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      login.reset();
+      login.mutate(values);
+    },
+  });
 
   return (
     <SafeAreaView
@@ -53,94 +46,85 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         paddingTop: 32,
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <BackButton />
-        <KeyboardAvoid>
-          <Text variant="largeTitle" marginTop="l">
+      <KeyboardAvoid>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <BackButton />
+          <Text variant="largeTitle" marginTop="xl">
             Login
           </Text>
           <Text variant="body" marginTop="s">
             Use your credentials to log in to your account
           </Text>
           <Box style={{ marginTop: 24 }}>
-            <Formik
-              initialValues={INITIAL_VALUES}
-              onSubmit={handleSubmit}
-              validateOnChange={false}
-              validateOnBlur={false}
-              validationSchema={LoginSchema}
-            >
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit: submit,
-                values,
-                isSubmitting,
-                errors,
-              }) => (
-                <>
-                  <Input
-                    placeholder="Enter your email"
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                    error={errors.email}
-                    label="email"
-                    autoCompleteType="email"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    textContentType="emailAddress"
-                  />
-                  <Input
-                    style={{ marginTop: 8 }}
-                    secureTextEntry
-                    placeholder="Enter your password"
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    error={errors.password}
-                    label="password"
-                    autoCompleteType="password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                    textContentType="password"
-                    onSubmitEditing={() => submit()}
-                  />
-                  {/* Validation Errors */}
-                  {!!Object.entries(errors).length && (
-                    <Box marginTop="s">
-                      <ErrorsList errors={errors} />
-                    </Box>
-                  )}
-                  {/* Firebase Error */}
-                  {firebaseError && (
-                    <Box marginTop="s">
-                      <ErrorsList errors={{ firebaseError }} />
-                    </Box>
-                  )}
-                  {/* Login CTA */}
-                  <Box marginTop="xl">
-                    <Button onPress={submit}>
-                      {isSubmitting ? (
-                        <ActivityIndicator color="white" />
-                      ) : (
-                        "Login"
-                      )}
-                    </Button>
+            <FormikProvider value={formik}>
+              <>
+                <Input
+                  placeholder="Enter your email"
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.email}
+                  error={formik.errors.email}
+                  label="email"
+                  autoComplete="email"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                  textContentType="emailAddress"
+                />
+                <Input
+                  style={{ marginTop: 8 }}
+                  secureTextEntry
+                  placeholder="Enter your password"
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  value={formik.values.password}
+                  error={formik.errors.password}
+                  label="password"
+                  autoComplete="password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  textContentType="password"
+                  onSubmitEditing={() => formik.handleSubmit()}
+                />
+                {/* Validation Errors */}
+                {!!Object.entries(formik.errors).length && (
+                  <Box marginTop="s">
+                    <ErrorsList errors={formik.errors} />
                   </Box>
-                </>
-              )}
-            </Formik>
+                )}
+                {/* API Error */}
+                {login.error && (
+                  <Box marginTop="s">
+                    <ErrorsList
+                      errors={{
+                        error:
+                          login.error.response?.data?.message ??
+                          "Unknown error",
+                      }}
+                    />
+                  </Box>
+                )}
+                {/* Login CTA */}
+                <Box marginTop="3xl">
+                  <Button onPress={formik.handleSubmit}>
+                    {login.isLoading ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </Box>
+              </>
+            </FormikProvider>
             {/* Signup navigation */}
             <Box
               justifyContent="center"
               flexDirection="row"
-              marginTop="m"
-              paddingBottom="xl"
+              marginTop="l"
+              paddingBottom="3xl"
             >
               <Text variant="body">Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -149,17 +133,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </Box>
-            {/* Forgot Password Button */}
-            {/* <Box flexDirection="row" justifyContent="center" marginTop="m">
-              <TouchableOpacity>
-                <Text variant="headline" color="accent">
-                  I Forgot my Password :(
-                </Text>
-              </TouchableOpacity>
-            </Box> */}
           </Box>
-        </KeyboardAvoid>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoid>
     </SafeAreaView>
   );
 };

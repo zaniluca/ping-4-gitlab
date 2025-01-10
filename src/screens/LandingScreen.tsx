@@ -1,21 +1,26 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, TouchableOpacity, useColorScheme } from "react-native";
+import {
+  Image,
+  Platform,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
 import Disclaimer from "../components/Disclaimer";
 import { Box, Text } from "../components/restyle";
-import { useAuth } from "../contexts/AuthContext";
+import { useGitlabLogin } from "../hooks/auth-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
 type Props = RootStackScreenProps<"Landing">;
 
 const LandingScreen: React.FC<Props> = ({ navigation }) => {
-  const { signInAnonymously } = useAuth();
   const { colors } = useTheme();
   const colorScheme = useColorScheme();
+  const loginWithGitlab = useGitlabLogin();
 
   // "transparent" doesn't work properly on iOS so we have to use this workaround
   const transparent = colorScheme === "light" ? "#FFFFFF00" : "#1F1F1F00";
@@ -28,8 +33,8 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
         zIndex: 1000,
       }}
     >
-      <Box paddingHorizontal="m" marginBottom="xxl" flex={1}>
-        <Box flexDirection="column" flexGrow={1} marginTop="xl">
+      <Box paddingHorizontal="l" marginBottom="4xl" flex={1}>
+        <Box flexDirection="column" flexGrow={1} marginTop="3xl">
           <Box alignItems="center">
             <Text variant="smallTitle" color="primary">
               Never miss a notification
@@ -38,14 +43,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
-          <LinearGradient
-            colors={[transparent, colors.primaryBackground]}
-            style={{
-              flex: 1,
-            }}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 0, y: 0.92 }}
-          >
+          <Box style={{ flex: 1, position: "relative" }}>
             <Image
               source={require("../../assets/landing-screen-1.png")}
               style={{
@@ -53,19 +51,42 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
                 width: "90%",
                 alignSelf: "center",
                 resizeMode: "contain",
-                zIndex: -1,
               }}
             />
-          </LinearGradient>
+            <LinearGradient
+              colors={[transparent, colors.primaryBackground]}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "100%",
+              }}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 0, y: 0.92 }}
+            />
+          </Box>
         </Box>
         <Box flexShrink={1}>
-          <Button title="Let's get started!" onPress={signInAnonymously} />
+          {Platform.OS === "ios" ? ( // TODO: remove this when we have a way to login with Gitlab on Android
+            <Button
+              marginTop="m"
+              label="Continue with Gitlab"
+              onPress={loginWithGitlab}
+            />
+          ) : (
+            <Button
+              marginTop="m"
+              label="Let's get started"
+              onPress={() => navigation.navigate("Signup")}
+            />
+          )}
           <Disclaimer />
           <Box
             justifyContent="center"
             flexDirection="row"
-            marginTop="m"
-            paddingBottom="xl"
+            marginTop="l"
+            paddingBottom="3xl"
           >
             <Text variant="body">Already have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>

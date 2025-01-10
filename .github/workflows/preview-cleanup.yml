@@ -1,0 +1,55 @@
+name: Preview Cleanup
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+    paths:
+      - "**.ts"
+      - "**.tsx"
+      - "**.js"
+      - "**.json"
+      - "**.lock"
+      - "!eas.json"
+      - "**.yml"
+
+jobs:
+  preview:
+    if: github.event.pull_request.merged == true
+    name: Preview Cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Cleanup preview
+        shell: bash
+        run: |
+          channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
+
+          echo $channels
+          echo "Looking for $GITHUB_HEAD_REF"
+
+          if grep -q "$GITHUB_HEAD_REF" <<< "$channels"; then
+            eas channel:delete --non-interactive $GITHUB_HEAD_REF
+            eas branch:delete --non-interactive $GITHUB_HEAD_REF
+          else
+            echo "Preview channel not found"
+          fi

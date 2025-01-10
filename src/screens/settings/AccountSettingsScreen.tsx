@@ -1,16 +1,29 @@
-import React from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useMemo } from "react";
+import { Alert, Platform, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box, Text } from "../../components/restyle";
 import SettingsSectionedList, {
   SettingsSettingsSections,
 } from "../../components/settings/SettingsSectionedList";
-import { useAuth } from "../../contexts/AuthContext";
+import { useGitlabLogin, useLogout } from "../../hooks/auth-hooks";
+import { useDeleteUser, useUser } from "../../hooks/user-hooks";
 import { RootStackScreenProps } from "../../navigation/types";
 
+const ConnectGitlab = () => {
+  const loginWithGitlab = useGitlabLogin();
+
+  return (
+    <Box flex={1}>
+      <TouchableOpacity activeOpacity={0.6} onPress={loginWithGitlab}>
+        <Text variant="headline">Connect Gitlab account</Text>
+      </TouchableOpacity>
+    </Box>
+  );
+};
 const DeleteAccount = () => {
-  const { logout, deleteUser } = useAuth();
+  const deleteUser = useDeleteUser();
+  const logout = useLogout();
 
   const handlePress = () => {
     Alert.alert(
@@ -25,8 +38,8 @@ const DeleteAccount = () => {
           text: "Proceed",
           style: "destructive",
           onPress: async () => {
+            await deleteUser.mutateAsync();
             await logout();
-            await deleteUser();
           },
         },
       ]
@@ -47,16 +60,38 @@ const DeleteAccount = () => {
 type Props = RootStackScreenProps<"AccountSettings">;
 
 const AccountSettingsScreen: React.FC<Props> = () => {
-  const SECTIONS: SettingsSettingsSections[] = [
-    {
-      data: [
-        {
-          key: "delete-account",
-          content: <DeleteAccount />,
-        },
-      ],
-    },
-  ];
+  const user = useUser();
+
+  const SECTIONS: SettingsSettingsSections[] = useMemo(
+    () => [
+      {
+        data:
+          user.data?.gitlabId || Platform.OS === "android" // TODO: remove this when we have a way to login with Gitlab on Android
+            ? []
+            : [
+                {
+                  key: "connect-gitlab",
+                  content: <ConnectGitlab />,
+                  footer: (
+                    <Text variant="caption" color="secondary">
+                      Connect your Gitlab account to more easily login to the
+                      app
+                    </Text>
+                  ),
+                },
+              ],
+      },
+      {
+        data: [
+          {
+            key: "delete-account",
+            content: <DeleteAccount />,
+          },
+        ],
+      },
+    ],
+    [user.data?.gitlabId]
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left"]}>

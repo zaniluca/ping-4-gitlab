@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "Ping",
+    "name": "Gitlab Ping",
     "owner": "zaniluca",
+    "scheme": "com.zaniluca.ping4gitlab",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "1.2.0",
+    "version": "2.1.6",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/zaniluca/ping-4-gitlab",
@@ -14,16 +15,17 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "runtimeVersion": "exposdk:44.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/bdcab203-d9ce-48aa-95db-938dbfe1be17"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.zaniluca.ping4gitlab",
-      "buildNumber": "20",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -32,26 +34,29 @@
     },
     "android": {
       "googleServicesFile": "./google-services.json",
+      "icon": "./assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "versionCode": 16,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
     },
     "plugins": [
-      "sentry-expo",
+      "expo-font",
+      "expo-secure-store",
       [
         "expo-notifications",
         {
           "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
-          "androidMode": "collapse",
-          "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
+          "mode": "production"
         }
       ]
-    ]
+    ],
+    "experiments": {
+      "tsconfigPaths": false
+    }
   }
 }

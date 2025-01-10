@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useLayoutEffect, useCallback } from "react";
 import { ScrollView } from "react-native";
 import { Settings } from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -6,7 +7,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import IconButton from "../components/IconButton";
 import InboxList from "../components/inbox/InboxList";
 import InboxSkeleton from "../components/inbox/InboxSkeleton";
-import { useData } from "../contexts/DataContext";
+import { useNotificationsList } from "../hooks/notifications-hooks";
+import { useRefetchOnFocus } from "../hooks/refetch-hooks";
+import { useUser } from "../hooks/user-hooks";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
@@ -14,7 +17,10 @@ type Props = RootStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const { userData, hasLoadedFirstSnapshot } = useData();
+  const notifications = useNotificationsList();
+  const user = useUser();
+
+  useRefetchOnFocus(notifications.refetch);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -26,19 +32,24 @@ const InboxScreen: React.FC<Props> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    if (!userData) return;
-    if (userData.onboarding) {
-      navigation.navigate("GetStarted");
-    }
-  }, [userData]);
+  useFocusEffect(
+    useCallback(() => {
+      // For some reason after upgrading to SDK46 and React 18
+      // This would not get calld on first render along with every useEffect
+      setTimeout(() => {
+        if (!user.hasCompletedOnboarding) {
+          navigation.navigate("GetStarted");
+        }
+      }, 0);
+    }, [user.hasCompletedOnboarding])
+  );
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.primaryBackground }}
       edges={["right", "left"]}
     >
-      {hasLoadedFirstSnapshot ? (
+      {notifications.isFetched ? (
         <InboxList />
       ) : (
         <ScrollView

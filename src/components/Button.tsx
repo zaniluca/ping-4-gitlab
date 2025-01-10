@@ -1,55 +1,61 @@
-import React from "react";
 import {
-  StyleProp,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+  composeRestyleFunctions,
+  createBox,
+  createVariant,
+  spacing,
+  SpacingProps,
+  useRestyle,
+  VariantProps,
+} from "@shopify/restyle";
+import React, { PropsWithChildren } from "react";
+import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 
-import { useTheme } from "../utils/theme";
 import { Text } from "./restyle";
+import { Theme } from "../utils/theme";
 
-type Props = {
-  onPress: () => void;
-  title?: string;
-  style?: StyleProp<ViewStyle>;
-};
+const BaseButton = createBox<Theme, TouchableOpacityProps>(TouchableOpacity);
 
-const Button: React.FC<Props> = ({ onPress, title, style, children }) => {
-  const { fontFamily, colors } = useTheme();
+const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
+  spacing,
+  createVariant({ themeKey: "buttonVariants" }),
+]);
+
+type RestyleProps = SpacingProps<Theme> & VariantProps<Theme, "buttonVariants">;
+
+type Props = PropsWithChildren &
+  RestyleProps & {
+    onPress: () => void;
+    label?: string;
+  };
+
+const Button: React.FC<Props> = ({ onPress, label, children, ...rest }) => {
+  const props = useRestyle(restyleFunctions, rest);
 
   return (
-    <TouchableOpacity
+    <BaseButton
       activeOpacity={0.9}
-      style={[styles.button, style, { backgroundColor: colors.accent }]}
       onPress={onPress}
+      alignItems="center"
+      justifyContent="center"
+      paddingHorizontal="xl"
+      borderRadius={4}
+      backgroundColor="accent"
+      {...props}
     >
-      <Text
-        style={[
-          styles.text,
-          { fontFamily: fontFamily.semibold, color: colors.white },
-        ]}
-      >
-        {title ? title : children}
-      </Text>
-    </TouchableOpacity>
+      {/* TODO: remove and integrate 12 in the padding */}
+      <View style={{ paddingVertical: 12 }}>
+        <Text
+          fontWeight="600"
+          color={rest.variant === "outline" ? "primary" : "white"}
+          fontSize={18}
+          letterSpacing={0.25}
+          lineHeight={21}
+        >
+          {label ? label : children}
+        </Text>
+      </View>
+    </BaseButton>
   );
 };
 
 export default Button;
-
-const styles = StyleSheet.create({
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-  },
-  text: {
-    fontSize: 18,
-    lineHeight: 21,
-    letterSpacing: 0.25,
-  },
-});

@@ -36,7 +36,7 @@ const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
             variant="callout"
             fontFamily={fontFamily.semibold}
             textTransform="uppercase"
-            paddingHorizontal="l"
+            paddingHorizontal="xl"
             letterSpacing={1.5}
           >
             {title}
@@ -53,13 +53,13 @@ const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
         <Box
           flexDirection="row"
           justifyContent="space-between"
-          padding="m"
+          padding="l"
           backgroundColor="primaryBackground"
         >
           {content}
         </Box>
         {footer && (
-          <Box marginTop="xs" marginHorizontal="m">
+          <Box marginTop="xs" marginHorizontal="l">
             {footer}
           </Box>
         )}

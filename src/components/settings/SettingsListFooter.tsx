@@ -1,25 +1,31 @@
-import Constants from "expo-constants";
+import * as Application from "expo-application";
+import * as WebBrowser from "expo-web-browser";
 import React from "react";
-import { Platform } from "react-native";
 
-import { openUrl } from "../../utils/open-url";
 import { Box, Text } from "../restyle";
 
 const SettingsListFooter = () => {
   return (
-    <Box flex={1} alignItems="center" paddingTop="l">
-      <Text variant="caption" color="secondary">
-        {Constants.manifest?.name} {Constants.manifest?.version} (
-        {Platform.OS === "ios"
-          ? Constants.manifest?.ios?.buildNumber
-          : Constants.manifest?.android?.versionCode}
-        )
-      </Text>
+    <Box flex={1} alignItems="center" paddingTop="xl">
+      {__DEV__ ? (
+        <Text variant="caption" color="secondary">
+          Ping (Development)
+        </Text>
+      ) : (
+        <Text variant="caption" color="secondary">
+          {Application.applicationName} {Application.nativeApplicationVersion} (
+          {Application.nativeBuildVersion})
+        </Text>
+      )}
       <Text marginTop="s" variant="caption" color="secondary">
-        This app is open sourced on{" "}
+        This app's code is available on{" "}
         <Text
           color="blue"
-          onPress={() => openUrl("https://github.com/zaniluca/ping-4-gitlab")}
+          onPress={async () =>
+            await WebBrowser.openBrowserAsync(
+              "https://github.com/zaniluca/ping-4-gitlab"
+            )
+          }
         >
           GitHub
         </Text>
