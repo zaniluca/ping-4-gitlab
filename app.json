@@ -30,7 +30,7 @@
         "usesNonExemptEncryption": false
       },
       "appStoreUrl": "https://apps.apple.com/app/ping-for-gitlab/id1620904531",
-      "associatedDomains": ["webcredentials:www.pfg.app"]
+      "associatedDomains": ["webcredentials:pfg.app"]
     },
     "android": {
       "googleServicesFile": "./google-services.json",
