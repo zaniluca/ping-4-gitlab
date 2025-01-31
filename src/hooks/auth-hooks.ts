@@ -1,9 +1,6 @@
-import * as Sentry from "@sentry/react-native";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
-import { WebBrowserRedirectResult } from "expo-web-browser";
-import Toast from "react-native-toast-message";
+import { useEffect } from "react";
 
 import { useRootStackNavigation } from "./navigation-hooks";
 import { useSecureStore } from "./use-secure-store";
@@ -108,85 +105,22 @@ export const useLogout = () => {
 
 export const useGitlabLogin = () => {
   const user = useUser();
-  const { setValueForKey } = useSecureStore();
-  const queryClient = useQueryClient();
 
   // https://docs.expo.dev/guides/authentication/#warming-the-browser
-  // Temporarily disabled due to the removal of OAuth support for Android
-  // useEffect(() => {
-  //   WebBrowser.warmUpAsync();
+  useEffect(() => {
+    WebBrowser.warmUpAsync();
 
-  //   return () => {
-  //     WebBrowser.coolDownAsync();
-  //   };
-  // }, []);
+    return () => {
+      WebBrowser.coolDownAsync();
+    };
+  }, []);
 
-  return async () => {
-    try {
-      const res = (await WebBrowser.openAuthSessionAsync(
-        `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
-        Linking.createURL("/"),
-        {
-          showInRecents: true,
-        }
-      )) as WebBrowserRedirectResult;
-      console.log("OAuth response: ", res);
-
-      // Only "success" is a suppoterd type but this doesn't ensure that the
-      // response is a successful one
-      if (res.type !== "success" && res.type === "cancel") {
-        console.warn("OAuth cancelled by user");
-        return;
+  return async () =>
+    await WebBrowser.openBrowserAsync(
+      `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
+      {
+        createTask: true,
+        showInRecents: true,
       }
-
-      if (res.type !== "success") {
-        console.error("Error response from OAuth: ", res);
-        Sentry.captureException(
-          new Error("Error response from OAuth: " + JSON.stringify(res))
-        );
-        return;
-      }
-
-      const parsedResponse = Linking.parse(res.url);
-
-      const error = parsedResponse.queryParams?.error;
-
-      if (error) {
-        console.error("Error during Gitlab login: ", error);
-
-        Toast.show({
-          type: "error",
-          text1: "Error during Gitlab login",
-          text2: error as string,
-        });
-
-        return;
-      }
-
-      const accessToken = parsedResponse.queryParams?.accessToken;
-      const refreshToken = parsedResponse.queryParams?.refreshToken;
-
-      if (!accessToken || !refreshToken) {
-        console.error(
-          "Token not provided in Gitlab OAuth response: ",
-          parsedResponse
-        );
-        return;
-      }
-
-      await setValueForKey("accessToken", accessToken as string);
-      await setValueForKey("refreshToken", refreshToken as string);
-
-      await queryClient.invalidateQueries(["user"]);
-
-      console.log("Succesfull Gitlab login");
-
-      Toast.show({
-        type: "success",
-        text1: "Succesfully logged in with Gitlab",
-      });
-    } catch (err: any) {
-      console.error("Error during Gitlab login: ", err.message);
-    }
-  };
+    );
 };

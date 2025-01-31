@@ -29,7 +29,14 @@ export const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/")],
   config: {
     screens: {
-      Login: "login",
+      Login: {
+        path: "login",
+        parse: {
+          accessToken: String,
+          refreshToken: String,
+          error: String,
+        },
+      },
       Inbox: {
         path: "notifications",
         screens: {

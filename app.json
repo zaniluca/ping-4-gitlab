@@ -39,7 +39,18 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "ping4gitlab"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "plugins": [
       "expo-font",

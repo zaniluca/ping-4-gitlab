@@ -8,7 +8,13 @@ export type RootStackParamList = {
   AccountSettings: undefined;
   GetStarted: undefined;
   NotificationDetail: APINotification;
-  Login: undefined;
+  Login:
+    | {
+        accessToken?: string;
+        refreshToken?: string;
+        error?: string;
+      }
+    | undefined;
   Landing: undefined;
   Signup: undefined;
 };
