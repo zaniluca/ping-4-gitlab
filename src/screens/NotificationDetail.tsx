@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import Toast from "react-native-toast-message";
 import { WebView } from "react-native-webview";
 
@@ -17,11 +17,6 @@ const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
   const notificationId = route.params.id;
 
   const { data: notification } = useNotification(notificationId, {
-    onSuccess: (data) => {
-      navigation.setOptions({
-        title: data.subject,
-      });
-    },
     onError: (error) => {
       navigation.setOptions({
         title: "Whoops!",
@@ -34,6 +29,14 @@ const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
       });
     },
   });
+
+  useLayoutEffect(() => {
+    if (!notification) return;
+
+    navigation.setOptions({
+      title: notification.subject,
+    });
+  }, [notification]);
 
   useEffect(() => {
     if (notification?.viewed) return;

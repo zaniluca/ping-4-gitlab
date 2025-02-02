@@ -12,7 +12,7 @@ const handleNotificationDeepLink = (
   if (response.notification.request.content.data?.url) {
     return response.notification.request.content.data.url as string;
   } else if (response.notification.request.content.data?.nid) {
-    return `notification/${response.notification.request.content.data.nid}`;
+    return `notifications/${response.notification.request.content.data.nid}`;
   } else {
     Sentry.captureMessage("Received notification with missing fields", {
       extra: {
@@ -37,21 +37,10 @@ export const linking: LinkingOptions<RootStackParamList> = {
           error: String,
         },
       },
-      Inbox: {
-        path: "notifications",
-        screens: {
-          NotificationDetail: {
-            path: ":id",
-            parse: {
-              id: (id: string) => id,
-            },
-          },
-        },
-      },
-      Settings: {
-        path: "settings",
-        screens: {
-          AccountSettings: "account",
+      NotificationDetail: {
+        path: "notifications/:id",
+        parse: {
+          id: (id: string) => id,
         },
       },
     },

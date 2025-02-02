@@ -81,11 +81,16 @@ export const useNotification = (
   options?: UseQueryOptions<APINotification, APIError>
 ) => {
   const user = useUser();
+  const queryClient = useQueryClient();
+  const existingData = queryClient.getQueryData<APINotification>([
+    "notifications",
+    id,
+  ]);
 
   return useQuery<APINotification, APIError>({
     queryKey: ["notifications", id],
     queryFn: () => fetchNotification(id),
-    enabled: !!user.data,
+    enabled: !!user.data && !existingData,
     onError: (err) => {
       console.log(
         `Error fetching notification ${id}`,
