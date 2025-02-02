@@ -23,10 +23,17 @@ type GitlabUserResponse = {
   email: string;
 };
 
+// Workaround for redirecting with a script
+// Seems like android mobile browsers don't redirect properly
+const redirect = (res: Response, url: string) =>
+  res.send(`
+  <script>
+    window.location.href = "${url}";
+  </script>
+`);
+
 const redirectWithError = (res: Response, error: string) =>
-  res.redirect(
-    `${APP_URL_SCHEME}login/gitlab?error=${encodeURIComponent(error)}`
-  );
+  redirect(res, `${APP_URL_SCHEME}login?error=${encodeURIComponent(error)}`);
 
 router.get("/authorize", async (req, res) => {
   return res.redirect(
@@ -104,8 +111,9 @@ router.get("/callback", async (req, res) => {
     });
     const refreshToken = getRefreshToken(alreadyExistingUser.id);
 
-    return res.redirect(
-      `${APP_URL_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    return redirect(
+      res,
+      `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   }
 
@@ -167,8 +175,9 @@ router.get("/callback", async (req, res) => {
   });
   const refreshToken = getRefreshToken(user.id);
 
-  return res.redirect(
-    `${APP_URL_SCHEME}login/gitlab?accessToken=${accessToken}&refreshToken=${refreshToken}`
+  return redirect(
+    res,
+    `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`
   );
 });
 

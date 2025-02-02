@@ -13,7 +13,7 @@ export const USER_PUBLIC_FIELDS: Partial<Record<keyof User, boolean>> = {
 
 export const APP_URL_SCHEME =
   process.env.NODE_ENV === "production"
-    ? "com.zaniluca.ping4gitlab://"
+    ? "ping4gitlab://"
     : process.env.ANDROID_EMULATOR
     ? "exp://10.0.2.2:8081/--/" // Android emulator w/ Expo
-    : "exp://localhost:8081/--/"; // iOS simulator w/ Expo
+    : "exp://127.0.0.1:8081/--/"; // iOS simulator w/ Expo
