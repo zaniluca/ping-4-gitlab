@@ -241,7 +241,7 @@ router.post("/webhook", async (req, res, next) => {
     ...composeNotificationContent(notification as NotificationWithHeaders),
     data: {
       nid: notification.id,
-      url: `${APP_URL_SCHEME}notification?id=${notification.id}`,
+      url: `${APP_URL_SCHEME}notifications/${notification.id}`,
     },
   };
 
