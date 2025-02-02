@@ -11,7 +11,6 @@ import {
 import Toast from "react-native-toast-message";
 
 import { useRootStackNavigation } from "../hooks/navigation-hooks";
-import { useNotification } from "../hooks/notifications-hooks";
 import { useUpdateUser, useUser } from "../hooks/user-hooks";
 import {
   registerForPushNotificationsAsync,
@@ -34,20 +33,6 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   const navigation = useRootStackNavigation();
   const updateUser = useUpdateUser();
   const queryClient = useQueryClient();
-  const [notificationId, setNotificationId] = useState<string | null>(null);
-
-  useNotification(notificationId!, {
-    enabled: !!user.data && !!notificationId,
-    onSuccess: (data) => {
-      navigation.navigate("NotificationDetail", data);
-    },
-    onError: (error) => {
-      console.error("Notification not recived", error);
-    },
-    onSettled: () => {
-      setNotificationId(null);
-    },
-  });
 
   useEffect(() => {
     if (!user.data) return;

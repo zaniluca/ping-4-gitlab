@@ -91,9 +91,6 @@ const RootStackNavigator = () => {
           <Stack.Screen
             name="NotificationDetail"
             component={NotificationDetail}
-            options={({ route }) => ({
-              title: route.params.subject,
-            })}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen

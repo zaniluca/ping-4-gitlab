@@ -47,6 +47,7 @@ const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
 
 export const useNotificationsList = () => {
   const user = useUser();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery<APIPaginatedNotifications, APIError>(
     ["notifications"],
@@ -54,6 +55,17 @@ export const useNotificationsList = () => {
     {
       enabled: !!user.hasCompletedOnboarding,
       getNextPageParam: (lastPage, _pages) => lastPage.nextCursor,
+      onSuccess: (data) => {
+        // Populate individual notification queries
+        data.pages.forEach((page) => {
+          page.data.forEach((notification) => {
+            queryClient.setQueryData(
+              ["notifications", notification.id],
+              notification
+            );
+          });
+        });
+      },
       onError: (err: APIError) => {
         console.log(
           "Error fetching notifications",
