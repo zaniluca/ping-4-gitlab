@@ -6,9 +6,9 @@ import {
   useNotification,
   useUpdateNotification,
 } from "../hooks/notifications-hooks";
-import { RootStackScreenProps } from "../navigation/types";
+import { InboxStackScreenProps } from "../navigation/types";
 
-type Props = RootStackScreenProps<"NotificationDetail">;
+type Props = InboxStackScreenProps<"NotificationDetail">;
 
 const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
   const updateNotification = useUpdateNotification();

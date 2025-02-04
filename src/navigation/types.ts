@@ -1,13 +1,19 @@
+import { NavigatorScreenParams } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export type RootStackParamList = {
+export type InboxStackParamList = {
   Inbox: undefined;
+  NotificationDetail: { id: string };
   Settings: undefined;
   AccountSettings: undefined;
   GetStarted: undefined;
-  NotificationDetail: {
-    id: string;
-  };
+};
+
+export type InboxStackScreenProps<T extends keyof InboxStackParamList> =
+  NativeStackScreenProps<InboxStackParamList, T>;
+
+export type RootStackParamList = {
+  InboxStack: NavigatorScreenParams<InboxStackParamList>;
   Login:
     | {
         accessToken?: string;

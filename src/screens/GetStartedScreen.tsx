@@ -10,10 +10,10 @@ import Toaster from "../components/Toaster";
 import { Box, Text } from "../components/restyle";
 import { useLogout } from "../hooks/auth-hooks";
 import { useDeleteUser, useUser } from "../hooks/user-hooks";
-import { RootStackScreenProps } from "../navigation/types";
+import { InboxStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
-type Props = RootStackScreenProps<"GetStarted">;
+type Props = InboxStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();

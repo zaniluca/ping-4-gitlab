@@ -28,6 +28,7 @@ const handleNotificationDeepLink = (
 export const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/")],
   config: {
+    initialRouteName: "Landing",
     screens: {
       Login: {
         path: "login",
@@ -37,10 +38,17 @@ export const linking: LinkingOptions<RootStackParamList> = {
           error: String,
         },
       },
-      NotificationDetail: {
-        path: "notifications/:id",
-        parse: {
-          id: (id: string) => id,
+      InboxStack: {
+        initialRouteName: "Inbox",
+        screens: {
+          NotificationDetail: {
+            path: "notifications/:id",
+            parse: {
+              id: (id: string) => id,
+            },
+          },
+          Settings: "settings",
+          AccountSettings: "settings/account",
         },
       },
     },
