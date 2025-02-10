@@ -35,7 +35,9 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("NotificationDetail", notification)}
+      onPress={() =>
+        navigation.navigate("NotificationDetail", { id: notification.id })
+      }
     >
       <Box flexDirection="row" paddingHorizontal="l" paddingVertical="s">
         <Box paddingRight="s" alignItems="center">

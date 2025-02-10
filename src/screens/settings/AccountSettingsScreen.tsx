@@ -8,7 +8,7 @@ import SettingsSectionedList, {
 } from "../../components/settings/SettingsSectionedList";
 import { useGitlabLogin, useLogout } from "../../hooks/auth-hooks";
 import { useDeleteUser, useUser } from "../../hooks/user-hooks";
-import { RootStackScreenProps } from "../../navigation/types";
+import { InboxStackScreenProps } from "../../navigation/types";
 
 const ConnectGitlab = () => {
   const loginWithGitlab = useGitlabLogin();
@@ -57,7 +57,7 @@ const DeleteAccount = () => {
   );
 };
 
-type Props = RootStackScreenProps<"AccountSettings">;
+type Props = InboxStackScreenProps<"AccountSettings">;
 
 const AccountSettingsScreen: React.FC<Props> = () => {
   const user = useUser();

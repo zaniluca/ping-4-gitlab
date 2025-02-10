@@ -1,11 +1,6 @@
 import { useFormik, FormikProvider } from "formik";
 import React from "react";
-import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import BackButton from "../components/BackButton";
@@ -150,14 +145,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
                     )}
                   </Button>
                 </Box>
-                {/* Gitlab CTA */}
-                {Platform.OS === "ios" && ( // TODO: remove this when we have a way to login with Gitlab on Android
-                  <Box marginTop="m">
-                    <Button onPress={loginWithGitlab} variant="outline">
-                      Continue with Gitlab
-                    </Button>
-                  </Box>
-                )}
+                <Box marginTop="m">
+                  <Button onPress={loginWithGitlab} variant="outline">
+                    Continue with Gitlab
+                  </Button>
+                </Box>
               </>
             </FormikProvider>
             <Disclaimer />

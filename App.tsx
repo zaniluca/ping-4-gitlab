@@ -24,11 +24,11 @@ import { useAppState } from "./src/hooks/refetch-hooks";
 import { posthog } from "./src/hooks/use-analytics";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
+import { linking } from "./src/navigation/linking";
 import { isProductionChannel } from "./src/utils/http";
 import queryClient from "./src/utils/query-client";
 import { routingInstrumentation } from "./src/utils/sentry";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
-
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
@@ -64,14 +64,13 @@ const App = () => {
           ref={navigation}
           theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
           onReady={onLayoutRootView}
+          linking={linking}
         >
           <PostHogProvider
             client={posthog}
-            options={
-              {
-                // disabled: !isProductionChannel(),
-              }
-            }
+            options={{
+              disabled: !isProductionChannel(),
+            }}
             autocapture
           >
             <NotificationsProvider>
