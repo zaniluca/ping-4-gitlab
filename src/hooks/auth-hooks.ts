@@ -117,10 +117,6 @@ export const useGitlabLogin = () => {
 
   return async () =>
     await WebBrowser.openBrowserAsync(
-      `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`,
-      {
-        createTask: true,
-        showInRecents: true,
-      }
+      `${API_URL}/oauth/gitlab/authorize?state=${user.data?.id ?? ""}`
     );
 };
