@@ -3,6 +3,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
 
 import { useRootStackNavigation } from "./navigation-hooks";
+import { useAnalytics } from "./use-analytics";
 import { useSecureStore } from "./use-secure-store";
 import { useUser } from "./user-hooks";
 import { API_URL, http } from "../utils/http";
@@ -87,6 +88,7 @@ export const useAnonymousLogin = () => {
 export const useLogout = () => {
   const { deleteValueForKey } = useSecureStore();
   const queryClient = useQueryClient();
+  const analytics = useAnalytics();
 
   return async () => {
     try {
@@ -95,6 +97,8 @@ export const useLogout = () => {
 
       await queryClient.resetQueries(["user"]);
       await queryClient.resetQueries(["notifications"]);
+
+      analytics.reset();
 
       console.log("User logged out");
     } catch (err: any) {

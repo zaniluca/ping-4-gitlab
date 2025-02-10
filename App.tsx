@@ -13,6 +13,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { PostHogProvider } from "posthog-react-native";
 import { useCallback, useRef } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -20,9 +21,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";
+import { posthog } from "./src/hooks/use-analytics";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { linking } from "./src/navigation/linking";
+import { isProductionChannel } from "./src/utils/http";
 import queryClient from "./src/utils/query-client";
 import { routingInstrumentation } from "./src/utils/sentry";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
@@ -63,22 +66,30 @@ const App = () => {
           onReady={onLayoutRootView}
           linking={linking}
         >
-          <NotificationsProvider>
-            {/*  
+          <PostHogProvider
+            client={posthog}
+            options={{
+              disabled: !isProductionChannel(),
+            }}
+            autocapture
+          >
+            <NotificationsProvider>
+              {/*  
               Workaround to fix React navigation background on navigation beeing white even on darkmode 
               https://stackoverflow.com/a/67606259/12661017
             */}
-            <SafeAreaProvider
-              style={
-                colorScheme === "dark" && {
-                  backgroundColor: darkTheme.colors.primaryBackground,
+              <SafeAreaProvider
+                style={
+                  colorScheme === "dark" && {
+                    backgroundColor: darkTheme.colors.primaryBackground,
+                  }
                 }
-              }
-            >
-              <RootStackNavigator />
-            </SafeAreaProvider>
-            <Toaster />
-          </NotificationsProvider>
+              >
+                <RootStackNavigator />
+              </SafeAreaProvider>
+              <Toaster />
+            </NotificationsProvider>
+          </PostHogProvider>
         </NavigationContainer>
         <StatusBar />
       </QueryClientProvider>
