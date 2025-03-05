@@ -3,7 +3,11 @@ import * as Updates from "expo-updates";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
+import { useOnlineManager } from "./use-online-manager";
+
 export const useUpdates = () => {
+  const isOnline = useOnlineManager();
+
   const {
     isUpdateAvailable,
     isChecking,
@@ -15,13 +19,9 @@ export const useUpdates = () => {
   useEffect(() => {
     if (__DEV__) {
       console.log("Skipping updates check in development mode");
+    } else if (!isOnline) {
+      console.log("Skipping updates check because we are offline");
     } else {
-      Sentry.addBreadcrumb({
-        event_id: "check-for-update",
-        category: "updates",
-        message: "Checking for updates",
-        level: "info",
-      });
       Updates.checkForUpdateAsync();
     }
   }, []);
@@ -32,13 +32,14 @@ export const useUpdates = () => {
         "An error occurred during updates initialization",
         initializationError
       );
-      Sentry.captureException(initializationError);
+      Sentry.captureException(initializationError.message);
     } else if (checkError) {
       console.error("An error occurred during updates check", checkError);
-      Sentry.captureException(checkError);
+      Sentry.captureException(checkError.message);
     } else if (downloadError) {
       console.error("An error occurred during updates download", downloadError);
-      Sentry.captureException(downloadError);
+      Sentry.captureException(downloadError.message);
+
       Toast.show({
         type: "error",
         text1: "An error occurred while downloading the update",
@@ -67,13 +68,6 @@ export const useUpdates = () => {
     const result = await Updates.fetchUpdateAsync();
 
     console.log("Update fetched", result);
-
-    Sentry.addBreadcrumb({
-      event_id: "fetch-update",
-      category: "updates",
-      message: "Update fetched",
-      level: "info",
-    });
 
     if (result.isNew) {
       console.log("New update available! Reloading...");
