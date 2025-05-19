@@ -24,7 +24,6 @@ import { useAppState } from "./src/hooks/refetch-hooks";
 import { posthog } from "./src/hooks/use-analytics";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
-import { isProductionChannel } from "./src/utils/http";
 import queryClient from "./src/utils/query-client";
 import { routingInstrumentation } from "./src/utils/sentry";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
@@ -65,15 +64,7 @@ const App = () => {
           theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
           onReady={onLayoutRootView}
         >
-          <PostHogProvider
-            client={posthog}
-            options={
-              {
-                // disabled: !isProductionChannel(),
-              }
-            }
-            autocapture
-          >
+          <PostHogProvider client={posthog} autocapture>
             <NotificationsProvider>
               {/*  
               Workaround to fix React navigation background on navigation beeing white even on darkmode 
