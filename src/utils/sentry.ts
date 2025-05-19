@@ -15,15 +15,12 @@ Sentry.init({
       routingInstrumentation,
     }),
   ],
-  _experiments: {
-    profilesSampleRate: 0.1,
-  },
   // release: nativeApplicationVersion ?? "dev",
   // dist: `${Platform.OS}.${nativeBuildVersion}`,
   // environment: process.env.NODE_ENV,
 });
 
-Sentry.configureScope((scope) => {
-  scope.setTag("expo-update-id", Updates.updateId);
-  scope.setTag("expo-is-embedded-update", Updates.isEmbeddedLaunch);
+Sentry.getGlobalScope().setTags({
+  "expo-update-id": Updates.updateId,
+  "expo-is-embedded-update": Updates.isEmbeddedLaunch,
 });

@@ -19,8 +19,10 @@ const getDevelopmentHost = () => {
   return "localhost";
 };
 
+export const isProductionChannel = () => Updates.channel === "production";
+
 const getReleaseApiUrl = () =>
-  Updates.channel === "production"
+  isProductionChannel()
     ? "https://api-ping-4-gitlab-production.up.railway.app"
     : "https://api-ping-4-gitlab-staging.up.railway.app";
 
