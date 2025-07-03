@@ -66,13 +66,7 @@ const App = () => {
           onReady={onLayoutRootView}
           linking={linking}
         >
-          <PostHogProvider
-            client={posthog}
-            options={{
-              disabled: !isProductionChannel(),
-            }}
-            autocapture
-          >
+          <PostHogProvider client={posthog} autocapture>
             <NotificationsProvider>
               {/*  
               Workaround to fix React navigation background on navigation beeing white even on darkmode 
