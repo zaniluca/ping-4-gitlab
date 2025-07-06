@@ -11,7 +11,6 @@ import {
 import Toast from "react-native-toast-message";
 
 import { useRootStackNavigation } from "../hooks/navigation-hooks";
-import { useNotification } from "../hooks/notifications-hooks";
 import { useUpdateUser, useUser } from "../hooks/user-hooks";
 import {
   registerForPushNotificationsAsync,
@@ -34,66 +33,6 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   const navigation = useRootStackNavigation();
   const updateUser = useUpdateUser();
   const queryClient = useQueryClient();
-  const [notificationId, setNotificationId] = useState<string | null>(null);
-
-  useNotification(notificationId!, {
-    enabled: !!user.data && !!notificationId,
-    onSuccess: (data) => {
-      navigation.navigate("NotificationDetail", data);
-    },
-    onError: (error) => {
-      console.error("Notification not recived", error);
-    },
-    onSettled: () => {
-      setNotificationId(null);
-    },
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-
-    Notifications.getLastNotificationResponseAsync().then((response) => {
-      console.log("Last notification response", response);
-
-      if (!isMounted || !response?.notification) return;
-      if (response.notification.request.content.data?.nid) {
-        setNotificationId(
-          response.notification.request.content.data.nid as string
-        );
-      } else {
-        Sentry.captureMessage("Received last notification without nid", {
-          extra: {
-            // Needed to avoid sentry cutting the object depth
-            response: JSON.stringify(response, null, 2),
-          },
-        });
-      }
-    });
-
-    // Register handler for notifications received when the app is in the foreground
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        console.log("Notification recived", response);
-        if (!response.notification.request.content.data?.nid) {
-          Sentry.captureMessage("Received notification without nid", {
-            extra: {
-              // Needed to avoid sentry cutting the object depth
-              response: JSON.stringify(response, null, 2),
-            },
-          });
-          return;
-        }
-        setNotificationId(
-          response.notification.request.content.data.nid as string
-        );
-      }
-    );
-
-    return () => {
-      isMounted = false;
-      subscription.remove();
-    };
-  }, []);
 
   useEffect(() => {
     if (!user.data) return;

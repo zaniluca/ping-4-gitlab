@@ -1,11 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import {
-  Image,
-  Platform,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { Image, TouchableOpacity, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
@@ -68,19 +63,11 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
           </Box>
         </Box>
         <Box flexShrink={1}>
-          {Platform.OS === "ios" ? ( // TODO: remove this when we have a way to login with Gitlab on Android
-            <Button
-              marginTop="m"
-              label="Continue with Gitlab"
-              onPress={loginWithGitlab}
-            />
-          ) : (
-            <Button
-              marginTop="m"
-              label="Let's get started"
-              onPress={() => navigation.navigate("Signup")}
-            />
-          )}
+          <Button
+            marginTop="m"
+            label="Continue with Gitlab"
+            onPress={loginWithGitlab}
+          />
           <Disclaimer />
           <Box
             justifyContent="center"
