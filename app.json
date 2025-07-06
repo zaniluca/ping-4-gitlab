@@ -56,6 +56,8 @@
     "plugins": [
       "expo-font",
       "expo-secure-store",
+      "expo-localization",
+      "expo-web-browser",
       [
         "expo-notifications",
         {
