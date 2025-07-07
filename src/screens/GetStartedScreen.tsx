@@ -39,10 +39,12 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       // Returning true from onBackPress denotes that we have handled the event
       const onBackPress = () => true;
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
 
-      return () =>
-        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      return () => subscription.remove();
     }, [user.hasCompletedOnboarding])
   );
 

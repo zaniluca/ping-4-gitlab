@@ -6,7 +6,7 @@ Sentry.init({
   enabled: !__DEV__,
   enableAutoSessionTracking: true,
   sessionTrackingIntervalMillis: 10000,
-  tracesSampleRate: 0.1,
+  enableCaptureFailedRequests: true,
 });
 
 Sentry.getGlobalScope().setTags({

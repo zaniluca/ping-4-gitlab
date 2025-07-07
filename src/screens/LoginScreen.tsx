@@ -53,7 +53,7 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         await setValueForKey("accessToken", accessToken);
         await setValueForKey("refreshToken", refreshToken);
 
-        await queryClient.invalidateQueries(["user"]);
+        await queryClient.invalidateQueries({ queryKey: ["user"] });
       }
     };
 

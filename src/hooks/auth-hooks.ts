@@ -36,7 +36,7 @@ export const useSignup = () => {
       await setValueForKey("refreshToken", data.refreshToken);
       // If there was already a user, it means it was an anonymous one
       if (user.data) navigation.navigate("Inbox");
-      await queryClient.refetchQueries(["user"]);
+      await queryClient.refetchQueries({ queryKey: ["user"] });
     },
     onError: (err: APIError) => {
       console.error("Error during POST /signup: ", err.message);
@@ -57,7 +57,7 @@ export const useLogin = () => {
       await setValueForKey("refreshToken", data.refreshToken);
       // If there was already a user, it means it was an anonymous one
       if (user.data) navigation.navigate("Inbox");
-      await queryClient.refetchQueries(["user"]);
+      await queryClient.refetchQueries({ queryKey: ["user"] });
     },
     onError: (err: APIError) => {
       console.error("Error during POST /login: ", err.response?.data?.message);
@@ -74,7 +74,7 @@ export const useAnonymousLogin = () => {
     onSuccess: async (data) => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
-      await queryClient.refetchQueries(["user"]);
+      await queryClient.refetchQueries({ queryKey: ["user"] });
     },
     onError: (err: APIError) => {
       console.error(
@@ -95,8 +95,8 @@ export const useLogout = () => {
       await deleteValueForKey("accessToken");
       await deleteValueForKey("refreshToken");
 
-      await queryClient.resetQueries(["user"]);
-      await queryClient.resetQueries(["notifications"]);
+      await queryClient.resetQueries({ queryKey: ["user"] });
+      await queryClient.resetQueries({ queryKey: ["notifications"] });
 
       analytics.reset();
 

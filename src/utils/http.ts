@@ -12,8 +12,10 @@ const getDevelopmentHost = () => {
   // 10.0.2.2 is the special host for accessing localhost via android emulator
   if (Platform.OS === "android") return "10.0.2.2";
   // Getting the IP address of the device we're developing on to make work with Expo GO
-  if (Device.isDevice)
-    return Constants.manifest?.debuggerHost?.split(":").shift();
+  if (Device.isDevice) {
+    const hostUri = Constants.expoConfig?.hostUri;
+    return hostUri ? hostUri.split(":").shift() : "localhost";
+  }
 
   // If we're in iOS simulator we can use localhost
   return "localhost";

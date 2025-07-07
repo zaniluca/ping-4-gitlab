@@ -18,6 +18,7 @@ import { useCallback, useRef } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import "./src/utils/sentry";
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";

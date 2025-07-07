@@ -70,7 +70,8 @@ export const useDeleteUser = () => {
       await deleteValueForKey("accessToken");
       await deleteValueForKey("refreshToken");
 
-      await queryClient.resetQueries(["user"]);
+      await queryClient.resetQueries({ queryKey: ["user"] });
+
       console.log("User deleted");
     },
     onError: (err: APIError) => {
@@ -87,7 +88,7 @@ export const useUpdateUser = () => {
     onMutate: async (data) => {
       console.log("Optimistically updating user with: ", data);
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries(["user"]);
+      await queryClient.cancelQueries({ queryKey: ["user"] });
       // Snapshot the previous value
       const previousData = queryClient.getQueryData(["user"]) as APIUser;
       // Optimistically update the user
@@ -105,7 +106,7 @@ export const useUpdateUser = () => {
     },
     onSettled: () => {
       // Always refetch after error or success
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 };
