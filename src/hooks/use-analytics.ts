@@ -14,8 +14,9 @@ export const posthog = new PostHog(
 export const useAnalytics = () => {
   const identify = (user: Partial<APIUser>) => {
     posthog.identify(user.id, {
-      email: user.email,
-      hookId: user.hookId,
+      // This is done to avoid undefined properties
+      ...(user.email && { email: user.email }),
+      ...(user.hookId && { hookId: user.hookId }),
     });
   };
 

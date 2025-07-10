@@ -77,13 +77,14 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
   // Handler for foreground notifications
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: false,
+      shouldShowBanner: false,
+      shouldShowList: false,
       shouldPlaySound: true,
       shouldSetBadge: false,
     }),
     handleSuccess: async (nid) => {
       console.log("Recived push notification in foreground with id: ", nid);
-      queryClient.invalidateQueries(["notifications"]);
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
 
       Toast.show({
         type: "info",

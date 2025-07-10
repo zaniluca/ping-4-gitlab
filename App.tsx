@@ -18,6 +18,7 @@ import { useCallback, useRef } from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import "./src/utils/sentry";
 import Toaster from "./src/components/Toaster";
 import { NotificationsProvider } from "./src/contexts/PushNotificationsContext";
 import { useAppState } from "./src/hooks/refetch-hooks";
@@ -25,9 +26,7 @@ import { posthog } from "./src/hooks/use-analytics";
 import { useOnlineManager } from "./src/hooks/use-online-manager";
 import RootStackNavigator from "./src/navigation/RootStackNavigator";
 import { linking } from "./src/navigation/linking";
-import { isProductionChannel } from "./src/utils/http";
 import queryClient from "./src/utils/query-client";
-import { routingInstrumentation } from "./src/utils/sentry";
 import { lightTheme, darkTheme, NavDarkTheme } from "./src/utils/theme";
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -46,8 +45,6 @@ const App = () => {
   });
 
   const onLayoutRootView = useCallback(async () => {
-    routingInstrumentation.registerNavigationContainer(navigation);
-
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }

@@ -107,7 +107,7 @@ export const useUpdateNotification = () => {
   return useMutation({
     mutationFn: updateNotification,
     onMutate: async ({ id, data }) => {
-      await queryClient.cancelQueries(["notifications"]);
+      await queryClient.cancelQueries({ queryKey: ["notifications"] });
 
       const previousData = queryClient.getQueryData([
         "notifications",
@@ -179,7 +179,7 @@ export const useUpdateNotification = () => {
     },
     onSettled: () => {
       // Always refetch after error or success
-      queryClient.invalidateQueries(["notifications"]);
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 };
