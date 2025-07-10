@@ -13,6 +13,7 @@ on:
       - "**.js"
       - "**.json"
       - "**.lock"
+      - "**.yml"
 
 jobs:
   build:
@@ -22,7 +23,7 @@ jobs:
       matrix:
         include:
           - platform: "ios"
-            os: "macos-12"
+            os: "macos-15"
           - platform: "android"
             os: "ubuntu-latest"
 
@@ -37,7 +38,7 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Copy Google Services file from secrets
         run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
@@ -46,14 +47,18 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       - name: Setup Expo
-        uses: expo/expo-github-action@v7
+        uses: expo/expo-github-action@v8
         with:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup EAS local builds
-        run: yarn global add eas-cli-local-build-plugin
+      - name: Setup Java SDK
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 17
 
       # Eas local doesn't support environment variables
       # so we have to pass them via the shell
@@ -62,9 +67,8 @@ jobs:
           EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
-          SENTRY_SKIP_RELEASE=true \
+          SENTRY_DISABLE_AUTO_UPLOAD=true \
           eas build --local \
             --non-interactive \
             --output=./out \
@@ -72,7 +76,7 @@ jobs:
             --profile=production
 
       - name: Upload binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ping-4-gitlab-${{ matrix.platform }}
           path: out

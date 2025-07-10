@@ -1,20 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useRef } from "react";
 
+import InboxStackNavigator from "./InboxStackNavigator";
+import { RootStackParamList } from "./types";
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
 import { useUpdates } from "../hooks/use-updates";
 import { useUser } from "../hooks/user-hooks";
-import GetStartedScreen from "../screens/GetStartedScreen";
-import InboxScreen from "../screens/InboxScreen";
 import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
-import NotificationDetail from "../screens/NotificationDetail";
 import SignupScreen from "../screens/SignupScreen";
-import AccountSettingsScreen from "../screens/settings/AccountSettingsScreen";
-import SettingsScreen from "../screens/settings/SettingsScreen";
 import { useTheme } from "../utils/theme";
-import { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -61,15 +57,10 @@ const RootStackNavigator = () => {
       {user.data ? (
         <>
           <Stack.Screen
-            name="Inbox"
-            component={InboxScreen}
+            name="InboxStack"
+            component={InboxStackNavigator}
             options={{
-              gestureEnabled: false,
-              headerBackVisible: false,
-              headerLargeTitle: true,
-              // headerSearchBarOptions: {
-              //   placeholder: "Search for notifications",
-              // },
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -89,39 +80,11 @@ const RootStackNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="NotificationDetail"
-            component={NotificationDetail}
-            options={({ route }) => ({
-              title: route.params.subject,
-            })}
-          />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen
-            name="AccountSettings"
-            component={AccountSettingsScreen}
-            options={{
-              title: "Account",
-            }}
-          />
-          <Stack.Screen
             name="Landing"
             component={LandingScreen}
             navigationKey="AuthenticatedLanding"
             options={{
               headerShown: false,
-            }}
-          />
-          {/* Modals */}
-          <Stack.Screen
-            name="GetStarted"
-            component={GetStartedScreen}
-            options={{
-              presentation: "modal",
-              title: "Get Started",
-              gestureEnabled: false,
-              headerLargeTitle: true,
-              // Hiding the back button on android
-              headerLeft: () => <></>,
             }}
           />
         </>

@@ -22,21 +22,16 @@ type CustomConfig = Omit<ConfigContext, "config"> & {
 export default ({ config }: CustomConfig): ExpoConfig => ({
   ...config,
   icon: getIconForBuildEnv(),
-  hooks: {
-    postPublish: [
-      // Don't run sentry-expo/upload-sourcemaps if we're building on CI
-      !process.env.SENTRY_SKIP_RELEASE
-        ? {
-            file: "sentry-expo/upload-sourcemaps",
-            config: {
-              setCommits: true,
-              organization: process.env.SENTRY_ORG,
-              project: process.env.SENTRY_PROJECT,
-            },
-          }
-        : {},
+  plugins: [
+    ...(config.plugins || []),
+    [
+      "@sentry/react-native/expo",
+      {
+        organization: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
     ],
-  },
+  ],
   extra: {
     eas: {
       projectId: "bdcab203-d9ce-48aa-95db-938dbfe1be17",

@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
+import InboxItemIcon from "./InboxItemIcon";
 import { useRootStackNavigation } from "../../hooks/navigation-hooks";
 import timeElapsed from "../../utils/time-elapsed";
 import { APINotification } from "../../utils/types";
 import { Box, Text } from "../restyle";
-import InboxItemIcon from "./InboxItemIcon";
 
 type Props = {
   notification: APINotification;
@@ -35,7 +35,9 @@ const InboxItem: React.FC<Props> = ({ notification }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("NotificationDetail", notification)}
+      onPress={() =>
+        navigation.navigate("NotificationDetail", { id: notification.id })
+      }
     >
       <Box flexDirection="row" paddingHorizontal="l" paddingVertical="s">
         <Box paddingRight="s" alignItems="center">

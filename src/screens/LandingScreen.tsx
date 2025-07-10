@@ -1,11 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import {
-  Image,
-  Platform,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { Image, TouchableOpacity, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../components/Button";
@@ -43,14 +38,7 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
               All your GitLab activities in one place
             </Text>
           </Box>
-          <LinearGradient
-            colors={[transparent, colors.primaryBackground]}
-            style={{
-              flex: 1,
-            }}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 0, y: 0.92 }}
-          >
+          <Box style={{ flex: 1, position: "relative" }}>
             <Image
               source={require("../../assets/landing-screen-1.png")}
               style={{
@@ -58,19 +46,28 @@ const LandingScreen: React.FC<Props> = ({ navigation }) => {
                 width: "90%",
                 alignSelf: "center",
                 resizeMode: "contain",
-                zIndex: -1,
               }}
             />
-          </LinearGradient>
+            <LinearGradient
+              colors={[transparent, colors.primaryBackground]}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "100%",
+              }}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 0, y: 0.92 }}
+            />
+          </Box>
         </Box>
         <Box flexShrink={1}>
-          {Platform.OS === "ios" && ( // TODO: remove this when we have a way to login with Gitlab on Android
-            <Button
-              marginTop="m"
-              label="Continue with Gitlab"
-              onPress={loginWithGitlab}
-            />
-          )}
+          <Button
+            marginTop="m"
+            label="Continue with Gitlab"
+            onPress={loginWithGitlab}
+          />
           <Disclaimer />
           <Box
             justifyContent="center"

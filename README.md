@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://user-images.githubusercontent.com/59318963/187087277-524b1e3b-b7cf-406c-8ed9-500a18c23867.png" alt="Ping for Gitlab" width="84" height="84"> 
+ <img src="https://user-images.githubusercontent.com/59318963/187087277-524b1e3b-b7cf-406c-8ed9-500a18c23867.png" alt="Ping for Gitlab" width="84" height="84">
 </p>
 
 # Ping for Gitlab
@@ -43,3 +43,7 @@ Now that you've setup the client you may want to also setup the server to start 
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.

@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [2.1.6] - 2025-01-09
+
+### Fixed
+
+- Bug fixes
+
+## [2.1.5] - 2024-10-04
+
+### Fixed
+
+- Stability improvements
+
+## [2.1.4] - 2024-06-17
+
+### Changes
+
+- Small internal changes
+
+## [2.1.3] - 2023-10-11
+
+### Changes
+
+- Minor internal stability changes
 
 ## [2.1.2] - 2023-06-10
 
@@ -104,7 +127,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - First release on the stores
 
-[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.1.2...HEAD
+[unreleased]: https://github.com/zaniluca/ping-4-gitlab/compare/v2.1.6...HEAD
 [1.0.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.1
 [1.0.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.0.2
 [1.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v1.1.0
@@ -115,3 +138,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [2.1.0]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.0
 [2.1.1]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.1
 [2.1.2]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.2
+[2.1.3]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.3
+[2.1.4]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.4
+[2.1.5]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.5
+[2.1.6]: https://github.com/zaniluca/ping-4-gitlab/releases/tag/v2.1.6

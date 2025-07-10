@@ -10,10 +10,10 @@ import InboxSkeleton from "../components/inbox/InboxSkeleton";
 import { useNotificationsList } from "../hooks/notifications-hooks";
 import { useRefetchOnFocus } from "../hooks/refetch-hooks";
 import { useUser } from "../hooks/user-hooks";
-import { RootStackScreenProps } from "../navigation/types";
+import { InboxStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
-type Props = RootStackScreenProps<"Inbox">;
+type Props = InboxStackScreenProps<"Inbox">;
 
 const InboxScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();

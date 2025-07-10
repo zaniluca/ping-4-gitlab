@@ -2,11 +2,10 @@
   "expo": {
     "name": "Gitlab Ping",
     "owner": "zaniluca",
-    "scheme": "com.zaniluca.ping4gitlab",
+    "scheme": "ping4gitlab",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "2.1.3",
-    "privacy": "public",
+    "version": "2.2.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/zaniluca/ping-4-gitlab",
@@ -30,7 +29,8 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "appStoreUrl": "https://apps.apple.com/app/ping-for-gitlab/id1620904531"
+      "appStoreUrl": "https://apps.apple.com/app/ping-for-gitlab/id1620904531",
+      "associatedDomains": ["webcredentials:pfg.app"]
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -40,20 +40,36 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.zaniluca.ping4gitlab",
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab"
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.zaniluca.ping4gitlab",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "ping4gitlab"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "plugins": [
-      "sentry-expo",
+      "expo-font",
+      "expo-secure-store",
+      "expo-localization",
+      "expo-web-browser",
       [
         "expo-notifications",
         {
           "sounds": ["./assets/notification.wav"],
           "icon": "./assets/notification-icon.png",
           "color": "#E24329",
-          "androidMode": "collapse",
-          "androidCollapsedTitle": "{unread_notifications} Notifications from Gitlab"
+          "mode": "production"
         }
       ]
-    ]
+    ],
+    "experiments": {
+      "tsconfigPaths": false
+    }
   }
 }
