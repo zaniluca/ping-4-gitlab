@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
           - platform: "ios"
-            os: "macos-13"
+            os: "macos-15"
           - platform: "android"
             os: "ubuntu-latest"
 

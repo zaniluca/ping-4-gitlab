@@ -10,10 +10,10 @@ import Toaster from "../components/Toaster";
 import { Box, Text } from "../components/restyle";
 import { useLogout } from "../hooks/auth-hooks";
 import { useDeleteUser, useUser } from "../hooks/user-hooks";
-import { RootStackScreenProps } from "../navigation/types";
+import { InboxStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 
-type Props = RootStackScreenProps<"GetStarted">;
+type Props = InboxStackScreenProps<"GetStarted">;
 
 const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
@@ -39,10 +39,12 @@ const GetStartedScreen: React.FC<Props> = ({ navigation }) => {
       // Returning true from onBackPress denotes that we have handled the event
       const onBackPress = () => true;
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
 
-      return () =>
-        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      return () => subscription.remove();
     }, [user.hasCompletedOnboarding])
   );
 

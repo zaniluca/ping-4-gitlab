@@ -4,13 +4,8 @@ import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
 export const useUpdates = () => {
-  const {
-    isUpdateAvailable,
-    isChecking,
-    initializationError,
-    checkError,
-    downloadError,
-  } = Updates.useUpdates();
+  const { isUpdateAvailable, isChecking, checkError, downloadError } =
+    Updates.useUpdates();
 
   useEffect(() => {
     if (__DEV__) {
@@ -27,13 +22,7 @@ export const useUpdates = () => {
   }, []);
 
   useEffect(() => {
-    if (initializationError) {
-      console.error(
-        "An error occurred during updates initialization",
-        initializationError
-      );
-      Sentry.captureException(initializationError);
-    } else if (checkError) {
+    if (checkError) {
       console.error("An error occurred during updates check", checkError);
       Sentry.captureException(checkError);
     } else if (downloadError) {
@@ -45,7 +34,7 @@ export const useUpdates = () => {
         text2: "Please try again later.",
       });
     }
-  }, [initializationError, checkError, downloadError]);
+  }, [checkError, downloadError]);
 
   useEffect(() => {
     if (__DEV__) return;

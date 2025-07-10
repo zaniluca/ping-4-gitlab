@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 .DS_Store
 .env
+/android
+/ios
 
 google-services.json
 GoogleService-Info.plist
