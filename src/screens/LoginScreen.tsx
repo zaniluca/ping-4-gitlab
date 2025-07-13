@@ -1,7 +1,10 @@
+import { useQueryClient } from "@tanstack/react-query";
+import * as WebBrowser from "expo-web-browser";
 import { FormikProvider, useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 import BackButton from "../components/BackButton";
 import Button from "../components/Button";
@@ -10,6 +13,7 @@ import Input from "../components/Input";
 import KeyboardAvoid from "../components/KeyboardAvoid";
 import { Box, Text } from "../components/restyle";
 import { useLogin } from "../hooks/auth-hooks";
+import { useSecureStore } from "../hooks/use-secure-store";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 import { LoginSchema } from "../utils/validation";
@@ -21,8 +25,40 @@ const INITIAL_VALUES = {
   password: "",
 };
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
+const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { colors } = useTheme();
+  const { setValueForKey } = useSecureStore();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const handleAuth = async () => {
+      WebBrowser.dismissBrowser();
+
+      const accessToken = route.params?.accessToken;
+      const refreshToken = route.params?.refreshToken;
+      const error = route.params?.error;
+
+      if (error) {
+        console.error("Error during oauth login: ", error);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: error,
+        });
+        navigation.navigate("Landing");
+        return;
+      }
+
+      if (accessToken && refreshToken) {
+        await setValueForKey("accessToken", accessToken);
+        await setValueForKey("refreshToken", refreshToken);
+
+        await queryClient.invalidateQueries({ queryKey: ["user"] });
+      }
+    };
+
+    handleAuth();
+  }, [route.params]);
 
   const login = useLogin();
 

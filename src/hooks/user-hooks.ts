@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 
 import { useLogout } from "./auth-hooks";
+import { useAnalytics } from "./use-analytics";
 import { useSecureStore } from "./use-secure-store";
 import { http } from "../utils/http";
 import { APIUser, APIError } from "../utils/types";
@@ -20,6 +21,7 @@ const deleteUser = () => http.delete("user").then((res) => res.data);
 
 export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
   const logout = useLogout();
+  const analytics = useAnalytics();
 
   const userQuery = useQuery<APIUser, APIError>({
     queryKey: ["user"],
@@ -33,6 +35,8 @@ export const useUser = (options?: UseQueryOptions<APIUser, APIError>) => {
         email: data.email || undefined,
         username: data.hookId,
       });
+
+      analytics.identify(data);
     },
     onError: (err) => {
       if (err.response?.status !== 403) {
@@ -66,7 +70,8 @@ export const useDeleteUser = () => {
       await deleteValueForKey("accessToken");
       await deleteValueForKey("refreshToken");
 
-      await queryClient.resetQueries(["user"]);
+      await queryClient.resetQueries({ queryKey: ["user"] });
+
       console.log("User deleted");
     },
     onError: (err: APIError) => {
@@ -83,7 +88,7 @@ export const useUpdateUser = () => {
     onMutate: async (data) => {
       console.log("Optimistically updating user with: ", data);
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries(["user"]);
+      await queryClient.cancelQueries({ queryKey: ["user"] });
       // Snapshot the previous value
       const previousData = queryClient.getQueryData(["user"]) as APIUser;
       // Optimistically update the user
@@ -101,7 +106,7 @@ export const useUpdateUser = () => {
     },
     onSettled: () => {
       // Always refetch after error or success
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 };

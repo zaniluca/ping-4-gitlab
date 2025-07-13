@@ -47,6 +47,7 @@ const updateNotification = ({ id, data }: NotificationUpdateRequest) =>
 
 export const useNotificationsList = () => {
   const user = useUser();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery<APIPaginatedNotifications, APIError>(
     ["notifications"],
@@ -54,6 +55,17 @@ export const useNotificationsList = () => {
     {
       enabled: !!user.hasCompletedOnboarding,
       getNextPageParam: (lastPage, _pages) => lastPage.nextCursor,
+      onSuccess: (data) => {
+        // Populate individual notification queries
+        data.pages.forEach((page) => {
+          page.data.forEach((notification) => {
+            queryClient.setQueryData(
+              ["notifications", notification.id],
+              notification
+            );
+          });
+        });
+      },
       onError: (err: APIError) => {
         console.log(
           "Error fetching notifications",
@@ -69,11 +81,16 @@ export const useNotification = (
   options?: UseQueryOptions<APINotification, APIError>
 ) => {
   const user = useUser();
+  const queryClient = useQueryClient();
+  const existingData = queryClient.getQueryData<APINotification>([
+    "notifications",
+    id,
+  ]);
 
   return useQuery<APINotification, APIError>({
     queryKey: ["notifications", id],
     queryFn: () => fetchNotification(id),
-    enabled: !!user.data,
+    enabled: !!user.data && !existingData,
     onError: (err) => {
       console.log(
         `Error fetching notification ${id}`,
@@ -90,7 +107,7 @@ export const useUpdateNotification = () => {
   return useMutation({
     mutationFn: updateNotification,
     onMutate: async ({ id, data }) => {
-      await queryClient.cancelQueries(["notifications"]);
+      await queryClient.cancelQueries({ queryKey: ["notifications"] });
 
       const previousData = queryClient.getQueryData([
         "notifications",
@@ -162,7 +179,7 @@ export const useUpdateNotification = () => {
     },
     onSettled: () => {
       // Always refetch after error or success
-      queryClient.invalidateQueries(["notifications"]);
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 };
