@@ -17,6 +17,7 @@ import { useSecureStore } from "../hooks/use-secure-store";
 import { RootStackScreenProps } from "../navigation/types";
 import { useTheme } from "../utils/theme";
 import { LoginSchema } from "../utils/validation";
+import { CommonActions } from "@react-navigation/native";
 
 type Props = RootStackScreenProps<"Login">;
 
@@ -53,7 +54,13 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         await setValueForKey("accessToken", accessToken);
         await setValueForKey("refreshToken", refreshToken);
 
-        await queryClient.invalidateQueries({ queryKey: ["user"] });
+        await queryClient.refetchQueries({ queryKey: ["user"] });
+        navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: "InboxStack", params: { screen: "Inbox" } }],
+            })
+          );
       }
     };
 

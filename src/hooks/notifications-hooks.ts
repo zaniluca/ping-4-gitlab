@@ -15,7 +15,7 @@ const fetchNotification = (id: string) =>
   http.get(`notification/${id}`).then((res) => res.data);
 
 const fetchNotificationsList = async ({ pageParam = "" }) => {
-  const { data } = await http.get(
+  const { data: response } = await http.get(
     "notification/list" +
       (pageParam
         ? `?${new URLSearchParams({
@@ -25,8 +25,8 @@ const fetchNotificationsList = async ({ pageParam = "" }) => {
   );
 
   return {
-    data,
-    nextCursor: data.length ? data[data.length - 1].id : undefined,
+    data: response.data,
+    nextCursor: response.hasMore ? response.nextCursor : undefined,
   };
 };
 

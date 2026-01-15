@@ -35,7 +35,7 @@ export const useSignup = () => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
       // If there was already a user, it means it was an anonymous one
-      if (user.data) navigation.navigate("Inbox");
+      if (user.data) navigation.navigate("InboxStack", { screen: "Inbox" });
       await queryClient.refetchQueries({ queryKey: ["user"] });
     },
     onError: (err: APIError) => {
@@ -56,7 +56,7 @@ export const useLogin = () => {
       await setValueForKey("accessToken", data.accessToken);
       await setValueForKey("refreshToken", data.refreshToken);
       // If there was already a user, it means it was an anonymous one
-      if (user.data) navigation.navigate("Inbox");
+      if (user.data) navigation.navigate("InboxStack", { screen: "Inbox" });
       await queryClient.refetchQueries({ queryKey: ["user"] });
     },
     onError: (err: APIError) => {
