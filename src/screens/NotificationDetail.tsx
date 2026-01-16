@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { Linking } from "react-native";
 import Toast from "react-native-toast-message";
 import { WebView } from "react-native-webview";
 
@@ -56,6 +57,13 @@ const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
         html: notification?.html ?? "",
       }}
       textZoom={125}
+      onShouldStartLoadWithRequest={(event) => {
+        if (!/^[data:text, about:blank]/.test(event.url)) {
+          Linking.openURL(event.url);
+          return false;
+        }
+        return true;
+      }}
     />
   );
 };
