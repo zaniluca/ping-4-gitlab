@@ -13,6 +13,7 @@ web-build/
 .env
 /android
 /ios
+.github/skills
 
 google-services.json
 GoogleService-Info.plist
