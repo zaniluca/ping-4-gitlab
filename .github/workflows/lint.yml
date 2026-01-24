@@ -21,8 +21,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: pnpm install
+        uses: ./.github/actions/pnpm-install
 
       - name: Run Lint
-        run: yarn lint
+        run: pnpm lint

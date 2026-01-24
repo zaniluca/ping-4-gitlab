@@ -43,8 +43,8 @@ jobs:
       - name: Copy Google Services file from secrets
         run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: pnpm install
+        uses: ./.github/actions/pnpm-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
