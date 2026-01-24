@@ -5,12 +5,6 @@ module.exports = {
     "plugin:@tanstack/eslint-plugin-query/recommended",
   ],
   rules: {
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
     "no-unused-vars": [
       "warn",
       {
