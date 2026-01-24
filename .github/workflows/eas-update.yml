@@ -12,6 +12,7 @@ on:
       - "**.lock"
       - "!eas.json"
       - "**.yml"
+      - "**.yaml"
 
 jobs:
   update:

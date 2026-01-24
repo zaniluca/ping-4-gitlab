@@ -11,6 +11,7 @@ on:
       - "**.tsx"
       - "**.js"
       - "**.yml"
+      - "**.yaml"
 
 jobs:
   lint:
