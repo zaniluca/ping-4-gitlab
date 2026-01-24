@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changes
+
+- Notification links now open in external browser
+
 ### Fixed
 
 - Bug fixes and stability improvements
