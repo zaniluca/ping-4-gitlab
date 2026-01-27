@@ -12,6 +12,7 @@ on:
       - "**.lock"
       - "!eas.json"
       - "**.yml"
+      - "**.yaml"
 
 jobs:
   update:
@@ -29,8 +30,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: pnpm install
+        uses: ./.github/actions/pnpm-install
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
