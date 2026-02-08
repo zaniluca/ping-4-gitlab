@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "tanstack": {
+      "url": "https://tanstack.com/api/mcp"
+    }
+  }
+}

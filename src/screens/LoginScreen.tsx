@@ -1,3 +1,4 @@
+import { CommonActions } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import * as WebBrowser from "expo-web-browser";
 import { FormikProvider, useFormik } from "formik";
@@ -53,7 +54,13 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         await setValueForKey("accessToken", accessToken);
         await setValueForKey("refreshToken", refreshToken);
 
-        await queryClient.invalidateQueries({ queryKey: ["user"] });
+        await queryClient.refetchQueries({ queryKey: ["user"] });
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "InboxStack", params: { screen: "Inbox" } }],
+          })
+        );
       }
     };
 

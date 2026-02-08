@@ -91,7 +91,7 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
         text1: "New notification recived!",
         text2: "Take a look at your inbox",
         onPress() {
-          navigation.navigate("Inbox");
+          navigation.navigate("InboxStack", { screen: "Inbox" });
         },
       });
     },

@@ -32,8 +32,8 @@ The app is build using Expo and React Native, the entire codebase is written in 
 git clone https://github.com/zaniluca/ping-4-gitlab.git
 cd ping-4-gitlab
 nvm use
-yarn
-yarn start
+pnpm i
+pnpm start
 ```
 
 ## What Now?

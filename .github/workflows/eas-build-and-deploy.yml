@@ -41,8 +41,8 @@ jobs:
       - name: Copy Google Services file from secrets
         run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: pnpm install
+        uses: ./.github/actions/pnpm-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
@@ -90,11 +90,28 @@ jobs:
           git push origin --tags
 
   deploy:
-    name: Deploy
+    name: Deploy to ${{ matrix.store }}
     if: ${{ inputs.deploy }}
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ios
+            store: TestFlight
+          - platform: android
+            store: Play Store
     steps:
+      - name: Check if deployment should run for this platform
+        run: |
+          if [[ "${{ inputs.platform }}" == "all" || "${{ inputs.platform }}" == "${{ matrix.platform }}" ]]; then
+            echo "Proceeding with ${{ matrix.store }} deployment"
+          else
+            echo "Skipping ${{ matrix.store }} deployment as platform ${{ matrix.platform }} was not selected"
+            exit 0
+          fi
+
       - name: Check for EXPO_TOKEN
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
@@ -103,7 +120,7 @@ jobs:
           fi
 
       - name: Check for Apple Credentials
-        if: ${{ inputs.platform == 'ios' || inputs.platform == 'all' }}
+        if: matrix.platform == 'ios'
         run: |
           if [ -z "${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}" ] || [ -z "${{ secrets.EXPO_APPLE_ID }}" ]; then
             echo "You must provide an EXPO_APPLE_APP_SPECIFIC_PASSWORD and EXPO_APPLE_ID to deploy to testflight"
@@ -113,8 +130,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: pnpm install
+        uses: ./.github/actions/pnpm-install
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
@@ -123,20 +140,18 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Submit to testflight
-        if: ${{ inputs.platform == 'ios' || inputs.platform == 'all' }}
+      - name: Submit to ${{ matrix.store }}
         run: |
-          EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} \
-          EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} \
-          eas submit \
-            --latest \
-            --non-interactive \
-            -p ios
-
-      - name: Submit to playstore
-        if: ${{ inputs.platform == 'android' || inputs.platform == 'all' }}
-        run: |
-          eas submit \
-            --latest \
-            --non-interactive \
-            -p android
+          if [ "${{ matrix.platform }}" == "ios" ]; then
+            EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} \
+            EXPO_APPLE_ID=${{ secrets.EXPO_APPLE_ID }} \
+            eas submit \
+              --latest \
+              --non-interactive \
+              -p ios
+          else
+            eas submit \
+              --latest \
+              --non-interactive \
+              -p android
+          fi
