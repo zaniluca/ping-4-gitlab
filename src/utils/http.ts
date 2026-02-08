@@ -25,13 +25,13 @@ export const isProductionChannel = () => Updates.channel === "production";
 
 const getReleaseApiUrl = () =>
   isProductionChannel()
-    ? "https://api-ping-4-gitlab-production.up.railway.app"
-    : "https://api-ping-4-gitlab-staging.up.railway.app";
+    ? "https://api-ping-4-gitlab-production.zaniluca.workers.dev"
+    : "https://api-ping-4-gitlab-staging.zaniluca.workers.dev";
 
 export const API_URL =
   process.env.NODE_ENV === "production"
     ? getReleaseApiUrl()
-    : `http://${getDevelopmentHost()}:8080`;
+    : `http://${getDevelopmentHost()}:8787`;
 
 export const http = axios.create({
   baseURL: API_URL,

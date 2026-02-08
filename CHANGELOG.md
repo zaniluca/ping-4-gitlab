@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
-## [2.2.0] - 2025-07-18
-
 ### Changes
 
 - Notification links now open in external browser
+
+## [2.2.0] - 2025-07-18
 
 ### Fixed
 
