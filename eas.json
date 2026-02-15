@@ -5,10 +5,7 @@
   },
   "build": {
     "base": {
-      "autoIncrement": true,
-      "cache": {
-        "key": "expo53"
-      }
+      "autoIncrement": true
     },
     "development": {
       "extends": "base",

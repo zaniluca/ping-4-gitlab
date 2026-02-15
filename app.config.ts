@@ -8,7 +8,7 @@ const getIconForBuildEnv = () => {
   ) {
     return `./assets/icon-${process.env.EAS_BUILD_PROFILE}.png`;
   } else {
-    return "./assets/icon.png";
+    return "./assets/app.icon";
   }
 };
 
@@ -21,7 +21,10 @@ type CustomConfig = Omit<ConfigContext, "config"> & {
 
 export default ({ config }: CustomConfig): ExpoConfig => ({
   ...config,
-  icon: getIconForBuildEnv(),
+  ios: {
+    ...config.ios,
+    icon: getIconForBuildEnv(),
+  },
   plugins: [
     ...(config.plugins || []),
     [
