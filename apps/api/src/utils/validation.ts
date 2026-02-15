@@ -1,51 +1,43 @@
-import * as yup from "yup";
-import * as jwt from "jsonwebtoken";
-import type { User } from "@prisma/client";
-import type { ObjectShape } from "yup/lib/object";
+import { z } from "zod";
 
-type ObjectShapeValues = ObjectShape extends Record<string, infer V>
-  ? V
-  : never;
-
-type Shape<T extends Record<any, any>> = Partial<
-  Record<keyof T, ObjectShapeValues>
->;
-
-const PasswordSchema = yup
+const passwordSchema = z
   .string()
-  .min(6)
-  .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
-  .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
-  .matches(/^(?=.*[0-9])/, "Must contain at least one number")
-  .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character");
+  .min(6, "Password must be at least 6 characters")
+  .regex(/[a-z]/, "Must contain at least one lowercase character")
+  .regex(/[A-Z]/, "Must contain at least one uppercase character")
+  .regex(/[0-9]/, "Must contain at least one number")
+  .regex(/[!@#%&]/, "Must contain at least one special character");
 
-export const SignupBodySchema = yup.object({
-  email: yup.string().email().required().label("Email"),
-  password: PasswordSchema.required().label("Password"),
+export const signupBodySchema = z.object({
+  email: z.email("Invalid email address"),
+  password: passwordSchema,
 });
 
-export const LoginBodySchema = yup.object({
-  email: yup.string().email().required().label("Email"),
-  password: yup.string().required().label("Password"),
+export const loginBodySchema = z.object({
+  email: z.email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 
-export const RefreshBodySchema = yup.object({
-  refreshToken: yup
-    .string()
-    .required()
-    .test("is-valid-refresh-token", "Invalid refresh token", (value) => {
-      try {
-        jwt.decode(value!);
-        return !!jwt.verify(value!, process.env.JWT_REFRESH_SECRET!);
-      } catch (e) {
-        return false;
-      }
-    }),
+export const refreshBodySchema = z.object({
+  refreshToken: z.string().min(1, "Refresh token is required"),
 });
 
-export const UserUpdateBodySchema = yup.object<Shape<User>>({
-  email: yup.string().email(),
-  password: PasswordSchema,
-  expoPushTokens: yup.array().of(yup.string()),
-  mutedUntil: yup.date().min(new Date()).nullable(),
+export const userUpdateBodySchema = z.object({
+  email: z.email("Invalid email address").optional(),
+  password: passwordSchema.optional(),
+  expoPushTokens: z.array(z.string()).optional(),
+  mutedUntil: z.coerce
+    .date()
+    .min(new Date(), "Date must be in the future")
+    .nullable()
+    .optional(),
+});
+
+export const notificationUpdateBodySchema = z.object({
+  viewed: z.boolean().optional(),
+});
+
+export const notificationListQuerySchema = z.object({
+  cursor: z.string().optional(),
+  limit: z.coerce.number().min(1).max(100).default(20),
 });

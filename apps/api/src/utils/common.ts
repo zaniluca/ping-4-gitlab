@@ -1,20 +1,22 @@
 import * as jwt from "jsonwebtoken";
-import * as Sentry from "@sentry/node";
+import * as Sentry from "@sentry/cloudflare";
 import type { CustomJWTClaims, Headers } from "./types";
-import prisma from "../../prisma/client";
+import type { DrizzleClient } from "../db/client";
+import { users } from "../db/schema";
+import { eq } from "drizzle-orm";
 
-export const getAccessToken = (payload: CustomJWTClaims) => {
-  return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
+export const getAccessToken = (payload: CustomJWTClaims, secret: string) => {
+  return jwt.sign(payload, secret, {
     expiresIn: "1h",
   });
 };
 
-export const getRefreshToken = (uid: string) => {
+export const getRefreshToken = (uid: string, secret: string) => {
   return jwt.sign(
     {
       uid,
     },
-    process.env.JWT_REFRESH_SECRET!,
+    secret,
     {
       expiresIn: "60d",
     }
@@ -42,16 +44,14 @@ export const parseHeaders = (headers: string) => {
   return json as Headers;
 };
 
-export const updateLastLogin = async (id: string) => {
+export const updateLastLogin = async (id: string, db: DrizzleClient) => {
   try {
-    await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
+    await db
+      .update(users)
+      .set({
         lastLogin: new Date(),
-      },
-    });
+      })
+      .where(eq(users.id, id));
   } catch (error) {
     Sentry.captureException(error);
     console.error(error);

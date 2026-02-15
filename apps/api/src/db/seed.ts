@@ -1,6 +1,8 @@
-import prisma from "./client";
-import bcrypt from "bcrypt";
-import { randomUUID } from "crypto";
+import { drizzle } from "drizzle-orm/d1";
+import { getPlatformProxy } from "wrangler";
+import bcrypt from "bcryptjs";
+import * as schema from "./schema";
+import { createId } from "@paralleldrive/cuid2";
 
 const USERS = [
   {
@@ -60,7 +62,7 @@ const ISSUE_1 = {
     "x-auto-response-suppress": "All",
     "x-gitlab-issue-id": "106950598",
     "x-gitlab-issue-iid": "853",
-    "x-gitlab-notificationreason:": undefined,
+    "x-gitlab-notificationreason:": "",
     "x-gitlab-project": "ping-4-gitlab",
     "x-gitlab-project-id": "18854524",
     "x-gitlab-project-path": "zaniluca/ping-4-gitlab",
@@ -75,16 +77,20 @@ const ISSUE_1 = {
 const PROJECTS = ["ping-4-gitlab", "test-project", "test"];
 const NOTIFICATIONS = [ISSUE_1];
 
-const load = async () => {
+const main = async () => {
   try {
-    await prisma.user.deleteMany();
-    await prisma.notification.deleteMany();
+    const { env, dispose } = await getPlatformProxy();
+    const db = drizzle(env.DB as D1Database, { schema });
 
-    await prisma.user.createMany({
-      data: USERS,
-    });
+    // Delete all existing data
+    await db.delete(schema.notifications);
+    await db.delete(schema.users);
 
-    USERS.forEach(async (user) => {
+    // Insert users
+    await db.insert(schema.users).values(USERS);
+
+    // Insert notifications for each user in batches
+    for (const user of USERS) {
       const notifications = Array.from({ length: 100 }).map((_, i) => {
         const randomProject =
           PROJECTS[Math.floor(Math.random() * PROJECTS.length)];
@@ -93,7 +99,7 @@ const load = async () => {
 
         return {
           ...randomNotification,
-          contentHash: `seeded-${randomUUID()}`,
+          contentHash: `seeded-${createId()}`,
           userId: user.id,
           headers: {
             ...randomNotification.headers,
@@ -104,16 +110,20 @@ const load = async () => {
         };
       });
 
-      await prisma.notification.createMany({
-        data: notifications,
-      });
-    });
+      // Insert in batches of 10 to avoid SQLite parameter limit
+      const batchSize = 10;
+      for (let i = 0; i < notifications.length; i += batchSize) {
+        const batch = notifications.slice(i, i + batchSize);
+        await db.insert(schema.notifications).values(batch);
+      }
+    }
+
+    console.log("Database seeded successfully");
+    await dispose();
   } catch (e) {
-    console.error(e);
+    console.error("Error seeding database:", e);
     process.exit(1);
-  } finally {
-    await prisma.$disconnect();
   }
 };
 
-load();
+main();

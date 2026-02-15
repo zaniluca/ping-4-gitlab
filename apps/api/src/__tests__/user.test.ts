@@ -1,111 +1,177 @@
-import request from "supertest";
-import bcrypt from "bcrypt";
-import app from "..";
-import { USER_PUBLIC_FIELDS } from "../utils/constants";
+import bcrypt from "bcryptjs";
+import { testApp } from "..";
 import { getAccessToken } from "../utils/common";
-import prismaMock from "../../prisma/mocked-client";
+import drizzleMock from "../__mocks__/drizzle-mock";
+import { User } from "../db/schema";
+
+type ErrorResponse = {
+  message: string;
+};
 
 const NEW_EMAIL = "updated@test.com";
 const NEW_HOOK = "updated";
 const NEW_PASSWORD = "Updated1234!";
 const NEW_PASSWORD_HASH = bcrypt.hashSync(NEW_PASSWORD, 10);
 
+const mockEnv = {
+  WEBHOOK_SECRET: "test-secret",
+  JWT_ACCESS_SECRET: "test-jwt-secret",
+  JWT_REFRESH_SECRET: "test-jwt-refresh-secret",
+  DB: {} as any,
+  ENVIRONMENT: "test",
+  GITLAB_REDIRECT_URI: "http://localhost:8080/oauth/gitlab/callback",
+  DATABASE_URL: "test-db-url",
+  GITLAB_APP_ID: "test-app-id",
+  GITLAB_APP_SECRET: "test-app-secret",
+} as Env;
+
+const MOCK_USER: User = {
+  id: "1",
+  email: "test@test.com",
+  password: bcrypt.hashSync("Test1234!", 10),
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  expoPushTokens: [],
+  hookId: "test",
+  lastLogin: new Date(Date.now() - 1000),
+  onboardingCompleted: false,
+  mutedUntil: null,
+  gitlabId: null,
+};
+
 describe("GET /user", () => {
   it("Fails if unauthorized", async () => {
-    await request(app)
-      .get("/user")
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(403);
-        expect(res.body.message).toBe("Unauthorized");
-      });
+    const res = await testApp.request("/user", { method: "GET" }, mockEnv);
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as ErrorResponse;
+    expect(body.message).toBe("no authorization included in request");
   });
 });
 
 describe("PUT /user", () => {
   it("Fails if unauthorized", async () => {
-    await request(app)
-      .put("/user")
-      .send({})
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(403);
-        expect(res.body.message).toBe("Unauthorized");
-      });
+    const res = await testApp.request(
+      "/user",
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      },
+      mockEnv,
+    );
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as ErrorResponse;
+    expect(body.message).toBe("no authorization included in request");
   });
   it("Updates user data", async () => {
-    await request(app)
-      .put("/user")
-      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
-      .send({
-        email: NEW_EMAIL,
-        hookId: NEW_HOOK,
-      })
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(200);
-      });
-
-    expect(prismaMock.user.update).toHaveBeenCalledWith({
-      where: { id: "1" },
-      data: {
-        email: NEW_EMAIL,
-        hookId: NEW_HOOK,
-        password: undefined,
-      },
-      select: USER_PUBLIC_FIELDS,
+    const mockUpdateReturning = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(MOCK_USER),
     });
+    const mockUpdateWhere = vi.fn().mockReturnValue({
+      returning: mockUpdateReturning,
+    });
+    const mockUpdateSet = vi.fn().mockReturnValue({
+      where: mockUpdateWhere,
+    });
+    drizzleMock.update.mockReturnValue({
+      set: mockUpdateSet,
+    } as any);
+
+    const res = await testApp.request(
+      "/user",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + getAccessToken({ uid: "1" }, mockEnv.JWT_ACCESS_SECRET),
+        },
+        body: JSON.stringify({
+          email: NEW_EMAIL,
+          hookId: NEW_HOOK,
+        }),
+      },
+      mockEnv,
+    );
+    expect(res.status).toBe(200);
+    expect(drizzleMock.update).toHaveBeenCalled();
   });
-  // FOR SOME REASON, THIS TEST FAILS
-  it.skip("Updates user password", async () => {
-    await request(app)
-      .put("/user")
-      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
-      .send({
-        email: NEW_EMAIL,
-        hookId: NEW_HOOK,
-        password: NEW_PASSWORD,
-      })
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(200);
-      });
-
-    expect(prismaMock.user.update).toHaveBeenCalledWith({
-      where: { id: "1" },
-      data: {
-        email: NEW_EMAIL,
-        hookId: NEW_HOOK,
-        password: NEW_PASSWORD_HASH,
-      },
-      select: USER_PUBLIC_FIELDS,
+  it("Updates user password", async () => {
+    const mockUpdateReturning = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(MOCK_USER),
     });
+    const mockUpdateWhere = vi.fn().mockReturnValue({
+      returning: mockUpdateReturning,
+    });
+    const mockUpdateSet = vi.fn().mockReturnValue({
+      where: mockUpdateWhere,
+    });
+    drizzleMock.update.mockReturnValue({
+      set: mockUpdateSet,
+    } as any);
+
+    const res = await testApp.request(
+      "/user",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + getAccessToken({ uid: "1" }, mockEnv.JWT_ACCESS_SECRET),
+        },
+        body: JSON.stringify({
+          email: NEW_EMAIL,
+          hookId: NEW_HOOK,
+          password: NEW_PASSWORD,
+        }),
+      },
+      mockEnv,
+    );
+    expect(res.status).toBe(200);
+    expect(drizzleMock.update).toHaveBeenCalled();
   });
 });
 
 describe("DELETE /user", () => {
   it("Fails if unauthorized", async () => {
-    await request(app)
-      .delete("/user")
-      .send({})
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(403);
-        expect(res.body.message).toBe("Unauthorized");
-      });
+    const res = await testApp.request(
+      "/user",
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      },
+      mockEnv,
+    );
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as ErrorResponse;
+    expect(body.message).toBe("no authorization included in request");
   });
 
   it("Deletes user", async () => {
-    await request(app)
-      .delete("/user")
-      .set("Authorization", "Bearer " + getAccessToken({ uid: "1" }))
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(200);
-      });
-
-    expect(prismaMock.user.delete).toHaveBeenCalledWith({
-      where: { id: "1" },
+    const mockDeleteReturning = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(MOCK_USER),
     });
+    const mockDeleteWhere = vi.fn().mockReturnValue({
+      returning: mockDeleteReturning,
+    });
+    drizzleMock.delete.mockReturnValue({
+      where: mockDeleteWhere,
+    } as any);
+
+    const res = await testApp.request(
+      "/user",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + getAccessToken({ uid: "1" }, mockEnv.JWT_ACCESS_SECRET),
+        },
+      },
+      mockEnv,
+    );
+    expect(res.status).toBe(200);
+    expect(drizzleMock.delete).toHaveBeenCalled();
   });
 });

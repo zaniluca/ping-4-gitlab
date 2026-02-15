@@ -1,4 +1,4 @@
-name: Sentry Release
+name: Deploy
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
       - "**.yml"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     env:
       JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
@@ -21,6 +21,9 @@ jobs:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      SENTRY_ENVIRONMENT: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+      WRANGLER_ENV: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,15 +31,11 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/pnpm-install
 
-      - name: Build
-        run: pnpm tsc
+      - name: Type Check
+        run: pnpm typecheck
 
-      - name: Inject Debug IDS
-        run: ./node_modules/.bin/sentry-cli sourcemaps inject --org $SENTRY_ORG --project $SENTRY_PROJECT ./dist
+      - name: Migrate Database
+        run: pnpm run db:migrate:${{ github.ref_name == 'master' && 'staging' || 'production' }}
 
-      - name: Create Sentry release
-        uses: getsentry/action-release@v1
-        with:
-          environment: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
-          sourcemaps: "./dist"
-          ignore_empty: true
+      - name: Deploy to Cloudflare
+        run: pnpm run deploy

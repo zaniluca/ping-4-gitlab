@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -5,7 +6,7 @@ import {
 } from "unique-names-generator";
 
 const generateUniqueHook = () => {
-  return process.env.NODE_ENV === "test"
+  return env.ENVIRONMENT === "test"
     ? "test"
     : uniqueNamesGenerator({
         dictionaries: [adjectives, animals],

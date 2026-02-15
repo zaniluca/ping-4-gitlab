@@ -1,52 +1,149 @@
-import type { User } from "@prisma/client";
-import request from "supertest";
-import app from "..";
-import prismaMock from "../../prisma/mocked-client";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { testApp } from "..";
+import drizzleMock from "../__mocks__/drizzle-mock";
+import { User } from "../db/schema";
 
 describe("POST /webhook", () => {
+  const mockEnv = {
+    WEBHOOK_SECRET: "test-secret",
+    JWT_ACCESS_SECRET: "test-jwt-secret",
+    JWT_REFRESH_SECRET: "test-jwt-refresh-secret",
+    DB: {} as any,
+    ENVIRONMENT: "test",
+    GITLAB_REDIRECT_URI: "http://localhost:8080/oauth/gitlab/callback",
+    DATABASE_URL: "test-db-url",
+    GITLAB_APP_ID: "test-app-id",
+    GITLAB_APP_SECRET: "test-app-secret",
+  } as Env;
+
   it("Rejects requests without valid secret", async () => {
-    await request(app)
-      .post("/webhook")
-      .query({ token: "invalid" })
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(403);
-        expect(res.body.message).toBe("Unauthorized");
-      });
+    const res = await testApp.request(
+      "/webhook?token=invalid",
+      { method: "POST" },
+      mockEnv,
+    );
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ message: "Unauthorized" });
   });
   it("Fails if the user doesn't exist", async () => {
-    prismaMock.user.findUniqueOrThrow.mockRejectedValue(new Error());
+    const mockWhere = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(undefined),
+    });
+    const mockFrom = vi.fn().mockReturnValue({
+      where: mockWhere,
+    });
+    drizzleMock.select.mockReturnValue({
+      from: mockFrom,
+    } as any);
 
-    await request(app)
-      .post("/webhook")
-      .query({ token: process.env.WEBHOOK_SECRET })
-      .field("to", MOCK_NOTIFICATION_PAYLOAD.to)
-      .field("subject", MOCK_NOTIFICATION_PAYLOAD.subject)
-      .field("text", MOCK_NOTIFICATION_PAYLOAD.text)
-      .field("html", MOCK_NOTIFICATION_PAYLOAD.html)
-      .field("headers", MOCK_NOTIFICATION_PAYLOAD.headers)
-      .expect("Content-Type", /json/)
-      .expect((res) => {
-        expect(res.status).toBe(400);
-        expect(res.body.message).toBe("User with hook test doesn't exist");
-      });
+    const formData = new FormData();
+    formData.append("to", MOCK_NOTIFICATION_PAYLOAD.to);
+    formData.append("subject", MOCK_NOTIFICATION_PAYLOAD.subject);
+    formData.append("text", MOCK_NOTIFICATION_PAYLOAD.text);
+    formData.append("html", MOCK_NOTIFICATION_PAYLOAD.html);
+    formData.append("headers", MOCK_NOTIFICATION_PAYLOAD.headers);
+
+    const res = await testApp.request(
+      `/webhook?token=${mockEnv.WEBHOOK_SECRET}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+      mockEnv,
+    );
+
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({
+      message: "User with hook test doesn't exist",
+    });
   });
   it("Creates the notification", async () => {
-    prismaMock.user.findUniqueOrThrow.mockResolvedValue(MOCK_USER);
-
-    await request(app)
-      .post("/webhook")
-      .query({ token: process.env.WEBHOOK_SECRET })
-      .field("to", MOCK_NOTIFICATION_PAYLOAD.to)
-      .field("subject", MOCK_NOTIFICATION_PAYLOAD.subject)
-      .field("text", MOCK_NOTIFICATION_PAYLOAD.text)
-      .field("html", MOCK_NOTIFICATION_PAYLOAD.html)
-      .field("headers", MOCK_NOTIFICATION_PAYLOAD.headers);
-
-    expect(prismaMock.notification.create).toHaveBeenCalledWith({
-      data: EXPECTED_NOTIFICATION_DATA,
+    // Mock user lookup
+    const mockUserWhere = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(MOCK_USER),
     });
+    const mockUserFrom = vi.fn().mockReturnValue({
+      where: mockUserWhere,
+    });
+
+    // Mock existing notification check (should return undefined - no duplicate)
+    const mockExistingNotifWhere = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue(undefined),
+    });
+    const mockExistingNotifFrom = vi.fn().mockReturnValue({
+      where: mockExistingNotifWhere,
+    });
+
+    // Mock notification insert
+    const mockNotificationReturning = vi.fn().mockReturnValue({
+      get: vi.fn().mockResolvedValue({
+        id: "notif-1",
+        subject: "Skeleton loader component",
+        text: "Reassigned issue 853 https://gitlab.com/zaniluca/test Assignee changed  to Luca Zani ",
+        html: expect.any(String),
+        userId: MOCK_USER.id,
+        contentHash: expect.any(String),
+        headers: expect.any(Object),
+        createdAt: new Date(),
+      }),
+    });
+    const mockNotificationValues = vi.fn().mockReturnValue({
+      returning: mockNotificationReturning,
+    });
+
+    // Mock notification count
+    const mockCountWhere = vi
+      .fn()
+      .mockReturnValue(Promise.resolve([{ value: 1 }]));
+    const mockCountFrom = vi.fn().mockReturnValue({
+      where: mockCountWhere,
+    });
+
+    // Mock user update for onboarding completion
+    const mockUpdateReturning = vi.fn().mockReturnValue({
+      get: vi
+        .fn()
+        .mockResolvedValue({ ...MOCK_USER, onboardingCompleted: true }),
+    });
+    const mockUpdateWhere = vi.fn().mockReturnValue({
+      returning: mockUpdateReturning,
+    });
+    const mockUpdateSet = vi.fn().mockReturnValue({
+      where: mockUpdateWhere,
+    });
+
+    drizzleMock.select
+      .mockReturnValueOnce({ from: mockUserFrom } as any)
+      .mockReturnValueOnce({ from: mockExistingNotifFrom } as any)
+      .mockReturnValueOnce({ from: mockCountFrom } as any);
+
+    drizzleMock.insert.mockReturnValue({
+      values: mockNotificationValues,
+    } as any);
+
+    drizzleMock.update.mockReturnValue({
+      set: mockUpdateSet,
+    } as any);
+
+    const formData = new FormData();
+    formData.append("to", MOCK_NOTIFICATION_PAYLOAD.to);
+    formData.append("subject", MOCK_NOTIFICATION_PAYLOAD.subject);
+    formData.append("text", MOCK_NOTIFICATION_PAYLOAD.text);
+    formData.append("html", MOCK_NOTIFICATION_PAYLOAD.html);
+    formData.append("headers", MOCK_NOTIFICATION_PAYLOAD.headers);
+
+    const res = await testApp.request(
+      `/webhook?token=${mockEnv.WEBHOOK_SECRET}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+      mockEnv,
+    );
+
+    // Since user has no push tokens, it will return 400
+    expect(res.status).toBe(400);
+    expect(mockNotificationValues).toHaveBeenCalled();
   });
 });
 

@@ -1,7 +1,9 @@
-import { Router } from "express";
+import { Hono } from "hono";
+import { AppEnv } from "../../utils/types";
 import gitlab from "./gitlab";
 
-const router = Router();
-router.use("/gitlab", gitlab);
+const oauth = new Hono<AppEnv>();
 
-export default router;
+oauth.route("/gitlab", gitlab);
+
+export default oauth;

@@ -29,8 +29,11 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/pnpm-install
 
+      - name: Type Check
+        run: pnpm typecheck
+
       - name: Build
-        run: pnpm tsc
+        run: pnpm build
 
       - name: Test
         run: pnpm test

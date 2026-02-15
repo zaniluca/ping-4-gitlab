@@ -1,160 +1,154 @@
-import { Router } from "express";
-import prisma from "../../prisma/client";
-import bcrypt from "bcrypt";
-import type {
-  AuthRequestWithPayload,
-  RequestWithPayload,
-} from "../utils/types";
+import { Hono } from "hono";
+import bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
+import { users } from "../db/schema";
+import type { User } from "../db/schema";
 import {
   getAccessToken,
   getRefreshToken,
   getTokenPayload,
   updateLastLogin,
 } from "../utils/common";
-import type { User } from "@prisma/client";
 import {
-  LoginBodySchema,
-  RefreshBodySchema,
-  SignupBodySchema,
+  loginBodySchema,
+  refreshBodySchema,
+  signupBodySchema,
 } from "../utils/validation";
-import {
-  BadRequestError,
-  CredentialsError,
-  ErrorWithStatus,
-} from "../utils/errors";
-import { expressjwt } from "express-jwt";
-import generateUniqueHook from "../utils/hook-generator";
-import { validate } from "../middlewares";
-import type { InferType } from "yup";
+import { HTTPException } from "hono/http-exception";
+import { getValidHookId } from "../utils/get-valid-hook-id";
+import { eq } from "drizzle-orm";
+import { AppEnv } from "../utils/types";
+import { validate } from "../middlewares/validation";
 
-const router = Router();
+const auth = new Hono<AppEnv>();
 
-type LoginPayload = InferType<typeof LoginBodySchema>;
+auth.post("/login", validate("json", loginBodySchema), async (c) => {
+  const { email, password } = c.req.valid("json");
+  const logger = c.get("logger");
 
-router.post(
-  "/login",
-  validate({ bodySchema: LoginBodySchema }),
-  async (req: RequestWithPayload<LoginPayload>, res, next) => {
-    const { email, password } = req.body;
+  const user = await c.var.db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .get();
 
-    if (!password || !email) {
-      return next(new BadRequestError("Missing required fields"));
+  if (!user || !user.password || !bcrypt.compareSync(password, user.password)) {
+    throw new HTTPException(401, { message: "Invalid credentials" });
+  }
+  logger.assign({ user });
+
+  await updateLastLogin(user.id, c.var.db);
+
+  return c.json({
+    accessToken: getAccessToken(
+      { uid: user.id, hookId: user.hookId },
+      c.env.JWT_ACCESS_SECRET,
+    ),
+    refreshToken: getRefreshToken(user.id, c.env.JWT_REFRESH_SECRET),
+  });
+});
+
+auth.post("/signup", validate("json", signupBodySchema), async (c) => {
+  const { email, password } = c.req.valid("json");
+  const logger = c.get("logger");
+
+  // Check for JWT token in Authorization header for anonymous user upgrade
+  const authHeader = c.req.header("Authorization");
+  let isAnonymous = false;
+  let anonymousUserId: string | undefined;
+
+  if (authHeader?.startsWith("Bearer ")) {
+    try {
+      const token = authHeader.substring(7);
+      const decoded = jwt.verify(token, c.env.JWT_ACCESS_SECRET) as {
+        uid: string;
+      };
+      isAnonymous = true;
+      anonymousUserId = decoded.uid;
+    } catch (e) {
+      // Invalid token, treat as new signup
     }
+  }
 
-    const user = await prisma.user.findUnique({
-      where: {
+  const existingUser = await c.var.db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .get();
+
+  if (existingUser) {
+    throw new HTTPException(409, { message: "User already exists" });
+  }
+
+  let user: Pick<User, "id" | "hookId">;
+
+  if (isAnonymous && anonymousUserId) {
+    const updatedUser = await c.var.db
+      .update(users)
+      .set({
         email,
-      },
-    });
+        password: bcrypt.hashSync(password, 10),
+      })
+      .where(eq(users.id, anonymousUserId))
+      .returning({ id: users.id, hookId: users.hookId })
+      .get();
 
-    if (
-      !user ||
-      !user.password ||
-      !bcrypt.compareSync(password, user.password)
-    ) {
-      return next(new CredentialsError("Invalid credentials"));
-    }
+    logger.setMsg("Upgraded anonymous user via signup");
+    user = updatedUser;
+  } else {
+    const hookId = await getValidHookId(c.var.db);
 
-    await updateLastLogin(user.id);
-
-    return res.status(200).json({
-      accessToken: getAccessToken({
-        uid: user.id,
-        hookId: user.hookId,
-      }),
-      refreshToken: getRefreshToken(user.id),
-    });
-  }
-);
-
-type SignupPayload = InferType<typeof SignupBodySchema>;
-
-router.post(
-  "/signup",
-  expressjwt({
-    secret: process.env.JWT_ACCESS_SECRET!,
-    algorithms: ["HS256"],
-    credentialsRequired: false,
-  }),
-  validate({ bodySchema: SignupBodySchema }),
-  async (req: AuthRequestWithPayload<SignupPayload>, res, next) => {
-    const { password, email } = req.body;
-    const isAnonymous = !!req.auth?.uid;
-
-    const alreadyExists = await prisma.user.count({
-      where: {
+    const newUser = await c.var.db
+      .insert(users)
+      .values({
         email,
-      },
-    });
+        password: bcrypt.hashSync(password, 10),
+        hookId,
+      })
+      .returning({ id: users.id, hookId: users.hookId })
+      .get();
 
-    if (alreadyExists) {
-      return next(new ErrorWithStatus(409, "User already exists"));
-    }
-
-    let user: Pick<User, "id" | "hookId">;
-
-    if (isAnonymous) {
-      console.log("Upgrading anonymous user to permanent user");
-
-      user = await prisma.user.update({
-        where: {
-          id: req.auth?.uid,
-        },
-        data: {
-          email,
-          password: bcrypt.hashSync(password, 10),
-        },
-        select: {
-          id: true,
-          hookId: true,
-        },
-      });
-    } else {
-      user = await prisma.user.create({
-        data: {
-          email,
-          password: bcrypt.hashSync(password, 10),
-          hookId: generateUniqueHook(),
-        },
-        select: {
-          id: true,
-          hookId: true,
-        },
-      });
-    }
-
-    // If the user is anonymous we don't create a new resource so the status should not be 201
-    return res.status(isAnonymous ? 200 : 201).json({
-      accessToken: getAccessToken({
-        uid: user.id,
-        hookId: user.hookId,
-      }),
-      refreshToken: getRefreshToken(user.id),
-    });
+    logger.setMsg("Created new user via signup");
+    user = newUser;
   }
-);
 
-type RefreshPayload = InferType<typeof RefreshBodySchema>;
+  logger.assign({ user });
 
-router.post(
-  "/refresh",
-  validate({ bodySchema: RefreshBodySchema }),
-  async (req: RequestWithPayload<RefreshPayload>, res) => {
-    const { refreshToken } = req.body;
+  return c.json(
+    {
+      accessToken: getAccessToken(
+        { uid: user.id, hookId: user.hookId! },
+        c.env.JWT_ACCESS_SECRET,
+      ),
+      refreshToken: getRefreshToken(user.id, c.env.JWT_REFRESH_SECRET),
+    },
+    isAnonymous ? 200 : 201,
+  );
+});
 
-    const payload = getTokenPayload(refreshToken);
+auth.post("/refresh", validate("json", refreshBodySchema), async (c) => {
+  const { refreshToken } = c.req.valid("json");
+  const payload = getTokenPayload(refreshToken);
 
-    await updateLastLogin(payload.uid);
-
-    return res.status(200).json({
-      // We can't pass the payload directly because it contains the iat and exp fields
-      accessToken: getAccessToken({
-        uid: payload.uid,
-        hookId: payload.hookId,
-      }),
-      refreshToken: getRefreshToken(payload.uid),
-    });
+  try {
+    jwt.decode(refreshToken);
+    const ok = !!jwt.verify(refreshToken, c.env.JWT_REFRESH_SECRET);
+    if (!ok) {
+      throw new Error("Invalid token");
+    }
+  } catch (e) {
+    throw new HTTPException(401, { message: "Invalid refresh token" });
   }
-);
 
-export default router;
+  await updateLastLogin(payload.uid, c.var.db);
+
+  return c.json({
+    accessToken: getAccessToken(
+      { uid: payload.uid, hookId: payload.hookId },
+      c.env.JWT_ACCESS_SECRET,
+    ),
+    refreshToken: getRefreshToken(payload.uid, c.env.JWT_REFRESH_SECRET),
+  });
+});
+
+export default auth;

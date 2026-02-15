@@ -1,13 +1,15 @@
-import { Prisma, User } from "@prisma/client";
+import { Hono } from "hono";
 import axios from "axios";
-import { Response, Router } from "express";
-import prisma from "../../../prisma/client";
+import type { User } from "../../db/schema";
+import { users } from "../../db/schema";
 import { getAccessToken, getRefreshToken } from "../../utils/common";
-import generateUniqueHook from "../../utils/hook-generator";
-import * as Sentry from "@sentry/node";
+import { getValidHookId } from "../../utils/get-valid-hook-id";
+import * as Sentry from "@sentry/cloudflare";
 import { APP_URL_SCHEME } from "../../utils/constants";
+import { eq } from "drizzle-orm";
+import { AppEnv } from "../../utils/types";
 
-const router = Router();
+const gitlab = new Hono<AppEnv>();
 
 type GitLabTokenResponse = {
   access_token: string;
@@ -24,161 +26,169 @@ type GitlabUserResponse = {
 };
 
 // Workaround for redirecting with a script
-// Seems like android mobile browsers don't redirect properly
-const redirect = (res: Response, url: string) =>
-  res.send(`
+// Mobile browsers don't always redirect properly
+const redirectWithScript = (url: string) => {
+  return `
   <script>
     window.location.href = "${url}";
   </script>
-`);
+`;
+};
 
-const redirectWithError = (res: Response, error: string) =>
-  redirect(res, `${APP_URL_SCHEME}login?error=${encodeURIComponent(error)}`);
-
-router.get("/authorize", async (req, res) => {
-  return res.redirect(
-    "https://gitlab.com/oauth/authorize?" +
-      new URLSearchParams({
-        client_id: process.env.GITLAB_APP_ID!,
-        redirect_uri: `${req.protocol}://${req.get(
-          "host"
-        )}/oauth/gitlab/callback`,
-        response_type: "code",
-        scope: "read_user",
-        state: req.query.state as string,
-      })
+const redirectWithError = (error: string) =>
+  redirectWithScript(
+    `${APP_URL_SCHEME}login?error=${encodeURIComponent(error)}`,
   );
-});
 
-router.get("/callback", async (req, res) => {
-  if (req.query.error && req.query.error_description) {
-    console.error(
-      "Error on GitLab OAuth callback: ",
-      req.query.error,
-      req.query.error_description
-    );
+gitlab.get("/authorize", async (c) => {
+  const state = c.req.query("state");
 
-    return redirectWithError(res, req.query.error_description as string);
-  }
-
-  const { code, state } = req.query;
-
-  let profile: GitlabUserResponse;
-  try {
-    const { data: tokens } = await axios.post<GitLabTokenResponse>(
-      "https://gitlab.com/oauth/token",
-      null,
-      {
-        params: {
-          client_id: process.env.GITLAB_APP_ID!,
-          client_secret: process.env.GITLAB_APP_SECRET!,
-          grant_type: "authorization_code",
-          code,
-          redirect_uri: `${req.protocol}://${req.get(
-            "host"
-          )}/oauth/gitlab/callback`,
-        },
-      }
-    );
-
-    const { data } = await axios.get<GitlabUserResponse>(
-      "https://gitlab.com/api/v4/user",
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.access_token}`,
-        },
-      }
-    );
-
-    profile = data;
-  } catch (error) {
-    Sentry.captureException(error);
-    console.error("Error while authenticating with GitLab", error);
-    return redirectWithError(res, "Couldn't authenticate with GitLab");
-  }
-
-  const alreadyExistingUser = await prisma.user.findUnique({
-    where: {
-      gitlabId: profile.id,
-    },
+  const params = new URLSearchParams({
+    client_id: c.env.GITLAB_APP_ID,
+    redirect_uri: c.env.GITLAB_REDIRECT_URI,
+    response_type: "code",
+    scope: "read_user",
+    ...(state && { state }),
   });
 
-  // Login
-  if (alreadyExistingUser) {
-    const accessToken = getAccessToken({
-      uid: alreadyExistingUser.id,
-      hookId: alreadyExistingUser.hookId,
-    });
-    const refreshToken = getRefreshToken(alreadyExistingUser.id);
+  return c.redirect(`https://gitlab.com/oauth/authorize?${params}`);
+});
 
-    return redirect(
-      res,
-      `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`
-    );
+gitlab.get("/callback", async (c) => {
+  const error = c.req.query("error");
+  const errorDescription = c.req.query("error_description");
+
+  if (error && errorDescription) {
+    console.error("Error on GitLab OAuth callback: ", error, errorDescription);
+    return c.html(redirectWithError(errorDescription));
   }
 
-  // Signup
-  let user: User;
+  const code = c.req.query("code");
+  const state = c.req.query("state");
+
   try {
-    if (state) {
-      // The user is connecting the account along with the email password account
-      try {
-        user = await prisma.user.findUniqueOrThrow({
-          where: {
-            id: state as string,
+    let profile: GitlabUserResponse;
+    try {
+      const { data: tokens } = await axios.post<GitLabTokenResponse>(
+        "https://gitlab.com/oauth/token",
+        null,
+        {
+          params: {
+            client_id: c.env.GITLAB_APP_ID,
+            client_secret: c.env.GITLAB_APP_SECRET,
+            grant_type: "authorization_code",
+            code,
+            redirect_uri: c.env.GITLAB_REDIRECT_URI,
           },
-        });
-      } catch (error) {
-        console.error("Error while retriving user from state: ", error);
-        return redirectWithError(
-          res,
-          "We couldn't associate your GitLab account with your email password account. Please try again."
+        },
+      );
+
+      const { data } = await axios.get<GitlabUserResponse>(
+        "https://gitlab.com/api/v4/user",
+        {
+          headers: {
+            Authorization: `Bearer ${tokens.access_token}`,
+          },
+        },
+      );
+
+      profile = data;
+    } catch (error) {
+      Sentry.captureException(error);
+      console.error("Error while authenticating with GitLab", error);
+      return c.html(redirectWithError("Couldn't authenticate with GitLab"));
+    }
+
+    const alreadyExistingUser = await c.var.db
+      .select()
+      .from(users)
+      .where(eq(users.gitlabId, profile.id))
+      .get();
+
+    // Login existing user
+    if (alreadyExistingUser) {
+      const accessToken = getAccessToken(
+        {
+          uid: alreadyExistingUser.id,
+          hookId: alreadyExistingUser.hookId,
+        },
+        c.env.JWT_ACCESS_SECRET,
+      );
+      const refreshToken = getRefreshToken(
+        alreadyExistingUser.id,
+        c.env.JWT_REFRESH_SECRET,
+      );
+
+      return c.html(
+        redirectWithScript(
+          `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`,
+        ),
+      );
+    }
+
+    // Signup new user or link to existing account
+    let user: User;
+    if (state) {
+      // User is connecting GitLab to existing email/password account
+      const existingUser = await c.var.db
+        .select()
+        .from(users)
+        .where(eq(users.id, state))
+        .get();
+
+      if (!existingUser) {
+        console.error(
+          "Error while retrieving user from state, existing user not found",
+        );
+        return c.html(
+          redirectWithError(
+            "We couldn't associate your GitLab account with your email password account. Please try again.",
+          ),
         );
       }
 
-      await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
+      user = await c.var.db
+        .update(users)
+        .set({
           gitlabId: profile.id,
-          // If the user didn't have an email password account, we set the email based on the gitlab account
-          ...(!user.email && { email: profile.email }),
-        },
-      });
+          email: existingUser.email || profile.email,
+        })
+        .where(eq(users.id, existingUser.id))
+        .returning()
+        .get();
     } else {
-      // New user
-      user = await prisma.user.create({
-        data: {
-          hookId: generateUniqueHook(),
+      // new user
+      const hookId = await getValidHookId(c.var.db);
+
+      const newUser = await c.var.db
+        .insert(users)
+        .values({
+          hookId,
           gitlabId: profile.id,
           email: profile.email,
-        },
-      });
+        })
+        .returning()
+        .get();
+
+      user = newUser;
     }
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        return redirectWithError(
-          res,
-          "An account with this email already exists"
-        );
-      }
-    }
-    Sentry.captureException(e);
-    throw e;
+
+    const accessToken = getAccessToken(
+      { uid: user.id, hookId: user.hookId },
+      c.env.JWT_ACCESS_SECRET,
+    );
+    const refreshToken = getRefreshToken(user.id, c.env.JWT_REFRESH_SECRET);
+
+    return c.html(
+      redirectWithScript(
+        `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`,
+      ),
+    );
+  } catch (error) {
+    console.error("Unexpected error in GitLab OAuth:", error);
+    Sentry.captureException(error);
+    return c.html(redirectWithError("An unexpected error occurred"));
   }
-
-  const accessToken = getAccessToken({
-    uid: user.id,
-    hookId: user.hookId,
-  });
-  const refreshToken = getRefreshToken(user.id);
-
-  return redirect(
-    res,
-    `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`
-  );
 });
 
-export default router;
+export default gitlab;

@@ -1,20 +1,12 @@
-import type { Request } from "express";
-import type { Request as ExpressJwtRequest } from "express-jwt";
 import type { JwtPayload } from "jsonwebtoken";
+import type { JwtVariables } from "hono/jwt";
+import { getDrizzleClient } from "../db/client";
+import { Logger } from "./logger";
 
 export type CustomJWTClaims = JwtPayload & {
   uid: string;
   hookId?: string | null;
 };
-
-export interface RequestWithPayload<T> extends Request {
-  body: T;
-}
-
-export interface AuthRequestWithPayload<T>
-  extends ExpressJwtRequest<CustomJWTClaims> {
-  body: T;
-}
 
 export type WebhookPayload = {
   headers: string;
@@ -53,3 +45,18 @@ type PipelineHeaders = {
 };
 
 export type PipelineStatus = "success" | "failed";
+
+export type Bindings = Env;
+
+// Variables stored in context
+export type Variables = JwtVariables & {
+  userId: string;
+  hookId: string;
+  logger: Logger;
+  db: ReturnType<typeof getDrizzleClient>;
+};
+
+export type AppEnv = {
+  Bindings: Bindings;
+  Variables: Variables;
+};
