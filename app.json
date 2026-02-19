@@ -5,7 +5,7 @@
     "scheme": "ping4gitlab",
     "description": "Multiplatform react-native app that sends you instant notifications about gitlab activities",
     "slug": "ping4gitlab",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/zaniluca/ping-4-gitlab",
