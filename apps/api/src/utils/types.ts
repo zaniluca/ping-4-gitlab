@@ -2,6 +2,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import type { JwtVariables } from "hono/jwt";
 import { getDrizzleClient } from "../db/client";
 import { Logger } from "./logger";
+import type { PostHog } from "posthog-node";
 
 export type CustomJWTClaims = JwtPayload & {
   uid: string;
@@ -54,6 +55,7 @@ export type Variables = JwtVariables & {
   hookId: string;
   logger: Logger;
   db: ReturnType<typeof getDrizzleClient>;
+  posthog: PostHog;
 };
 
 export type AppEnv = {

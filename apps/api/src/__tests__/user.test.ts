@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { testApp } from "..";
 import { getAccessToken } from "../utils/common";
 import drizzleMock from "../__mocks__/drizzle-mock";
+import { mockExecutionCtx } from "../__mocks__/cloudflare-workers-mock";
 import { User } from "../db/schema";
 
 type ErrorResponse = {
@@ -41,7 +42,7 @@ const MOCK_USER: User = {
 
 describe("GET /user", () => {
   it("Fails if unauthorized", async () => {
-    const res = await testApp.request("/user", { method: "GET" }, mockEnv);
+    const res = await testApp.request("/user", { method: "GET" }, mockEnv, mockExecutionCtx);
     expect(res.status).toBe(401);
     const body = (await res.json()) as ErrorResponse;
     expect(body.message).toBe("no authorization included in request");
@@ -58,6 +59,7 @@ describe("PUT /user", () => {
         body: JSON.stringify({}),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(401);
     const body = (await res.json()) as ErrorResponse;
@@ -92,6 +94,7 @@ describe("PUT /user", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     expect(drizzleMock.update).toHaveBeenCalled();
@@ -126,6 +129,7 @@ describe("PUT /user", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     expect(drizzleMock.update).toHaveBeenCalled();
@@ -142,6 +146,7 @@ describe("DELETE /user", () => {
         body: JSON.stringify({}),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(401);
     const body = (await res.json()) as ErrorResponse;
@@ -170,6 +175,7 @@ describe("DELETE /user", () => {
         },
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     expect(drizzleMock.delete).toHaveBeenCalled();

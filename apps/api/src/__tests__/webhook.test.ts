@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { testApp } from "..";
 import drizzleMock from "../__mocks__/drizzle-mock";
+import { mockExecutionCtx } from "../__mocks__/cloudflare-workers-mock";
 import { User } from "../db/schema";
 
 describe("POST /webhook", () => {
@@ -21,6 +22,7 @@ describe("POST /webhook", () => {
       "/webhook?token=invalid",
       { method: "POST" },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(403);
     expect(await res.json()).toEqual({ message: "Unauthorized" });
@@ -50,6 +52,7 @@ describe("POST /webhook", () => {
         body: formData,
       },
       mockEnv,
+      mockExecutionCtx,
     );
 
     expect(res.status).toBe(400);
@@ -139,6 +142,7 @@ describe("POST /webhook", () => {
         body: formData,
       },
       mockEnv,
+      mockExecutionCtx,
     );
 
     // Since user has no push tokens, it will return 400

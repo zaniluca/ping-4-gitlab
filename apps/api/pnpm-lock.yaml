@@ -44,6 +44,9 @@ importers:
       pino:
         specifier: ^10.3.0
         version: 10.3.0
+      posthog-node:
+        specifier: ^5.28.5
+        version: 5.28.5
       unique-names-generator:
         specifier: ^4.7.1
         version: 4.7.1
@@ -984,6 +987,9 @@ packages:
 
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
+
+  '@posthog/core@1.24.1':
+    resolution: {integrity: sha512-e8AciAnc6MRFws89ux8lJKFAaI03yEon0ASDoUO7yS91FVqbUGXYekObUUR3LHplcg+pmyiJBI0jolY0SFbGRA==}
 
   '@rollup/rollup-android-arm-eabi@4.54.0':
     resolution: {integrity: sha512-OywsdRHrFvCdvsewAInDKCNyR3laPA2mc9bRYJ6LBp5IyvF3fvXbbNR0bSzHlZVFtn6E0xw2oZlyjg4rKCVcng==}
@@ -2166,6 +2172,15 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
+  posthog-node@5.28.5:
+    resolution: {integrity: sha512-+8H7rMPB48cwKhzZmq0EQXDFWjdT6yQrecq+f7c7m19HMzyvYtm54I7vNncEr9lrkzczc4kcePxwLD4qgt/YXg==}
+    engines: {node: ^20.20.0 || >=22.22.0}
+    peerDependencies:
+      rxjs: ^7.0.0
+    peerDependenciesMeta:
+      rxjs:
+        optional: true
+
   process-warning@5.0.0:
     resolution: {integrity: sha512-a39t9ApHNx2L4+HBnQKqxxHNs1r7KF+Intd8Q/g1bUh6q0WIp9voPXJ/x0j+ZL45KF1pJd9+q2jLIRMfvEshkA==}
 
@@ -3227,6 +3242,10 @@ snapshots:
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.3': {}
+
+  '@posthog/core@1.24.1':
+    dependencies:
+      cross-spawn: 7.0.6
 
   '@rollup/rollup-android-arm-eabi@4.54.0':
     optional: true
@@ -4314,6 +4333,10 @@ snapshots:
     dependencies:
       xtend: 4.0.2
     optional: true
+
+  posthog-node@5.28.5:
+    dependencies:
+      '@posthog/core': 1.24.1
 
   process-warning@5.0.0: {}
 

@@ -58,6 +58,7 @@
     "jsonwebtoken": "^8.5.1",
     "object-hash": "^3.0.0",
     "pino": "^10.3.0",
+    "posthog-node": "^5.28.5",
     "unique-names-generator": "^4.7.1",
     "zod": "^4.1.13"
   }

@@ -78,6 +78,7 @@ const sanitizeSubject = (subject: string) => {
 
 webhook.post("/webhook", async (c) => {
   const logger = c.get("logger");
+  const posthog = c.get("posthog");
   const token = c.req.query("token");
 
   if (!token || token !== c.env.WEBHOOK_SECRET) {
@@ -179,7 +180,10 @@ webhook.post("/webhook", async (c) => {
       .from(notifications)
       .where(eq(notifications.userId, user.id));
 
-    if (!user.onboardingCompleted && notificationsCount > 0) {
+    const isFirstNotification =
+      !user.onboardingCompleted && notificationsCount > 0;
+
+    if (isFirstNotification) {
       logger.setMsg("First notification received, Onboarding completed");
       const updatedUser = await c.var.db
         .update(users)
@@ -188,7 +192,17 @@ webhook.post("/webhook", async (c) => {
         .returning()
         .get();
       user = updatedUser;
+
+      posthog.capture({
+        distinctId: user.id,
+        event: "onboarding_completed",
+      });
     }
+
+    posthog.capture({
+      distinctId: user.id,
+      event: "notification_received",
+    });
 
     if (user.mutedUntil && user.mutedUntil > new Date()) {
       logger.setMsg(

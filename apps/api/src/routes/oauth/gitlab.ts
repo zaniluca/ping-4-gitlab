@@ -66,6 +66,8 @@ gitlab.get("/callback", async (c) => {
   const code = c.req.query("code");
   const state = c.req.query("state");
 
+  const posthog = c.get("posthog");
+
   try {
     let profile: GitlabUserResponse;
     try {
@@ -119,6 +121,12 @@ gitlab.get("/callback", async (c) => {
         c.env.JWT_REFRESH_SECRET,
       );
 
+      posthog.capture({
+        distinctId: alreadyExistingUser.id,
+        event: "user_logged_in",
+        properties: { method: "gitlab" },
+      });
+
       return c.html(
         redirectWithScript(
           `${APP_URL_SCHEME}login?accessToken=${accessToken}&refreshToken=${refreshToken}`,
@@ -156,6 +164,11 @@ gitlab.get("/callback", async (c) => {
         .where(eq(users.id, existingUser.id))
         .returning()
         .get();
+
+      posthog.capture({
+        distinctId: user.id,
+        event: "gitlab_account_linked",
+      });
     } else {
       // new user
       const hookId = await getValidHookId(c.var.db);
@@ -171,6 +184,12 @@ gitlab.get("/callback", async (c) => {
         .get();
 
       user = newUser;
+
+      posthog.capture({
+        distinctId: user.id,
+        event: "user_signed_up",
+        properties: { method: "gitlab" },
+      });
     }
 
     const accessToken = getAccessToken(

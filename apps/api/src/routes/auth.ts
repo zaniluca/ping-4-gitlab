@@ -25,6 +25,7 @@ const auth = new Hono<AppEnv>();
 auth.post("/login", validate("json", loginBodySchema), async (c) => {
   const { email, password } = c.req.valid("json");
   const logger = c.get("logger");
+  const posthog = c.get("posthog");
 
   const user = await c.var.db
     .select()
@@ -39,6 +40,12 @@ auth.post("/login", validate("json", loginBodySchema), async (c) => {
 
   await updateLastLogin(user.id, c.var.db);
 
+  posthog.capture({
+    distinctId: user.id,
+    event: "user_logged_in",
+    properties: { method: "email" },
+  });
+
   return c.json({
     accessToken: getAccessToken(
       { uid: user.id, hookId: user.hookId },
@@ -51,6 +58,7 @@ auth.post("/login", validate("json", loginBodySchema), async (c) => {
 auth.post("/signup", validate("json", signupBodySchema), async (c) => {
   const { email, password } = c.req.valid("json");
   const logger = c.get("logger");
+  const posthog = c.get("posthog");
 
   // Check for JWT token in Authorization header for anonymous user upgrade
   const authHeader = c.req.header("Authorization");
@@ -95,6 +103,12 @@ auth.post("/signup", validate("json", signupBodySchema), async (c) => {
 
     logger.setMsg("Upgraded anonymous user via signup");
     user = updatedUser;
+
+    posthog.capture({
+      distinctId: user.id,
+      event: "user_signed_up",
+      properties: { method: "email", type: "anonymous_upgrade" },
+    });
   } else {
     const hookId = await getValidHookId(c.var.db);
 
@@ -110,6 +124,12 @@ auth.post("/signup", validate("json", signupBodySchema), async (c) => {
 
     logger.setMsg("Created new user via signup");
     user = newUser;
+
+    posthog.capture({
+      distinctId: user.id,
+      event: "user_signed_up",
+      properties: { method: "email", type: "new" },
+    });
   }
 
   logger.assign({ user });

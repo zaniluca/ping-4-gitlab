@@ -3,6 +3,7 @@ import { testApp } from "..";
 import { getAccessToken, getRefreshToken } from "../utils/common";
 import { User } from "../db/schema";
 import drizzleMock from "../__mocks__/drizzle-mock";
+import { mockExecutionCtx } from "../__mocks__/cloudflare-workers-mock";
 
 type ErrorResponse = {
   message: string;
@@ -52,6 +53,7 @@ describe("POST /login", () => {
         body: JSON.stringify({}),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorResponse;
@@ -79,6 +81,7 @@ describe("POST /login", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res1.status).toBe(401);
     const body1 = (await res1.json()) as ErrorResponse;
@@ -105,6 +108,7 @@ describe("POST /login", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res2.status).toBe(401);
     const body2 = (await res2.json()) as ErrorResponse;
@@ -145,6 +149,7 @@ describe("POST /login", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
 
     expect(drizzleMock.update).toHaveBeenCalled();
@@ -184,6 +189,7 @@ describe("POST /login", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     const body = (await res.json()) as AuthResponse;
@@ -205,6 +211,7 @@ describe("POST /signup", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorResponse;
@@ -233,6 +240,7 @@ describe("POST /signup", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(409);
     const body = (await res.json()) as ErrorResponse;
@@ -277,6 +285,7 @@ describe("POST /signup", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     // Invalid token is treated as new signup, so should succeed with 201
     expect(res.status).toBe(201);
@@ -327,6 +336,7 @@ describe("POST /signup", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     const body = (await res.json()) as AuthResponse;
@@ -370,6 +380,7 @@ describe("POST /signup", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(201);
     const body = (await res.json()) as {
@@ -392,6 +403,7 @@ describe("POST /refresh", () => {
         body: JSON.stringify({}),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(400);
     const body = (await res.json()) as ErrorResponse;
@@ -408,6 +420,7 @@ describe("POST /refresh", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(401);
   });
@@ -422,6 +435,7 @@ describe("POST /refresh", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(401);
   });
@@ -452,6 +466,7 @@ describe("POST /refresh", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
 
     expect(drizzleMock.update).toHaveBeenCalled();
@@ -483,6 +498,7 @@ describe("POST /refresh", () => {
         }),
       },
       mockEnv,
+      mockExecutionCtx,
     );
     expect(res.status).toBe(200);
     const body = (await res.json()) as AuthResponse;

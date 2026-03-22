@@ -12,12 +12,14 @@ import { getDrizzleClient } from "./db/client";
 import { requestId } from "hono/request-id";
 import { authRequired } from "./middlewares/auth";
 import { loggerMiddleware, wideLoggingMiddleware } from "./middlewares/logging";
+import { posthogMiddleware } from "./middlewares/posthog";
 
 const app = new Hono<AppEnv>();
 
 // Global middlewares
 app.use(requestId());
 app.use(loggerMiddleware, wideLoggingMiddleware);
+app.use(posthogMiddleware);
 app.use(async (c, next) => {
   c.set("db", getDrizzleClient(c.env.DB));
   await next();

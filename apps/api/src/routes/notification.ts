@@ -57,12 +57,19 @@ notification.get(
 
 notification.get("/:id", async (c) => {
   const id = c.req.param("id");
+  const userId = c.get("jwtPayload")?.uid as string;
+  const posthog = c.get("posthog");
 
   const foundNotification = await c.var.db
     .select()
     .from(notifications)
     .where(eq(notifications.id, id))
     .get();
+
+  posthog.capture({
+    distinctId: userId,
+    event: "notification_viewed",
+  });
 
   return c.json(foundNotification);
 });
