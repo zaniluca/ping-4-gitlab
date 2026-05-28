@@ -70,7 +70,6 @@ jobs:
           SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           GOOGLE_SERVICES_ANDROID_BASE64=${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} \
           SENTRY_DISABLE_AUTO_UPLOAD=true \
-          GRADLE_OPTS="-Xmx4096m -XX:MaxMetaspaceSize=4096m" \
           eas build --local \
             --non-interactive \
             --output=./out \
