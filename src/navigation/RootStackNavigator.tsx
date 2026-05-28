@@ -5,6 +5,7 @@ import InboxStackNavigator from "./InboxStackNavigator";
 import { RootStackParamList } from "./types";
 import Logo from "../components/Logo";
 import Skeleton from "../components/Skeleton";
+import { useNotificationDeepLink } from "../hooks/use-notification-deep-link";
 import { useUpdates } from "../hooks/use-updates";
 import { useUser } from "../hooks/user-hooks";
 import LandingScreen from "../screens/LandingScreen";
@@ -18,6 +19,8 @@ const RootStackNavigator = () => {
   const theme = useTheme();
   const firstTimeAuth = useRef(true);
   const { isCheckingForUpdate } = useUpdates();
+
+  useNotificationDeepLink();
 
   const user = useUser({
     onSettled: () => {

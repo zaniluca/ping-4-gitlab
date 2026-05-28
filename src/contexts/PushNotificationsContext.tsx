@@ -82,26 +82,30 @@ export const NotificationsProvider: React.FC<PropsWithChildren> = ({
       shouldPlaySound: true,
       shouldSetBadge: false,
     }),
-    handleSuccess: async (nid) => {
-      console.log("Recived push notification in foreground with id: ", nid);
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-
-      Toast.show({
-        type: "info",
-        text1: "New notification recived!",
-        text2: "Take a look at your inbox",
-        onPress() {
-          navigation.navigate("InboxStack", { screen: "Inbox" });
-        },
-      });
-    },
-    handleError: async (nid, error) =>
-      console.error(
-        "Error when reciving push notification in foreground with id: ",
-        nid,
-        error
-      ),
   });
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log(
+          "Received push notification in foreground with id: ",
+          notification.request.identifier
+        );
+        queryClient.invalidateQueries({ queryKey: ["notifications"] });
+
+        Toast.show({
+          type: "info",
+          text1: "New notification received!",
+          text2: "Take a look at your inbox",
+          onPress() {
+            navigation.navigate("InboxStack", { screen: "Inbox" });
+          },
+        });
+      }
+    );
+
+    return () => subscription.remove();
+  }, [queryClient, navigation]);
 
   return (
     <NotificationsContext.Provider value={{ pushToken }}>

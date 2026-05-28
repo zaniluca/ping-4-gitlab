@@ -1,4 +1,5 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
+import { withGradleProperties } from "@expo/config-plugins";
 
 const getIconForBuildEnv = () => {
   if (
@@ -8,7 +9,7 @@ const getIconForBuildEnv = () => {
   ) {
     return `./assets/icon-${process.env.EAS_BUILD_PROFILE}.png`;
   } else {
-    return "./assets/icon.png";
+    return "./assets/app.icon";
   }
 };
 
@@ -19,22 +20,39 @@ type CustomConfig = Omit<ConfigContext, "config"> & {
     Required<Pick<ExpoConfig, "name" | "slug">>;
 };
 
-export default ({ config }: CustomConfig): ExpoConfig => ({
-  ...config,
-  icon: getIconForBuildEnv(),
-  plugins: [
-    ...(config.plugins || []),
-    [
-      "@sentry/react-native/expo",
-      {
-        organization: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
-      },
-    ],
-  ],
-  extra: {
-    eas: {
-      projectId: "bdcab203-d9ce-48aa-95db-938dbfe1be17",
+export default ({ config }: CustomConfig): ExpoConfig => {
+  const expoConfig: ExpoConfig = {
+    ...config,
+    ios: {
+      ...config.ios,
+      icon: getIconForBuildEnv(),
     },
-  },
-});
+    plugins: [
+      ...(config.plugins || []),
+      [
+        "@sentry/react-native/expo",
+        {
+          organization: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+        },
+      ],
+    ],
+    extra: {
+      eas: {
+        projectId: "bdcab203-d9ce-48aa-95db-938dbfe1be17",
+      },
+    },
+  };
+
+  return withGradleProperties(expoConfig, (props) => {
+    props.modResults = props.modResults.filter(
+      (item) => !(item.type === "property" && item.key === "org.gradle.jvmargs")
+    );
+    props.modResults.push({
+      type: "property",
+      key: "org.gradle.jvmargs",
+      value: "-Xmx4096m -XX:MaxMetaspaceSize=2048m",
+    });
+    return props;
+  });
+};

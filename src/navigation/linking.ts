@@ -1,29 +1,7 @@
 import { LinkingOptions } from "@react-navigation/native";
-import * as Sentry from "@sentry/react-native";
 import * as Linking from "expo-linking";
-import * as Notifications from "expo-notifications";
 
 import { RootStackParamList } from "./types";
-
-const handleNotificationDeepLink = (
-  response: Notifications.NotificationResponse | null
-) => {
-  if (!response?.notification) return;
-  if (response.notification.request.content.data?.url) {
-    return response.notification.request.content.data.url as string;
-  } else if (response.notification.request.content.data?.nid) {
-    return `notifications/${response.notification.request.content.data.nid}`;
-  } else {
-    Sentry.captureMessage("Received notification with missing fields", {
-      extra: {
-        // Needed to avoid sentry cutting the object depth
-        response: JSON.stringify(response, null, 2),
-      },
-    });
-  }
-
-  return null;
-};
 
 export const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/")],
@@ -61,9 +39,7 @@ export const linking: LinkingOptions<RootStackParamList> = {
       return initialURL;
     }
 
-    // Handle URL from expo push notifications
-    const response = await Notifications.getLastNotificationResponseAsync();
-    return handleNotificationDeepLink(response);
+    return null;
   },
   subscribe(listener) {
     const onReceiveURL = ({ url }: { url: string }) => {
@@ -76,20 +52,8 @@ export const linking: LinkingOptions<RootStackParamList> = {
       "url",
       onReceiveURL
     );
-
-    // Listen to expo push notifications
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const url = handleNotificationDeepLink(response);
-        if (url) {
-          listener(url);
-        }
-      }
-    );
-
     return () => {
       eventListenerSubscription.remove();
-      subscription.remove();
     };
   },
 };
