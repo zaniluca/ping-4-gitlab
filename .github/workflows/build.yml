@@ -81,3 +81,17 @@ jobs:
         with:
           name: ping-4-gitlab-${{ matrix.platform }}
           path: out
+
+  build-check:
+    name: Build Pass
+    needs: [build]
+    if: ${{ always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check build matrix outcome
+        run: |
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "One or more builds failed or were skipped."
+            exit 1
+          fi
+          echo "All builds completed successfully."
