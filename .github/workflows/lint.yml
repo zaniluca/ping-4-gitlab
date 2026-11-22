@@ -7,14 +7,21 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "apps/mobile/**"
+      - "apps/mobile/src/**"
+      - "apps/mobile/App.tsx"
+      - "apps/mobile/app.config.ts"
+      - "apps/mobile/index.ts"
+      - "apps/mobile/metro.config.js"
+      - "apps/mobile/.eslintrc.js"
+      - "apps/mobile/tsconfig.json"
+      - "apps/mobile/package.json"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
+      - ".prettierrc.json"
       - "turbo.json"
-      - ".gitignore"
+      - ".github/actions/pnpm-install/action.yml"
       - ".github/workflows/lint.yml"
 
 jobs:

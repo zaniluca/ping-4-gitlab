@@ -9,12 +9,14 @@ on:
       - ready_for_review
     paths:
       - "apps/api/**"
+      - "!apps/api/.env.example"
+      - "!apps/api/LICENSE"
+      - "!apps/api/README.md"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
-      - "turbo.json"
+      - ".github/actions/pnpm-install/action.yml"
       - ".github/workflows/api-build-and-test.yml"
 
 jobs:

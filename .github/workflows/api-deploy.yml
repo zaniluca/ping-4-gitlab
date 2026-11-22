@@ -7,13 +7,18 @@ on:
       - master
       - production
     paths:
-      - "apps/api/**"
+      - "apps/api/src/**"
+      - "!apps/api/src/__mocks__/**"
+      - "!apps/api/src/__tests__/**"
+      - "!apps/api/src/db/seed.ts"
+      - "apps/api/migrations/**"
+      - "apps/api/static/**"
+      - "apps/api/wrangler.jsonc"
+      - "apps/api/package.json"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
-      - ".github/workflows/api-deploy.yml"
 
 jobs:
   deploy:

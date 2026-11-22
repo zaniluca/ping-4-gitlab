@@ -8,11 +8,14 @@ on:
       - ready_for_review
     paths:
       - "apps/mobile/**"
+      - "!apps/mobile/.env.example"
+      - "!apps/mobile/.eslintrc.js"
+      - "!apps/mobile/eas.json"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
+      - ".github/actions/pnpm-install/action.yml"
       - ".github/workflows/preview.yml"
     branches-ignore:
       - production
@@ -32,20 +35,10 @@ jobs:
             exit 1
           fi
 
-      # We need to checkout the PR head to get the commit message for the update
-      # Otherwise, we'll get the commit message from the merge commit
-      - name: Checkout PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Extract last commit message
-        id: get_head_commit_message
-        run: |
-          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
-
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: pnpm install
         uses: ./.github/actions/pnpm-install
@@ -58,10 +51,9 @@ jobs:
 
       - name: Publish update
         working-directory: apps/mobile
-        run: eas update --branch="$PREVIEW_BRANCH" --message="$HEAD_COMMIT_MSG"
+        run: eas update --branch="$PREVIEW_BRANCH" --message="$(git show -s --format=%s HEAD^2)"
         env:
           PREVIEW_BRANCH: ${{ github.head_ref }}
-          HEAD_COMMIT_MSG: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}
           EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}

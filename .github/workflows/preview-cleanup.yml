@@ -3,21 +3,12 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - master
-    paths:
-      - "apps/mobile/**"
-      - "!apps/mobile/eas.json"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "pnpm-workspace.yaml"
-      - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
-      - ".github/workflows/preview-cleanup.yml"
+    branches-ignore:
+      - production
 
 jobs:
   preview:
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'preview available') }}
     name: Preview Cleanup
     runs-on: ubuntu-latest
     steps:

@@ -47,7 +47,6 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -62,10 +61,7 @@ jobs:
       - name: Get version from manifest
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
         id: version
-        uses: notiz-dev/github-action-json-property@release
-        with:
-          path: "apps/mobile/app.json"
-          prop_path: "expo.version"
+        run: echo "prop=$(jq -r '.expo.version' apps/mobile/app.json)" >> "$GITHUB_OUTPUT"
 
       - name: Config Github Bot for tagging
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
@@ -137,7 +133,6 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 

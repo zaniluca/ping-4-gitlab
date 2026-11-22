@@ -6,13 +6,13 @@ on:
       - production
     paths:
       - "apps/mobile/**"
+      - "!apps/mobile/.env.example"
+      - "!apps/mobile/.eslintrc.js"
       - "!apps/mobile/eas.json"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
-      - ".github/workflows/eas-update.yml"
 
 jobs:
   update:

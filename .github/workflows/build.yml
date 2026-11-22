@@ -9,11 +9,12 @@ on:
       - ready_for_review
     paths:
       - "apps/mobile/**"
+      - "!apps/mobile/.env.example"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - ".nvmrc"
-      - ".github/actions/pnpm-install/**"
+      - ".github/actions/pnpm-install/action.yml"
       - ".github/workflows/build.yml"
 
 jobs:
@@ -50,7 +51,6 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
