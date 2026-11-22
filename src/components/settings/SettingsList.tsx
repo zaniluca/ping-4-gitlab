@@ -1,4 +1,4 @@
-import React from "react";
+import type { ReactElement } from "react";
 import {
   ListRenderItem,
   Platform,
@@ -21,9 +21,9 @@ import { Box, Text } from "../restyle";
 
 type SectionItem = {
   name: string;
-  icon: (_props: SvgProps) => JSX.Element;
+  icon: (_props: SvgProps) => ReactElement;
   onPress?: () => void;
-  right?: JSX.Element;
+  right?: ReactElement;
 };
 
 type SettingsSections = {

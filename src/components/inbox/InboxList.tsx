@@ -55,7 +55,6 @@ const InboxList = () => {
         ItemSeparatorComponent={Divider}
         keyExtractor={(item) => item.id}
         removeClippedSubviews
-        estimatedItemSize={80}
         ListFooterComponent={
           notifications.hasNextPage ? ListFooterComponent : null
         }

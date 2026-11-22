@@ -3,7 +3,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import * as WebBrowser from "expo-web-browser";
 import { FormikProvider, useFormik } from "formik";
 import React, { useEffect } from "react";
-import { TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import {
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -33,11 +38,19 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     const handleAuth = async () => {
-      WebBrowser.dismissBrowser();
-
       const accessToken = route.params?.accessToken;
       const refreshToken = route.params?.refreshToken;
       const error = route.params?.error;
+
+      if (!error && !(accessToken && refreshToken)) return;
+
+      if (Platform.OS === "ios") {
+        try {
+          await WebBrowser.dismissBrowser();
+        } catch (dismissError) {
+          console.warn("Could not dismiss the OAuth browser", dismissError);
+        }
+      }
 
       if (error) {
         console.error("Error during oauth login: ", error);
@@ -64,7 +77,9 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
       }
     };
 
-    handleAuth();
+    handleAuth().catch((error: unknown) => {
+      console.error("Could not complete OAuth login", error);
+    });
   }, [route.params]);
 
   const login = useLogin();
