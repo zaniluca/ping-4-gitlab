@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Copy Google Services file from secrets
-        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
+        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > apps/mobile/google-services.json
 
       - name: pnpm install
         uses: ./.github/actions/pnpm-install
@@ -47,11 +47,11 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
+        working-directory: apps/mobile
         run: |
           eas build \
             --non-interactive \
@@ -61,10 +61,7 @@ jobs:
       - name: Get version from manifest
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
         id: version
-        uses: notiz-dev/github-action-json-property@release
-        with:
-          path: "app.json"
-          prop_path: "expo.version"
+        run: echo "prop=$(jq -r '.expo.version' apps/mobile/app.json)" >> "$GITHUB_OUTPUT"
 
       - name: Config Github Bot for tagging
         if: ${{ github.ref == 'refs/heads/production' && inputs.profile == 'production' }}
@@ -136,11 +133,11 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Submit to ${{ matrix.store }}
+        working-directory: apps/mobile
         run: |
           if [ "${{ matrix.platform }}" == "ios" ]; then
             EXPO_APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }} \

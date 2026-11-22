@@ -1,0 +1,3 @@
+vi.mock("axios");
+
+export {};

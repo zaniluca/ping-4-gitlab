@@ -1,0 +1,61 @@
+{
+  "name": "api-ping-4-gitlab",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "zaniluca",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --local --port \"${API_PORT:-8787}\" --test-scheduled",
+    "build": "wrangler deploy --dry-run --env '' --outdir dist --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
+    "deploy": "wrangler deploy --env ${WRANGLER_ENV:-production} --outdir dist --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
+    "sentry:sourcemaps": "dotenv -e .env -- sh -c '_SENTRY_RELEASE=$(sentry-cli releases propose-version) && sentry-cli releases new $_SENTRY_RELEASE --org=$SENTRY_ORG --project=$SENTRY_PROJECT && sentry-cli sourcemaps upload --org=$SENTRY_ORG --project=$SENTRY_PROJECT --release=$_SENTRY_RELEASE --strip-prefix \"dist/..\" dist && sentry-cli releases finalize $_SENTRY_RELEASE --org=$SENTRY_ORG --project=$SENTRY_PROJECT && sentry-cli releases deploys $_SENTRY_RELEASE new -e ${SENTRY_ENVIRONMENT:-production} --org=$SENTRY_ORG --project=$SENTRY_PROJECT'",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:staging": "wrangler d1 migrations apply ping-4-gitlab-staging --env staging --remote",
+    "db:migrate:production": "wrangler d1 migrations apply ping-4-gitlab-production --env production --remote",
+    "db:migrate:local": "wrangler d1 migrations apply ping-4-gitlab-development --local",
+    "db:seed": "tsx src/db/seed.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cf-typegen": "wrangler types",
+    "postdeploy": "pnpm sentry:sourcemaps",
+    "typecheck": "tsc --noEmit",
+    "cron": "curl -X POST 'http://localhost:8787/__scheduled?cron=0+0+*+*+*'"
+  },
+  "devDependencies": {
+    "@sentry/cli": "^2",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^24.1.0",
+    "@types/object-hash": "^2.2.1",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^11.0.0",
+    "drizzle-kit": "^0.31.8",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.3",
+    "vitest": "^4.0.16",
+    "vitest-mock-extended": "^3.1.0",
+    "wrangler": "^4.54.0"
+  },
+  "engines": {
+    "node": "^24.1.0",
+    "pnpm": ">=10.0.0"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.5",
+    "@paralleldrive/cuid2": "^3.0.6",
+    "@sentry/cloudflare": "^10.30.0",
+    "axios": "^1.1.2",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.1",
+    "expo-server-sdk": "^3.12.0",
+    "hono": "^4.10.8",
+    "hono-pino": "^0.10.3",
+    "jsonwebtoken": "^8.5.1",
+    "object-hash": "^3.0.0",
+    "pino": "^10.3.0",
+    "posthog-node": "^5.28.5",
+    "unique-names-generator": "^4.7.1",
+    "zod": "^4.1.13"
+  }
+}

@@ -7,13 +7,16 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "!apps/mobile/.env.example"
+      - "!apps/mobile/.eslintrc.js"
+      - "!apps/mobile/eas.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/action.yml"
+      - ".github/workflows/preview.yml"
     branches-ignore:
       - production
 
@@ -32,21 +35,10 @@ jobs:
             exit 1
           fi
 
-      # We need to checkout the PR head to get the commit message for the update
-      # Otherwise, we'll get the commit message from the merge commit
-      - name: Checkout PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Extract last commit message
-        id: get_head_commit_message
-        run: |
-          echo "Last commit message: $(git show -s --format=%s)"
-          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
-
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: pnpm install
         uses: ./.github/actions/pnpm-install
@@ -58,15 +50,17 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish update
-        run: |
-          EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
-          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
-          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-          eas update --branch=${{ github.head_ref }} --message="${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}"
+        working-directory: apps/mobile
+        run: eas update --branch="$PREVIEW_BRANCH" --message="$(git show -s --format=%s HEAD^2)"
+        env:
+          PREVIEW_BRANCH: ${{ github.head_ref }}
+          EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Add preview label
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         if: ${{ github.event_name == 'pull_request' }}
         with:
           script: |

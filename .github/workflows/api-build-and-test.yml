@@ -1,0 +1,47 @@
+name: API Build and Test
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - "apps/api/**"
+      - "!apps/api/.env.example"
+      - "!apps/api/LICENSE"
+      - "!apps/api/README.md"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/action.yml"
+      - ".github/workflows/api-build-and-test.yml"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    env:
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
+
+      - name: Type Check
+        working-directory: apps/api
+        run: pnpm typecheck
+
+      - name: Build
+        working-directory: apps/api
+        run: pnpm build
+
+      - name: Test
+        working-directory: apps/api
+        run: pnpm test

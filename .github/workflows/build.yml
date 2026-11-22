@@ -8,13 +8,14 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "!apps/mobile/.env.example"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/action.yml"
+      - ".github/workflows/build.yml"
 
 jobs:
   build:
@@ -24,7 +25,7 @@ jobs:
       matrix:
         include:
           - platform: "ios"
-            os: "macos-16"
+            os: "macos-26"
           - platform: "android"
             os: "ubuntu-latest"
 
@@ -42,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Copy Google Services file from secrets
-        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > ./google-services.json
+        run: echo ${{ secrets.GOOGLE_SERVICES_ANDROID_BASE64 }} | base64 --decode > apps/mobile/google-services.json
 
       - name: pnpm install
         uses: ./.github/actions/pnpm-install
@@ -50,7 +51,6 @@ jobs:
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
-          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -64,6 +64,7 @@ jobs:
       # Eas local doesn't support environment variables
       # so we have to pass them via the shell
       - name: Build
+        working-directory: apps/mobile
         run: |
           EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
@@ -80,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ping-4-gitlab-${{ matrix.platform }}
-          path: out
+          path: apps/mobile/out
 
   build-check:
     name: Build Pass

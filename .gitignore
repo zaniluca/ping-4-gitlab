@@ -1,5 +1,7 @@
 node_modules/
+.turbo/
 .expo/
+.wrangler/
 dist/
 npm-debug.*
 *.jks
@@ -13,9 +15,13 @@ web-build/
 .env
 .env.*
 !.env.example
-/android
-/ios
+.dev.vars
+.dev.vars.*
+.sentryclirc
+/apps/mobile/android/
+/apps/mobile/ios/
 .github/skills
 
 google-services.json
 GoogleService-Info.plist
+credentials.json

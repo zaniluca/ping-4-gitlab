@@ -3,21 +3,12 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - master
-    paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "!eas.json"
-      - "**.yml"
-      - "**.yaml"
+    branches-ignore:
+      - production
 
 jobs:
   preview:
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'preview available') }}
     name: Preview Cleanup
     runs-on: ubuntu-latest
     steps:
@@ -41,16 +32,17 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Cleanup preview
+        working-directory: apps/mobile
         shell: bash
         run: |
-          channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
+          channels=$(eas channel:list --json --non-interactive | jq -r '.currentPage[] .name')
 
-          echo $channels
+          echo "$channels"
           echo "Looking for $GITHUB_HEAD_REF"
 
-          if grep -q "$GITHUB_HEAD_REF" <<< "$channels"; then
-            eas channel:delete --non-interactive $GITHUB_HEAD_REF
-            eas branch:delete --non-interactive $GITHUB_HEAD_REF
+          if grep -Fxq -- "$GITHUB_HEAD_REF" <<< "$channels"; then
+            eas channel:delete --non-interactive "$GITHUB_HEAD_REF"
+            eas branch:delete --non-interactive "$GITHUB_HEAD_REF"
           else
             echo "Preview channel not found"
           fi
