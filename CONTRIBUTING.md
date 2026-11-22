@@ -42,11 +42,4 @@ Bug reports are more than welcome, for the benefit of both parties be sure to be
 
 To enforce a consistent style we use [prettier](https://prettier.io/) and [commitlint](https://commitlint.js.org/#/) (used via [husky](https://typicode.github.io/husky/#/))
 
-At the moment we don't have any strict linter set up, we only check that commits complaints to the [conventional commits standard](https://www.conventionalcommits.org/en/v1.0.0/). Its very important that you stick to this convention as its validated when you commit your code (via husky) and with a github action on every pull request opened on `master`
-
-But what if you messed up your commit messages and now the ci blocks your pull request? No problem you can simply reword your latest commits messages like this:
-
-1. run `git rebase -i HEAD~n` where `n` is the number of commits you want to rename
-2. the previous command will open up an editable text file with instructions; to rename your commits simply replace `pick` with `reword` before any commit you want to rename
-3. then you can freely change the commit message to respect the [conventional commits standard](https://www.conventionalcommits.org/en/v1.0.0/)
-4. after you're done force push the amended commits by running `git push --force`
+The local Husky hook checks commit messages against the [Conventional Commits standard](https://www.conventionalcommits.org/en/v1.0.0/).
