@@ -1,0 +1,5 @@
+version = 1
+name = "development"
+
+[setup]
+script = "pnpm install --frozen-lockfile"
