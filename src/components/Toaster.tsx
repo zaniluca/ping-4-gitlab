@@ -12,13 +12,10 @@ import Toast, {
 import { Box, Text } from "./restyle";
 import { Theme } from "../utils/theme";
 
-type CustomToastParams = {
-  Icon?: (_props: SvgProps) => ReactElement;
-};
-
 type CustomToastProps = ToastConfigParams<BaseToastProps> &
-  BackgroundColorProps<Theme> &
-  CustomToastParams;
+  BackgroundColorProps<Theme> & {
+    Icon: (_props: SvgProps) => ReactElement;
+  };
 
 const BaseToast: FC<CustomToastProps> = ({
   text1,
@@ -38,11 +35,9 @@ const BaseToast: FC<CustomToastProps> = ({
       minHeight={48}
       width={Dimensions.get("screen").width * 0.95}
     >
-      {Icon && (
-        <Box paddingRight="l">
-          <Icon stroke="white" />
-        </Box>
-      )}
+      <Box paddingRight="l">
+        <Icon stroke="white" />
+      </Box>
       <Box flexDirection="column" flexShrink={1}>
         <Text variant="headline" color="white">
           {text1}

@@ -76,7 +76,6 @@ const SettingsSectionedList: FC<Props> = ({ sections }) => {
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
-      keyExtractor={(item) => item.key}
     />
   );
 };

@@ -57,10 +57,6 @@ const App = () => {
     });
   }, [navigation]);
 
-  const onNavigationReady = useCallback(async () => {
-    await Promise.all([SplashScreen.hideAsync(), trackScreen()]);
-  }, [trackScreen]);
-
   if (!fontsLoaded) {
     return null;
   }
@@ -71,7 +67,7 @@ const App = () => {
         <NavigationContainer
           ref={navigation}
           theme={colorScheme === "light" ? NavLightTheme : NavDarkTheme}
-          onReady={onNavigationReady}
+          onReady={() => Promise.all([SplashScreen.hideAsync(), trackScreen()])}
           onStateChange={trackScreen}
           linking={linking}
         >
