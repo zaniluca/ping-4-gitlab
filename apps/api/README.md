@@ -4,7 +4,7 @@
 
 ## Running locally
 
-Create `apps/api/.env` from [`.env.example`](.env.example) and set the local signing secrets. Wrangler also accepts `apps/api/.dev.vars` for local bindings. Run these commands from the workspace root.
+Create `apps/api/.env` from [`.env.example`](.env.example) and set the local signing secrets. Run these commands from the workspace root.
 
 ```sh
 pnpm install --frozen-lockfile
