@@ -1,13 +1,13 @@
-import React from "react";
+import type { FC, ReactElement } from "react";
 import { ListRenderItem, SectionList, SectionListData } from "react-native";
 
 import { useTheme } from "../../utils/theme";
 import { Box, Text } from "../restyle";
 
 export type SettingsSectionItem = {
-  key: any;
-  content: JSX.Element;
-  footer?: JSX.Element;
+  key: string;
+  content: ReactElement;
+  footer?: ReactElement;
 };
 
 export type SettingsSettingsSections = {
@@ -23,7 +23,7 @@ type Props = {
   sections: SettingsSettingsSections[];
 };
 
-const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
+const SettingsSectionedList: FC<Props> = ({ sections }) => {
   const { colors, fontFamily } = useTheme();
 
   const renderSectionHeader = ({
@@ -76,7 +76,6 @@ const SettingsSectionedList: React.FC<Props> = ({ sections }) => {
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
-      keyExtractor={(item) => item.key}
     />
   );
 };

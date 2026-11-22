@@ -1,5 +1,5 @@
-import { ExpoConfig, ConfigContext } from "@expo/config";
-import { withGradleProperties } from "@expo/config-plugins";
+import type { ConfigContext, ExpoConfig } from "expo/config";
+import { withGradleProperties } from "expo/config-plugins";
 
 const getIconForBuildEnv = () => {
   if (
@@ -30,7 +30,7 @@ export default ({ config }: CustomConfig): ExpoConfig => {
     plugins: [
       ...(config.plugins || []),
       [
-        "@sentry/react-native/expo",
+        "@sentry/react-native",
         {
           organization: process.env.SENTRY_ORG,
           project: process.env.SENTRY_PROJECT,

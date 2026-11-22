@@ -1,4 +1,5 @@
 import { BackgroundColorProps } from "@shopify/restyle";
+import type { FC, ReactElement } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { CheckCircle, Info, CloudLightning } from "react-native-feather";
 import { SvgProps } from "react-native-svg";
@@ -11,15 +12,12 @@ import Toast, {
 import { Box, Text } from "./restyle";
 import { Theme } from "../utils/theme";
 
-type CustomToastParams = {
-  Icon?: (_props: SvgProps) => JSX.Element;
-};
-
 type CustomToastProps = ToastConfigParams<BaseToastProps> &
-  BackgroundColorProps<Theme> &
-  CustomToastParams;
+  BackgroundColorProps<Theme> & {
+    Icon: (_props: SvgProps) => ReactElement;
+  };
 
-const BaseToast: React.FC<CustomToastProps> = ({
+const BaseToast: FC<CustomToastProps> = ({
   text1,
   text2,
   onPress,
@@ -37,11 +35,9 @@ const BaseToast: React.FC<CustomToastProps> = ({
       minHeight={48}
       width={Dimensions.get("screen").width * 0.95}
     >
-      {Icon && (
-        <Box paddingRight="l">
-          <Icon stroke="white" />
-        </Box>
-      )}
+      <Box paddingRight="l">
+        <Icon stroke="white" />
+      </Box>
       <Box flexDirection="column" flexShrink={1}>
         <Text variant="headline" color="white">
           {text1}
@@ -57,11 +53,13 @@ const BaseToast: React.FC<CustomToastProps> = ({
 );
 
 const toastConfig: ToastConfig = {
-  info: (props) => BaseToast({ ...props, backgroundColor: "blue", Icon: Info }),
-  success: (props) =>
-    BaseToast({ ...props, backgroundColor: "green", Icon: CheckCircle }),
-  error: (props) =>
-    BaseToast({ ...props, backgroundColor: "red", Icon: CloudLightning }),
+  info: (props) => <BaseToast {...props} backgroundColor="blue" Icon={Info} />,
+  success: (props) => (
+    <BaseToast {...props} backgroundColor="green" Icon={CheckCircle} />
+  ),
+  error: (props) => (
+    <BaseToast {...props} backgroundColor="red" Icon={CloudLightning} />
+  ),
 };
 
 const Toaster = () => <Toast config={toastConfig} position="bottom" />;
