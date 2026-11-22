@@ -1,15 +1,15 @@
 import { BoxProps } from "@shopify/restyle";
-import React, { useRef, useEffect } from "react";
+import { type FC, type ReactElement, useRef, useEffect } from "react";
 import { Animated } from "react-native";
 
 import { Box } from "./restyle";
 import { Theme } from "../utils/theme";
 
 type Props = BoxProps<Theme> & {
-  children?: JSX.Element | JSX.Element[];
+  children?: ReactElement | ReactElement[];
 };
 
-const Skeleton: React.FC<Props> = ({ children, ...rest }) => {
+const Skeleton: FC<Props> = ({ children, ...rest }) => {
   const opacity = useRef(new Animated.Value(0.3));
 
   useEffect(() => {

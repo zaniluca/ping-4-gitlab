@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Linking } from "react-native";
 import Toast from "react-native-toast-message";
-import { WebView } from "react-native-webview";
+import { WebView, type WebViewProps } from "react-native-webview";
 
 import {
   useNotification,
@@ -13,7 +13,6 @@ type Props = InboxStackScreenProps<"NotificationDetail">;
 
 const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
   const updateNotification = useUpdateNotification();
-  const webview = useRef<WebView | null>(null);
 
   const notificationId = route.params.id;
 
@@ -49,10 +48,9 @@ const NotificationDetail: React.FC<Props> = ({ route, navigation }) => {
   }, [notification]);
 
   return (
-    <WebView
+    <WebView<WebViewProps>
       originWhitelist={["*"]}
       startInLoadingState
-      ref={webview}
       source={{
         html: notification?.html ?? "",
       }}

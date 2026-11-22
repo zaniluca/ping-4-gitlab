@@ -22,7 +22,7 @@ The app is build using Expo and React Native, the entire codebase is written in 
 - `src/navigation/*` - Everything regarding navigation (we use [React Navigation](https://reactnavigation.org/))
 - `src/screens/*` - App Views.
 - `src/utils/*` - Shared utilities like validation functions, parsing, configurations etc.
-- `app.json` - Expo configuration file ([app.config.js](app.config.js) only used for dynamic configuration)
+- `app.json` - Expo configuration file ([app.config.ts](app.config.ts) for dynamic configuration)
 - `eas.json` - Configuration file used for [EAS Build service](https://docs.expo.dev/build/introduction/)
 - `App.tsx` - Main entrypoint
 
@@ -33,7 +33,7 @@ git clone https://github.com/zaniluca/ping-4-gitlab.git
 cd ping-4-gitlab
 nvm use
 pnpm i
-pnpm start
+pnpm dev
 ```
 
 ## What Now?

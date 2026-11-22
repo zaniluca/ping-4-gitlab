@@ -1,6 +1,7 @@
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { AndroidImportance } from "expo-notifications";
 import { Platform } from "react-native";
 
 export const registerForPushNotificationsAsync = async () => {
@@ -12,7 +13,7 @@ export const registerForPushNotificationsAsync = async () => {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
-      importance: Notifications.AndroidImportance.MAX,
+      importance: AndroidImportance.MAX,
       sound: "notification.wav",
     });
   }
