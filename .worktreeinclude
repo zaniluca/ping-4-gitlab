@@ -1,2 +1,6 @@
-.env
-.env.*
+apps/mobile/.env
+apps/mobile/.env.*
+apps/api/.env
+apps/api/.env.*
+apps/api/.dev.vars
+apps/api/.dev.vars.*

@@ -5,14 +5,14 @@ on:
       - master
       - production
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "!eas.json"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "!apps/mobile/eas.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/**"
+      - ".github/workflows/eas-update.yml"
 
 jobs:
   update:
@@ -40,6 +40,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish update
+        working-directory: apps/mobile
         run: |
           EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
           SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
@@ -48,6 +49,7 @@ jobs:
           eas update --auto
 
       - name: Upload Source Maps
+        working-directory: apps/mobile
         run: |
           npx sentry-expo-upload-sourcemaps dist
         env:

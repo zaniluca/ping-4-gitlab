@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "API_PORT",
+        "EXPO_PUBLIC_*",
+        "WRANGLER_LOG",
+        "EXPO_OFFLINE",
+        "EXPO_NO_TELEMETRY"
+      ]
+    },
+    "lint": {},
+    "typecheck": {},
+    "test": {
+      "cache": false
+    }
+  }
+}

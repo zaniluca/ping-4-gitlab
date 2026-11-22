@@ -7,13 +7,13 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/**"
+      - ".github/workflows/preview.yml"
     branches-ignore:
       - production
 
@@ -42,8 +42,7 @@ jobs:
       - name: Extract last commit message
         id: get_head_commit_message
         run: |
-          echo "Last commit message: $(git show -s --format=%s)"
-          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+          echo "HEAD_COMMIT_MSG=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,15 +57,18 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish update
-        run: |
-          EXPO_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
-          SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
-          SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
-          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-          eas update --branch=${{ github.head_ref }} --message="${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}"
+        working-directory: apps/mobile
+        run: eas update --branch="$PREVIEW_BRANCH" --message="$HEAD_COMMIT_MSG"
+        env:
+          PREVIEW_BRANCH: ${{ github.head_ref }}
+          HEAD_COMMIT_MSG: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MSG }}
+          EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Add preview label
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         if: ${{ github.event_name == 'pull_request' }}
         with:
           script: |

@@ -1,85 +1,21 @@
 {
-  "name": "ping-4-gitlab",
-  "version": "0.0.0",
+  "name": "ping-for-gitlab-workspace",
   "private": true,
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "dev": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
-    "eas-build-pre-install": "echo $GOOGLE_SERVICES_ANDROID_BASE64 | base64 --decode > ./google-services.json",
-    "prepare": "husky install",
-    "start-be": "cd ../api-ping-4-gitlab && pnpm dev"
+  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499",
+  "engines": {
+    "node": "^24.22.3"
   },
-  "dependencies": {
-    "@expo-google-fonts/source-sans-pro": "^0.2.2",
-    "@react-native-community/netinfo": "12.0.1",
-    "@react-navigation/native": "7.5.2",
-    "@react-navigation/native-stack": "7.21.1",
-    "@sentry/react-native": "8.28.1",
-    "@shopify/flash-list": "2.3.2",
-    "@shopify/restyle": "2.0.0",
-    "@tanstack/react-query": "^4.0.10",
-    "axios": "^0.27.2",
-    "expo": "58.0.26",
-    "expo-application": "58.1.2",
-    "expo-clipboard": "58.0.4",
-    "expo-constants": "58.0.16",
-    "expo-device": "58.0.5",
-    "expo-file-system": "58.0.14",
-    "expo-font": "58.0.12",
-    "expo-haptics": "58.0.8",
-    "expo-insights": "58.0.11",
-    "expo-linear-gradient": "58.0.4",
-    "expo-linking": "58.0.17",
-    "expo-localization": "58.0.5",
-    "expo-notifications": "58.1.9",
-    "expo-secure-store": "58.0.3",
-    "expo-splash-screen": "58.0.14",
-    "expo-status-bar": "58.0.5",
-    "expo-system-ui": "58.0.7",
-    "expo-updates": "58.0.22",
-    "expo-web-browser": "58.1.0",
-    "formik": "^2.2.9",
-    "jwt-decode": "^3.1.2",
-    "posthog-react-native": "4.87.1",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "react-native": "0.88.1",
-    "react-native-feather": "^1.1.2",
-    "react-native-progress": "^5.0.0",
-    "react-native-safe-area-context": "5.11.1",
-    "react-native-screens": "4.30.1",
-    "react-native-svg": "15.16.0",
-    "react-native-toast-message": "^2.1.5",
-    "react-native-web": "0.21.4",
-    "react-native-webview": "14.0.1",
-    "yup": "^0.32.11"
+  "scripts": {
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
-    "@tanstack/eslint-plugin-query": "^4.29.4",
-    "@types/node": "^17.0.24",
-    "@types/react": "19.3.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
-    "@typescript-eslint/parser": "^5.30.6",
-    "eslint": "^8.19.0",
-    "eslint-config-universe": "^11.0.0",
     "husky": "^8.0.1",
-    "prettier": "^2.7.1",
-    "typescript": "6.0.3"
-  },
-  "expo": {
-    "doctor": {
-      "reactNativeDirectoryCheck": {
-        "exclude": [
-          "react-native-progress",
-          "react-native-feather"
-        ]
-      }
-    }
-  },
-  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499"
+    "turbo": "2.11.13"
+  }
 }

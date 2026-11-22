@@ -7,11 +7,15 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/**"
+      - "turbo.json"
+      - ".gitignore"
+      - ".github/workflows/lint.yml"
 
 jobs:
   lint:

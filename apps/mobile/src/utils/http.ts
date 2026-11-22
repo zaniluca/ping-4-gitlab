@@ -31,7 +31,7 @@ const getReleaseApiUrl = () =>
 export const API_URL =
   process.env.NODE_ENV === "production"
     ? getReleaseApiUrl()
-    : `http://${getDevelopmentHost()}:8787`;
+    : process.env.EXPO_PUBLIC_API_URL ?? `http://${getDevelopmentHost()}:8787`;
 
 export const http = axios.create({
   baseURL: API_URL,

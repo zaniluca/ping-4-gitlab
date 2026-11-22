@@ -6,14 +6,14 @@ on:
     branches:
       - master
     paths:
-      - "**.ts"
-      - "**.tsx"
-      - "**.js"
-      - "**.json"
-      - "**.lock"
-      - "!eas.json"
-      - "**.yml"
-      - "**.yaml"
+      - "apps/mobile/**"
+      - "!apps/mobile/eas.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/**"
+      - ".github/workflows/preview-cleanup.yml"
 
 jobs:
   preview:
@@ -41,16 +41,17 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Cleanup preview
+        working-directory: apps/mobile
         shell: bash
         run: |
-          channels=`eas channel:list --json --non-interactive | jq '.currentPage[] .name'`
+          channels=$(eas channel:list --json --non-interactive | jq -r '.currentPage[] .name')
 
-          echo $channels
+          echo "$channels"
           echo "Looking for $GITHUB_HEAD_REF"
 
-          if grep -q "$GITHUB_HEAD_REF" <<< "$channels"; then
-            eas channel:delete --non-interactive $GITHUB_HEAD_REF
-            eas branch:delete --non-interactive $GITHUB_HEAD_REF
+          if grep -Fxq -- "$GITHUB_HEAD_REF" <<< "$channels"; then
+            eas channel:delete --non-interactive "$GITHUB_HEAD_REF"
+            eas branch:delete --non-interactive "$GITHUB_HEAD_REF"
           else
             echo "Preview channel not found"
           fi

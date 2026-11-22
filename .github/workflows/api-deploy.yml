@@ -1,0 +1,49 @@
+name: API Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - production
+    paths:
+      - "apps/api/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".nvmrc"
+      - ".github/actions/pnpm-install/**"
+      - ".github/workflows/api-deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.API_SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ secrets.API_SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ secrets.API_SENTRY_PROJECT }}
+      SENTRY_ENVIRONMENT: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+      WRANGLER_ENV: ${{ github.ref_name == 'master' && 'staging' || 'production' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
+
+      - name: Type Check
+        working-directory: apps/api
+        run: pnpm typecheck
+
+      - name: Migrate Database
+        working-directory: apps/api
+        run: pnpm run db:migrate:${{ github.ref_name == 'master' && 'staging' || 'production' }}
+
+      - name: Deploy to Cloudflare
+        working-directory: apps/api
+        run: pnpm run deploy
